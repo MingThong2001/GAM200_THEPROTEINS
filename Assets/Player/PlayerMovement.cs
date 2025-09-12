@@ -18,8 +18,11 @@ public class PlayerMovement : MonoBehaviour
     public float puddlemovementSpeed = 2f; //Puddle state movement speed.
     public float segmentedmovementspeed = 3f; //Segmented state movement speed.
 
-    public float squishfactor = 0.5f; //Factor for squishing effect (Used in puddle state).
-    public float jumpforce = 0.5f; //Force applied for jumping.
+    //Jumping 
+    public float jumpforce = 10f; //Force applied for jumping.
+    private bool isJumping = false;
+    private bool isGrounded = false;
+
 
     //Spring Strength & Damping for Segmented movement.
     public float springStrength = 10f; 
@@ -32,8 +35,6 @@ public class PlayerMovement : MonoBehaviour
     //Input Variables
     private float horizontalInput;
     private float verticalInput;    
-    private bool isJumping;
-    private bool isGrounded;
 
     //Physics Components
     public SpriteShapeController spriteshapeController; //Used to control the slime's shape.
@@ -45,23 +46,22 @@ public class PlayerMovement : MonoBehaviour
     //List to manage segmented parts (Slime's segmented state).
     private List<GameObject> segmentedobjects = new List<GameObject>();
 
-
-    
-   // private int currentcontrolsegmentedIndex = -1;
-
-
     //Layers
     public LayerMask groundLayer;
 
     //Spline shape only for slime body (Used to update slime's shape and movement).
     [SerializeField] private SpriteShapeController spriteShape;
     [SerializeField] private List<Transform> slimePoints;
-  
+    public void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        rb.freezeRotation = true; //Prevent rotation of the player (WIP).
+    }
     public void Update()
     {
-        CheckGrounded();
         handleInput();
         handleMovement();
+        handleJump();
     }
 
     //Used to adjust the shape of the slime's body (WIP).
@@ -78,11 +78,7 @@ public class PlayerMovement : MonoBehaviour
     }*/
 
   
-    public void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        rb.freezeRotation = true; //Prevent rotation of the player (WIP).
-    }
+
 
     //User input for movement and state changes.
     public void handleInput()
@@ -91,19 +87,19 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
-            verticalInput = 4f; // Move Up
+            verticalInput = 1f; // Move Up
         }
         if (Input.GetKey(KeyCode.A))
         {
-            horizontalInput = -4f; // Move Left
+            horizontalInput = -1f; // Move Left
         }
         if (Input.GetKey(KeyCode.S))
         {
-            verticalInput = -4f; // Move Down
+            verticalInput = -1f; // Move Down
         }
         if (Input.GetKey(KeyCode.D))
         {
-            horizontalInput = 4f; // Move Right
+            horizontalInput = 1f; // Move Right
         }
 
         //Handle Jump input
@@ -112,13 +108,7 @@ public class PlayerMovement : MonoBehaviour
             isJumping = true;
             Debug.Log("Jump input detected and grounded!");
         }
-        else if (Input.GetButtonDown("Jump") && !isGrounded)
-        {
-
-            Debug.Log("Jump input detected and not grounded!");
-
-        }
-
+      
         //State Input
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -152,85 +142,30 @@ public class PlayerMovement : MonoBehaviour
     //Handle movement based on current state.
     public void handleMovement()
     {
-        Debug.Log($"isGrounded: {isGrounded}, linearVelocity.y: {rb.linearVelocity.y}"); // Add this
-
         float speed = 0f;
-
-        //Determine movement speed based on current slime state.
         switch (currentstate)
-        { 
+        {
             case slimeState.Normal:
                 speed = normalmovementSpeed;
+                normalMovement(speed);
                 break;
             case slimeState.Puddle:
                 speed = puddlemovementSpeed;
+                puddleMovement();
                 break;
             case slimeState.Segmented:
                 speed = segmentedmovementspeed;
+                segmentedMovement();
                 break;
-        }
 
-        //Move the player horizontally based on their input and state speed.
-        Vector2 targetPosition = new Vector2(rb.position.x + horizontalInput * speed * Time.deltaTime, rb.position.y);
-        rb.MovePosition(targetPosition);
-
-        //Handle jumping behaviour.
-        if (isJumping && isGrounded)
-        {
-            // Apply force to EVERY rigidbody, not just the main one
-            Rigidbody2D[] allRbs = GetComponentsInChildren<Rigidbody2D>();
-            Debug.Log($"Found {allRbs.Length} rigidbodies");
-
-            foreach (Rigidbody2D rb2d in allRbs)
-            {
-                rb2d.AddForce(Vector2.up * 0.25f, ForceMode2D.Impulse); // Smaller force per segment
-                Debug.Log($"Applied force to {rb2d.name}");
-            }
-
-            isJumping = false; //Reset the jump flag after applying force.
         }
     }
 
-    //Check if the player is grounded by checking the vertical velocity of each Rigidbody2D component.
-    public void CheckGrounded()
+    public void normalMovement(float speed)
     {
-        Rigidbody2D[] allRigidBodies = GetComponentsInChildren<Rigidbody2D>();
-        isGrounded = false;
-        foreach (Rigidbody2D rb in allRigidBodies)
-        {
-            if (Mathf.Abs(rb.linearVelocity.y) < 1f)
-            {
-                isGrounded = true;
+        float horizontalForce = horizontalInput * normalmovementSpeed;
+        rb.AddForce(new Vector2(horizontalForce, 0), ForceMode2D.Force);
 
-            }
-        }
-    }
-
-    
-    
-    //Switch between different slime states.
-    public void switchState(slimeState slimeState)  
-    {
-        currentstate = slimeState;
-
-        if (currentstate == slimeState.Segmented)
-        {
-            transformSegmented();
-        }
-        else if (currentstate == slimeState.Puddle)
-        {
-            transformPuddle();
-        }
-        else
-        { 
-            resettonormalstate();
-        }
-    }
-
-    public void resettonormalstate()
-    { 
-        transform.localScale = Vector3.one; //Reset scale
-        rb.linearDamping = 0f;
     }
 
 
@@ -244,7 +179,9 @@ public class PlayerMovement : MonoBehaviour
 
         //Adding sliding physics.
         rb.AddForce(Vector2.right * horizontalInput * puddlemovementSpeed, ForceMode2D.Impulse);
-        //Puddle will have no jump movement
+
+        //Lower gravity to simulate puddle feeling
+        rb.gravityScale = 0.5f;
     }
 
     //Transfrom the player into Puddle state. (WIP)
@@ -255,12 +192,25 @@ public class PlayerMovement : MonoBehaviour
 
     }
     #endregion
-
-
     #region Segmented State
+    public void segmentedMovement()
+    { 
+        //Move the first segement with smooth control
+        Rigidbody2D headsegment = segmentedobjects[0].GetComponent<Rigidbody2D>();
+        //Vector2 targetPosition = rb.position + new Vector2(horizontalInput * puddlemovementSpeed * Time.deltaTime, rb.position.y);
+
+        //Move subsequent segments with lag (For trail effects)
+        for (int i = 1; i < segmentedobjects.Count; i++)
+        { 
+            Rigidbody2D segmentRB = segmentedobjects [i].GetComponent<Rigidbody2D>();   
+
+            //Each segment follow the previous one with abit of lag.
+            
+        }
+    }
 
     //Transform the player into segmented state and separate the segment. (WIP)
-    public void transformSegmented()
+  /*  public void transformSegmented()
     {
         currentstate = slimeState.Segmented;
 
@@ -285,22 +235,100 @@ public class PlayerMovement : MonoBehaviour
                 segmentObj.AddComponent<SegmentProjectile>();
 
                 //Launch the segment toward the mouse target.
-                LaunchSegment(segmentObj);
+                //  LaunchSegment(segmentObj);
             }
         }
     }
-    public void LaunchSegment(GameObject segmentObj)
+
+    #endregion */
+
+    //Check if the player is grounded by checking the vertical velocity of each Rigidbody2D component.
+    public void CheckGrounded()
     {
-        //Launch Projectile Logic.
+        isGrounded = false;
+        
+
+        foreach (Collider2D col in GetComponentsInChildren<Collider2D>())
+        {
+            if (col.IsTouchingLayers(groundLayer))
+            {
+                isGrounded = true;
+                break;
+            }
+        }
+    }
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("groundLayer"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("groundLayer"))
+        {
+            isGrounded = false;
+        }
+    }
+    public void handleJump()
+    {
+        //Handle jumping behaviour.
+        if (isJumping && isGrounded)
+        {
+            rb.AddForce(Vector2.up * jumpforce, ForceMode2D.Impulse);
+
+            foreach (Rigidbody2D segmentsRB in GetComponentsInChildren<Rigidbody2D>())
+            {
+                if (segmentsRB != rb)
+                { 
+                    segmentsRB.AddForce(Vector2.up * jumpforce * 0.25F, ForceMode2D.Impulse);
+                }
+            
+            }
+
+            foreach (SpringJoint2D spring in GetComponentsInChildren<SpringJoint2D>())
+            {
+                spring.dampingRatio = 0.5f;
+                spring.frequency = 4f;
+            }
+        }
+        isJumping = false;
+
+
     }
 
 
-    public void AddSegment()
+    //Switch between different slime states.
+    public void switchState(slimeState slimeState)  
     {
+        currentstate = slimeState;
 
-
+        if (currentstate == slimeState.Segmented)
+        {
+           // transformSegmented();
+        }
+        else if (currentstate == slimeState.Puddle)
+        {
+            transformPuddle();
+        }
+        else
+        { 
+            resettonormalstate();
+        }
     }
 
-    #endregion
+    public void resettonormalstate()
+    { 
+        transform.localScale = Vector3.one; //Reset scale
+        rb.linearDamping = 0f;
+    }
+
+
+    
+
+
+   
 }
-
+#endregion  

@@ -1,6 +1,9 @@
 using JetBrains.Annotations;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.U2D;
+using System.Collections.Generic;
+using System.Linq;
 
 public class SoftBodyPhyiscs : MonoBehaviour
 {
@@ -35,7 +38,15 @@ public class SoftBodyPhyiscs : MonoBehaviour
     //To update the spline's vertex positions based on the points.
     private void UpdateVerticies()  
     {
-        for (int i = 0; i < points.Length - 1; i++) //Loop through each point and update the corresponding vertex in the sprite shape.
+        for (int i = 0; i < points.Length; i++)
+        {
+            if (i >= spriteShape.spline.GetPointCount())
+            { 
+               spriteShape.spline.InsertPointAt(i, points[i].localPosition);
+            }
+        
+        }
+        for (int i = 0; i < points.Length; i++) //Loop through each point and update the corresponding vertex in the sprite shape.
         {
             Vector2 vertex = points[i].localPosition; //Get the current's point local position.
             Vector2 _towardsCenter = (Vector2.zero - vertex).normalized; //Calculate direction vector toward the center which is 0 , 0 .
@@ -76,6 +87,38 @@ public class SoftBodyPhyiscs : MonoBehaviour
             }
         }
     }
+
+    //Add new segment
+    public void AddNewSegment(Transform newSegment)
+    {
+        List<Transform> pointList = new List<Transform>(points);
+        pointList.Add(newSegment);
+        points = pointList.ToArray();
+
+        UpdateVerticies();
+       
+    }
+
+    public void RemoveSegmen()
+    {
+        //Remove the segment from the point array
+    }
+
+    public void SetSquishFactor(float factor)
+    {
+        for (int i = 0; i < points.Length; i++)
+        { 
+            Vector2 vertex = points[i].localPosition;
+            Vector2 toCenter = (-vertex).normalized;
+            Vector2 tangent = Vector2.Perpendicular(toCenter) * factor;
+            spriteShape.spline.SetRightTangent(i, tangent);
+            spriteShape.spline.SetLeftTangent(i, -tangent);
+
+
+        }
+    }
+
+   
 }
 
     
