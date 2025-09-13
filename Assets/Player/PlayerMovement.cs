@@ -14,24 +14,33 @@ public class PlayerMovement : MonoBehaviour
 {
     //Movement speed for different states.
     public Transform targetPosition;
-    public float normalmovementSpeed = 5f; //Normal state movement speed.
+    public float normalmovementSpeed = 1f; //Normal state movement speed.
     public float puddlemovementSpeed = 2f; //Puddle state movement speed.
     public float segmentedmovementspeed = 3f; //Segmented state movement speed.
 
     //Jumping 
-    public float jumpforce = 10f; //Force applied for jumping.
-    private bool isJumping = false;
-    private bool isGrounded = false;
+    public float jumpforce = 0.1f; //Force applied for jumping.
+    public float childforcemultiplier = 0.25f;      
+    private bool isJumping;
+    private bool isGrounded;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundcheckRadius = 1f;
 
 
+    //Movement
+    public float moveForce = 2f;
+    public float maxSpeed = 4f;
+    public float groundDrag = 5f;
     //Spring Strength & Damping for Segmented movement.
     public float springStrength = 10f; 
     public float springDamp = 5f;
 
+
     //Reference to RigidBody2D
     private Rigidbody2D rb;
 
-
+    
     //Input Variables
     private float horizontalInput;
     private float verticalInput;    
@@ -46,8 +55,7 @@ public class PlayerMovement : MonoBehaviour
     //List to manage segmented parts (Slime's segmented state).
     private List<GameObject> segmentedobjects = new List<GameObject>();
 
-    //Layers
-    public LayerMask groundLayer;
+   
 
     //Spline shape only for slime body (Used to update slime's shape and movement).
     [SerializeField] private SpriteShapeController spriteShape;
@@ -61,23 +69,28 @@ public class PlayerMovement : MonoBehaviour
     {
         handleInput();
         handleMovement();
+        CheckGrounded();
+    }
+
+    public void FixedUpdate()
+    {
         handleJump();
     }
 
     //Used to adjust the shape of the slime's body (WIP).
-   /* public void LateUpdate()
-    {
-        Spline spline = spriteShape.spline;
-        for (int i = 0; i < slimePoints.Count; i++)
-        {
-            Vector3 localPos = spriteShape.transform.InverseTransformPoint(slimePoints[i].position);
-            spline.SetPosition( i, localPos );
-        }
+    /* public void LateUpdate()
+     {
+         Spline spline = spriteShape.spline;
+         for (int i = 0; i < slimePoints.Count; i++)
+         {
+             Vector3 localPos = spriteShape.transform.InverseTransformPoint(slimePoints[i].position);
+             spline.SetPosition( i, localPos );
+         }
 
-        spriteShape.BakeMesh();
-    }*/
+         spriteShape.BakeMesh();
+     }*/
 
-  
+
 
 
     //User input for movement and state changes.
@@ -103,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Handle Jump input
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space)) 
         { 
             isJumping = true;
             Debug.Log("Jump input detected and grounded!");
@@ -163,8 +176,18 @@ public class PlayerMovement : MonoBehaviour
 
     public void normalMovement(float speed)
     {
-        float horizontalForce = horizontalInput * normalmovementSpeed;
-        rb.AddForce(new Vector2(horizontalForce, 0), ForceMode2D.Force);
+        // Calculate current horizontal speed
+        Vector2 velocityAtPoint = rb.GetPointVelocity(rb.position);
+        float horizontalSpeed = velocityAtPoint.x;
+
+        // Apply force only if under max speed
+        if (Mathf.Abs(horizontalSpeed) < maxSpeed)
+        {
+            rb.AddForce(new Vector2(horizontalInput * moveForce, 0), ForceMode2D.Force);
+        }
+
+        // Apply drag when no input
+        rb.linearDamping = (horizontalInput == 0 && isGrounded) ? groundDrag : 0f;
 
     }
 
@@ -245,17 +268,7 @@ public class PlayerMovement : MonoBehaviour
     //Check if the player is grounded by checking the vertical velocity of each Rigidbody2D component.
     public void CheckGrounded()
     {
-        isGrounded = false;
-        
-
-        foreach (Collider2D col in GetComponentsInChildren<Collider2D>())
-        {
-            if (col.IsTouchingLayers(groundLayer))
-            {
-                isGrounded = true;
-                break;
-            }
-        }
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundcheckRadius, groundLayer);
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
@@ -283,7 +296,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (segmentsRB != rb)
                 { 
-                    segmentsRB.AddForce(Vector2.up * jumpforce * 0.25F, ForceMode2D.Impulse);
+                    segmentsRB.AddForce(Vector2.up * jumpforce * childforcemultiplier, ForceMode2D.Impulse);
                 }
             
             }
