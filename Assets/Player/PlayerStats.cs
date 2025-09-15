@@ -1,4 +1,4 @@
-/*using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,50 +9,58 @@ public class PlayerStats : MonoBehaviour
     public float maxHealth = 100f;
     private float currentHealth;
 
-    public float baseSpeed = 5f;
-    public float baseJumpHeight = 5f;
-
     //Mass-Related values
-    public int maxSegments 
+    public int currentSegments = 12;
+    public int maxSegments = 12;
+    public float healthperSegment = 1f;
 
-    public void Start()
+    public float massperSegment = 1f;
+    private Rigidbody2D rb;
+
+    private void Awake()
     {
-       currentHealth = basemaxHealth;   
-       rb = GetComponent<Rigidbody2D>();
+        if (instance == null)
+        { 
+            instance = this;
+        }
+
+        rb = GetComponent<Rigidbody2D>();
+        updateStatsbasedonMess();
     }
 
-    public void Update()
-    {
-        updatestatsonMass();
-        updateSpring
-    }
 
-
-    private void chargeSquishyEnergy()
+    public void updateStatsbasedonMess()
     {
-        if (currentSquishyEnergy < maxSquishyEnergy)
-        {
-            currentSquishyEnergy += squishyEnergyRechargerate * Time.deltaTime;
-            if (currentSquishyEnergy > maxSquishyEnergy)
-            { 
-                currentSquishyEnergy = maxSquishyEnergy;
-            }
+       //Health scales with number of segments.
+       currentHealth = maxHealth + (currentHealth * healthperSegment);
+        if (rb != null)
+        { 
+            rb.mass = currentSegments * massperSegment;
         }
     }
-    
-  public  void UpdateHealth()
-    {
+
+    public void AddSegment()
+    { 
+        currentSegments = Mathf.Min(currentSegments +1, maxSegments);
+        updateStatsbasedonMess();
     }
-    public void TakeDamage(float Damage)
+
+    public void MinusSegment()
     {
-       currentHealth -= Damage;
-       if (currentHealth <= 0f)
-        { 
-            currentHealth = 0f;
+        currentSegments = Mathf.Max(currentSegments - 1, 1);
+        updateStatsbasedonMess();
+
+    }
+
+    public void TakeDamage(float Damage)
+    { 
+        currentHealth -= Damage;
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
             Die();
         }
     }
-
     private void Die()
     {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
@@ -80,14 +88,9 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    public float GetCurrentHealth()
+    { return currentHealth; }
 
-        public void resetStats()
-        {
-//currentHealth = maxHealth;
-            currentSquishyEnergy = 0;
-
-        }
-
-       
+  
     
-}*/
+}

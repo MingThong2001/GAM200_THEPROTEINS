@@ -4,6 +4,7 @@ public class SegmentProjectile : MonoBehaviour
 {
     public float damage = 10f;
     public float lifetime = 3f;
+    public float maxDistance = 5f;
     public float speed = 10f;
     public Transform returnPoints;
     public Transform firePoint;
@@ -11,25 +12,50 @@ public class SegmentProjectile : MonoBehaviour
 
     private Rigidbody2D rb;
     private bool isReturning = false;
+    private bool hasHit = false;
+    private Vector2 startPos;
+    private Vector2 targetPos;
 
     public void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        Destroy(gameObject, lifetime );
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        startPos = firePoint.position;
+        
+       //Set Initial target based on cursor
+       Vector2 mouseworldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        targetPos = (mouseworldPos - (Vector2)firePoint.position).normalized * maxDistance *Time.deltaTime;
+       Destroy(gameObject, lifetime);
         
     }
 
     public void Update()
     {
-        Vector2 currentP = transform.position;
-        Vector2 targetP = returnPoints.position;
-
-        Vector2 newPosition = Vector2.MoveTowards( currentP, targetP, speed * Time.deltaTime );
-        rb.MovePosition( newPosition );
-
-        if (Vector2.Distance(transform.position, returnPoints.position) < 0.1f)
+        if (hasHit)
         {
-            isReturning = false;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            return;
+        }
+        if (!isReturning)
+        {
+            Vector2 newPos = Vector2.MoveTowards(rb.position, targetPos, speed * Time.deltaTime);
+            rb.MovePosition(newPos);
+
+            if (Vector2.Distance(rb.position, targetPos) < 0.05f)
+            {
+                isReturning = false;
+            }
+
+        }
+        else
+        { 
+            //Move back to the return point.
+            Vector2 newPos = Vector2.MoveTowards(rb.position, returnPoints.position, speed * Time.deltaTime);
+            rb.MovePosition(newPos);
+            if (Vector2.Distance((Vector2)rb.position, returnPoints.position) < 0.05f)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -49,11 +75,13 @@ public class SegmentProjectile : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            //Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-            /* if (enemy != null)
-             * {
-             * enemy.TakeDamage(damageAmount):
-             *} */
+            hasHit = true;
+        }
+        else if (collision.gameObject.CompareTag("BreakableObjects"))
+        {
+            hasHit = true;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.MovePosition(collision.contacts[0].point);
         }
     }
 }

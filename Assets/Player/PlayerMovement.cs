@@ -28,10 +28,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundcheckRadius = 1f;
 
 
-    //Movement
+    //Normal Movement
     public float moveForce = 2f;
     public float maxSpeed = 4f;
     public float groundDrag = 5f;
+
+    //Puddle Movmement
+    public float puddleSpeed = 5f;
+    public float puddleFriction = 1f;
+    public float puddleGravity = 0.3f;
+
+
     //Spring Strength & Damping for Segmented movement.
     public float springStrength = 10f; 
     public float springDamp = 5f;
@@ -60,6 +67,10 @@ public class PlayerMovement : MonoBehaviour
     //Spline shape only for slime body (Used to update slime's shape and movement).
     [SerializeField] private SpriteShapeController spriteShape;
     [SerializeField] private List<Transform> slimePoints;
+
+
+
+
     public void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -71,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
         handleMovement();
         CheckGrounded();
     }
-
+    
     public void FixedUpdate()
     {
         handleJump();
@@ -197,24 +208,19 @@ public class PlayerMovement : MonoBehaviour
     public void puddleMovement()
     {
 
-        Vector2 targetPosition = rb.position + new Vector2(horizontalInput * puddlemovementSpeed * Time.deltaTime, rb.position.y);
-        rb.MovePosition(targetPosition);
+        Vector2 moveDirection = new Vector2(horizontalInput, 0f);
+        rb.AddForce(moveDirection * puddleSpeed, ForceMode2D.Force);
 
-        //Adding sliding physics.
-        rb.AddForce(Vector2.right * horizontalInput * puddlemovementSpeed, ForceMode2D.Impulse);
-
-        //Lower gravity to simulate puddle feeling
-        rb.gravityScale = 0.5f;
-    }
-
-    //Transfrom the player into Puddle state. (WIP)
-    public void transformPuddle()
-    {
-        currentstate = slimeState.Puddle;
-        rb.linearDamping = 2f; //Increase damping for slower movement.
-
+        if (horizontalInput == 0f)
+        {
+            Vector2 frictionForce = -rb.GetPointVelocity(rb.position) * puddleFriction;
+            rb.AddForce(frictionForce, ForceMode2D.Force);  
+        }
     }
     #endregion
+
+
+
     #region Segmented State
     public void segmentedMovement()
     { 
@@ -324,7 +330,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (currentstate == slimeState.Puddle)
         {
-            transformPuddle();
+         //   transformPuddle();
         }
         else
         { 

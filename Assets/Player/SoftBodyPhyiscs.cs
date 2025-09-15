@@ -27,7 +27,7 @@ public class SoftBodyPhyiscs : MonoBehaviour
         UpdateVerticies(); //Call to initialize the spline positions based on the points.
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
         UpdateVerticies(); //Continously update the spline vertices to match the point's positions.
     }
@@ -36,7 +36,7 @@ public class SoftBodyPhyiscs : MonoBehaviour
     #region privateMethods
 
     //To update the spline's vertex positions based on the points.
-    private void UpdateVerticies()  
+    public void UpdateVerticies()  
     {
         for (int i = 0; i < points.Length; i++)
         {

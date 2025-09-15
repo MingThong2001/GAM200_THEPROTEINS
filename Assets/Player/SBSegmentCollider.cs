@@ -27,8 +27,8 @@ public class SBSegmentCollider : MonoBehaviour
 
         if (impactSpeed > minibounceSpeed)
         { 
-            float bounceForce = impactSpeed * squishEnergy.currentCharge * bounceMultiplier;
-            rb.AddForce(collisionNormal * bounceForce, ForceMode2D.Impulse);
+            //float bounceForce = impactSpeed * squishEnergy.currentCharge * bounceMultiplier;
+          //  rb.AddForce(collisionNormal * bounceForce, ForceMode2D.Impulse);
         }
 
 
