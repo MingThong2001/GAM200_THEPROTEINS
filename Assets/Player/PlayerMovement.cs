@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     public float segmentedmovementspeed = 3f; //Segmented state movement speed.
 
     //Jumping 
-    public float jumpforce = 0.1f; //Force applied for jumping.
+    public float jumpforce = 10f; //Force applied for jumping.
     public float childforcemultiplier = 0.25f;      
     private bool isJumping;
     private bool isGrounded;
@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
     
     //Input Variables
-    private float horizontalInput;
+    public  float horizontalInput;
     private float verticalInput;    
 
     //Physics Components
@@ -78,14 +78,16 @@ public class PlayerMovement : MonoBehaviour
     }
     public void Update()
     {
+       
         handleInput();
-        handleMovement();
         CheckGrounded();
     }
     
     public void FixedUpdate()
     {
         handleJump();
+        handleMovement();
+
     }
 
     //Used to adjust the shape of the slime's body (WIP).
@@ -107,25 +109,18 @@ public class PlayerMovement : MonoBehaviour
     //User input for movement and state changes.
     public void handleInput()
     {
-        horizontalInput = 0f;
+        
 
         if (Input.GetKey(KeyCode.W))
         {
             verticalInput = 1f; // Move Up
         }
-        if (Input.GetKey(KeyCode.A))
-        {
-            horizontalInput = -1f; // Move Left
-        }
+        
         if (Input.GetKey(KeyCode.S))
         {
             verticalInput = -1f; // Move Down
         }
-        if (Input.GetKey(KeyCode.D))
-        {
-            horizontalInput = 1f; // Move Right
-        }
-
+       
         //Handle Jump input
         if (Input.GetKeyDown(KeyCode.Space)) 
         { 
@@ -179,7 +174,6 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case slimeState.Segmented:
                 speed = segmentedmovementspeed;
-                segmentedMovement();
                 break;
 
         }
@@ -187,6 +181,26 @@ public class PlayerMovement : MonoBehaviour
 
     public void normalMovement(float speed)
     {
+
+        float horizontalInput = 0f;
+        if (Input.GetKey(KeyCode.A))
+        {
+            horizontalInput = -1f; // Move Left
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            horizontalInput = 1f; // Move Right
+        }
+        Vector2 newPos = rb.position + new Vector2(horizontalInput * normalmovementSpeed *Time.fixedDeltaTime, 0f);
+        rb.MovePosition(newPos);
+    }
+
+
+    #region Puddle State
+    //Puddle State movement. (WIP)
+    public void puddleMovement()
+    {
+
         // Calculate current horizontal speed
         Vector2 velocityAtPoint = rb.GetPointVelocity(rb.position);
         float horizontalSpeed = velocityAtPoint.x;
@@ -199,44 +213,13 @@ public class PlayerMovement : MonoBehaviour
 
         // Apply drag when no input
         rb.linearDamping = (horizontalInput == 0 && isGrounded) ? groundDrag : 0f;
-
-    }
-
-
-    #region Puddle State
-    //Puddle State movement. (WIP)
-    public void puddleMovement()
-    {
-
-        Vector2 moveDirection = new Vector2(horizontalInput, 0f);
-        rb.AddForce(moveDirection * puddleSpeed, ForceMode2D.Force);
-
-        if (horizontalInput == 0f)
-        {
-            Vector2 frictionForce = -rb.GetPointVelocity(rb.position) * puddleFriction;
-            rb.AddForce(frictionForce, ForceMode2D.Force);  
-        }
     }
     #endregion
 
 
 
     #region Segmented State
-    public void segmentedMovement()
-    { 
-        //Move the first segement with smooth control
-        Rigidbody2D headsegment = segmentedobjects[0].GetComponent<Rigidbody2D>();
-        //Vector2 targetPosition = rb.position + new Vector2(horizontalInput * puddlemovementSpeed * Time.deltaTime, rb.position.y);
-
-        //Move subsequent segments with lag (For trail effects)
-        for (int i = 1; i < segmentedobjects.Count; i++)
-        { 
-            Rigidbody2D segmentRB = segmentedobjects [i].GetComponent<Rigidbody2D>();   
-
-            //Each segment follow the previous one with abit of lag.
-            
-        }
-    }
+    
 
     //Transform the player into segmented state and separate the segment. (WIP)
   /*  public void transformSegmented()
@@ -274,7 +257,8 @@ public class PlayerMovement : MonoBehaviour
     //Check if the player is grounded by checking the vertical velocity of each Rigidbody2D component.
     public void CheckGrounded()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundcheckRadius, groundLayer);
+        Vector2 checkPos = (Vector2)transform.position + Vector2.down * 0.5f;
+        isGrounded = Physics2D.OverlapCircle(checkPos, groundcheckRadius, groundLayer);
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
@@ -296,12 +280,12 @@ public class PlayerMovement : MonoBehaviour
         //Handle jumping behaviour.
         if (isJumping && isGrounded)
         {
-            rb.AddForce(Vector2.up * jumpforce, ForceMode2D.Impulse);
+            rb.AddForce(rb.position + Vector2.up * jumpforce * Time.fixedDeltaTime);
 
             foreach (Rigidbody2D segmentsRB in GetComponentsInChildren<Rigidbody2D>())
             {
                 if (segmentsRB != rb)
-                { 
+                {
                     segmentsRB.AddForce(Vector2.up * jumpforce * childforcemultiplier, ForceMode2D.Impulse);
                 }
             

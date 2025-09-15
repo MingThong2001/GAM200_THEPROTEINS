@@ -863,9 +863,9 @@ MonoBehaviour:
   maxtentacleLength: 5
   extensinSpeed: 10
   retractSpeed: 8
-  maxLiftHeight: 2
-  springFrequency: 4
-  springDamping: 0.5
+  maxLiftHeight: 20
+  springFrequency: 50
+  springDamping: 1
 --- !u!50 &183441788
 Rigidbody2D:
   serializedVersion: 5
@@ -2768,7 +2768,7 @@ MonoBehaviour:
   normalmovementSpeed: 2
   puddlemovementSpeed: 2
   segmentedmovementspeed: 3
-  jumpforce: 6
+  jumpforce: 2
   childforcemultiplier: 0
   groundLayer:
     serializedVersion: 2
