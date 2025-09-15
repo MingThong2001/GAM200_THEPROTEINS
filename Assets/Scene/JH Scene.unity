@@ -7793,6 +7793,7 @@ GameObject:
   - component: {fileID: 2062263845}
   - component: {fileID: 2062263844}
   - component: {fileID: 2062263843}
+  - component: {fileID: 2062263846}
   m_Layer: 0
   m_Name: CenterPoint2
   m_TagString: Untagged
@@ -7945,6 +7946,41 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2062263846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062263836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d40a037885e44442948332c7290d93e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPosition: {fileID: 0}
+  normalmovementSpeed: 1
+  puddlemovementSpeed: 2
+  segmentedmovementspeed: 3
+  jumpforce: 0.1
+  childforcemultiplier: 0.25
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  groundCheck: {fileID: 0}
+  groundcheckRadius: 1
+  moveForce: 2
+  maxSpeed: 4
+  groundDrag: 5
+  puddleSpeed: 5
+  puddleFriction: 1
+  puddleGravity: 0.3
+  springStrength: 10
+  springDamp: 5
+  spriteshapeController: {fileID: 0}
+  currentstate: 0
+  spriteShape: {fileID: 0}
+  slimePoints: []
 --- !u!1 &2094881688
 GameObject:
   m_ObjectHideFlags: 0
