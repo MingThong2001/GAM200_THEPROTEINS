@@ -16,6 +16,7 @@ public class TentacleAppendage : MonoBehaviour
     public float extensinSpeed = 10f;
     public float retractSpeed = 8f;
     public float maxLiftHeight = 2f;
+    
 
     //Spring Joint Settings
     public float springFrequency = 8f;

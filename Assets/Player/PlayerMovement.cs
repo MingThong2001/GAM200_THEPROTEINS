@@ -75,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.freezeRotation = true; //Prevent rotation of the player (WIP).
+        rb.gravityScale = 5f;
     }
     public void Update()
     {
