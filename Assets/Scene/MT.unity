@@ -1801,7 +1801,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   groundCheck: {fileID: 2112726531}
-  groundcheckRadius: 100
+  groundcheckRadius: 0.5
   moveForce: 4
   maxSpeed: 4
   groundDrag: 5
@@ -7552,7 +7552,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1282032705
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7735,7 +7735,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.035, y: -0.73}
+  m_AnchoredPosition: {x: -0.507, y: 0.321}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1282032712
