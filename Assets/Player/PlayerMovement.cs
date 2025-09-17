@@ -292,11 +292,11 @@ public class PlayerMovement : MonoBehaviour
             
             }
 
-            foreach (SpringJoint2D spring in GetComponentsInChildren<SpringJoint2D>())
-            {
-                spring.dampingRatio = 0.5f;
-                spring.frequency = 4f;
-            }
+            //foreach (SpringJoint2D spring in GetComponentsInChildren<SpringJoint2D>())
+            //{
+            //    spring.dampingRatio = 0.5f;
+            //    spring.frequency = 4f;
+            //}
         }
         isJumping = false;
 
