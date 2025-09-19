@@ -123,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
         }
        
         //Handle Jump input
-        if (Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) 
         { 
             isJumping = true;
             Debug.Log("Jump input detected and grounded!");
