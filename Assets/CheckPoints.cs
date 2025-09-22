@@ -19,14 +19,14 @@ public class CheckPoints : MonoBehaviour
     public float savedHealth;
     public int savedSegment;
     public Vector2 savedPosition;
-    
+
     //References
-    private PlayerStats playerStats;    
+    private PlayerStats playerStats;
 
     private void Awake()
     {
 
-       spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         //If player reference is assigned, save intial stats.
         if (player != null)
@@ -39,7 +39,7 @@ public class CheckPoints : MonoBehaviour
             }
         }
         isActivated = false; //Checkpoints start as inactive first.
-        UpdateColor(); 
+        UpdateColor();
     }
 
 
@@ -59,23 +59,30 @@ public class CheckPoints : MonoBehaviour
     }
 
     public void Activatethischeckpoint()
-    { 
+    {
         //Checkpoint is set as activated.
         isActivated = true;
 
-        PlayerStats stats = player.GetComponent <PlayerStats >();
+        PlayerStats stats = player.GetComponent<PlayerStats>();
         if (stats != null)
-        { 
+        {
+            Debug.Log($"Current Segments before saving: {stats.currentSegments}");
+
             savedHealth = stats.GetCurrentHealth();
             savedSegment = stats.currentSegments;
-            savedPosition = player.transform.position;  
+            savedPosition = player.transform.position;
         }
         UpdateColor(); //Update colour to show that the checkpoint has been activated.
+
+        Debug.Log($"Checkpoint Activated!");
+        Debug.Log($"Saved Health: {savedHealth}");
+        Debug.Log($"Saved Segments: {savedSegment}");
+        Debug.Log($"Saved Position: {savedPosition}");
     }
 
-   
+
     public void Deactivate()
-    { 
+    {
         isActivated = false;
         UpdateColor();
     }
@@ -84,8 +91,8 @@ public class CheckPoints : MonoBehaviour
     private void UpdateColor()
     {
         if (spriteRenderer != null)
-        { 
-            spriteRenderer.color = isActivated ? cpActivated : cpDisabled;  
+        {
+            spriteRenderer.color = isActivated ? cpActivated : cpDisabled;
         }
 
     }
@@ -94,15 +101,23 @@ public class CheckPoints : MonoBehaviour
     public void RespawnatCheckPoint()
     {
         if (player != null)
-        { 
+        {
             player.transform.position = savedPosition;
             if (playerStats != null)
-            { 
-                playerStats.GetCurrentHealth();
-                playerStats.currentSegments = savedSegment;
+            {
+                playerStats.SetHealth(savedHealth, 1f); //Reset health to savedhealth, keeping the health percentage.
+                playerStats.currentSegments = savedSegment; //Reet segment counts to the checkpoint saved segment counts
             }
 
         }
     }
+
+    public void UpdateCheckPointSegments(int newSegmentCount)
+    {
+        if (isActivated)
+        { savedSegment = newSegmentCount; }
+        Debug.Log($"Checkpoint segment count updated to {newSegmentCount}");
+
+    }
+
 }
-   

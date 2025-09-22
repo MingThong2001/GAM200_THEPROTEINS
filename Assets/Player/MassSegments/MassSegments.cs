@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class MassSegment : MonoBehaviour
@@ -12,6 +13,7 @@ public class MassSegment : MonoBehaviour
     private Rigidbody2D[] allrigidbodies;
 
     public HealthBarUI HealthbarUI;
+    public int savedSegment;
 
     public void Awake()
     {
@@ -123,6 +125,9 @@ public class MassSegment : MonoBehaviour
         if (newsegmentCount != oldSegment)
         {
             gloomassStats.currentSegments = newsegmentCount;
+            playerstats.currentSegments = newsegmentCount;
+
+            savedSegment = gloomassStats.currentSegments;
             Debug.Log($"Segment Added! New segment count: {gloomassStats.currentSegments}");
 
             UpdateAllStats();
@@ -136,8 +141,10 @@ public class MassSegment : MonoBehaviour
         if (newsegmentCount != oldSegment)
         {
             gloomassStats.currentSegments = newsegmentCount;
-            Debug.Log($"Segment Added! New segment count: {gloomassStats.currentSegments}");
+            playerstats.currentSegments = newsegmentCount;
 
+            savedSegment = gloomassStats.currentSegments ;
+            Debug.Log($"Segment Added! New segment count: {gloomassStats.currentSegments}");
             UpdateAllStats();
             LogStats("RemoveSegment");
         }
@@ -215,50 +222,77 @@ public class MassSegment : MonoBehaviour
 
     }
 
-
-    #endregion
-
-
-    //    #region Pickup
-    //    private void OnTriggerEnter2D(Collider2D slimepickup)
+    //private void UpdateCheckpoint(int newsegmentCount)
+    //{
+    //    CheckPoints checkpoint = GameObject.FindGameObjectWithTag("CheckPoints").GetComponent<CheckPoints>();
+    //    if (checkpoint != null && checkpoint.isActivated)
     //    {
-    //        Debug.Log("Trigger Enter this: " + slimepickup.gameObject.name);
-    //        if (slimepickup.CompareTag("GlooSegment"))
-    //        {
-    //            gloopickup pickup = slimepickup.GetComponent<gloopickup>();
-    //            if (pickup != null)
-    //            { 
-    //                pickupProcess(pickup);
-    //            }
-    //        }
-    //    }
-
-    //    private void pickupProcess(gloopickup pickup)
-    //    {
-    //        if (pickup.isAdditive && canaddSegment())
-    //        {
-    //            AddSegment(pickup.segmentAmount);
-    //            pickup.CollectPickup();
-    //        }
-    //        else if (!pickup.isAdditive && canremoveSegment())
-    //        {
-    //            RemoveSegment(pickup.segmentAmount );
-    //            pickup.CollectPickup(); 
-
-    //        }
-    //        Destroy(gameObject);
+    //        checkpoint.UpdateCheckPointSegments(newsegmentCount);
 
     //    }
-
-
-
-    //#endregion
 
     //}
+
+
+        #endregion
+
+
+        //    #region Pickup
+        //    private void OnTriggerEnter2D(Collider2D slimepickup)
+        //    {
+        //        Debug.Log("Trigger Enter this: " + slimepickup.gameObject.name);
+        //        if (slimepickup.CompareTag("GlooSegment"))
+        //        {
+        //            gloopickup pickup = slimepickup.GetComponent<gloopickup>();
+        //            if (pickup != null)
+        //            { 
+        //                pickupProcess(pickup);
+        //            }
+        //        }
+        //    }
+
+        //    private void pickupProcess(gloopickup pickup)
+        //    {
+        //        if (pickup.isAdditive && canaddSegment())
+        //        {
+        //            AddSegment(pickup.segmentAmount);
+        //            pickup.CollectPickup();
+        //        }
+        //        else if (!pickup.isAdditive && canremoveSegment())
+        //        {
+        //            RemoveSegment(pickup.segmentAmount );
+        //            pickup.CollectPickup(); 
+
+        //        }
+        //        Destroy(gameObject);
+
+        //    }
+
+
+
+        //#endregion
+
+        //}
     private void LogStats(string action)
     {
         Debug.Log($"[{ action}] Segments: { gloomassStats.currentSegments}, " + $"MaxHealth: {gloomassStats.currentMaxHealth}, " + 
             $"PlayerHealth: {playerstats.GetCurrentHealth()}, " + $"MoveSpeed: {playermovement.normalmovementSpeed}, " + $"JumpForce: {playermovement.jumpforce}");
     
     }
+
+    private void UpdateCheckpoint(int newSegmentCount)
+    {
+        // Find the active checkpoint and update its segment count
+        CheckPoints checkpoint = GameObject.FindGameObjectWithTag("CheckPoints")?.GetComponent<CheckPoints>();
+        if (checkpoint != null && checkpoint.isActivated)
+        {
+            checkpoint.UpdateCheckPointSegments(newSegmentCount);
+            Debug.Log($"Checkpoint segment count updated to {newSegmentCount}");
+        }
+        else
+        {
+            Debug.LogWarning("No active checkpoint found or checkpoint is not activated.");
+        }
     }
+
+}
