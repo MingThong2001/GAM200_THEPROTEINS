@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,16 +23,12 @@ public class BreakableObj : MonoBehaviour
         Createhealthbar();
         Updatehealthbar();
 
+        Collider2D playercollider = GameObject.FindWithTag("Player").GetComponent<Collider2D>();
+        Collider2D breakableobjcollider = GetComponent<Collider2D>();
+        Physics2D.IgnoreCollision(playercollider, breakableobjcollider);    
+
     }
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Objhealth -= 1f;
-            Objhealth = Mathf.Max(0, Objhealth);
-            Updatehealthbar();
-        }
-    }
+   
 
     private void Createhealthbar()
     { 
@@ -88,5 +85,4 @@ public class BreakableObj : MonoBehaviour
             healthbarinstance.transform.rotation = Quaternion.identity;
         }
     }
-
 }

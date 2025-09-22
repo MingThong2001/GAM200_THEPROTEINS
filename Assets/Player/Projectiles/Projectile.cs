@@ -121,10 +121,10 @@ public class Projectile : MonoBehaviour
         {
             HandleEnemyHit(collision);
         }
-        else if (collision.gameObject.CompareTag("BreakableObjs"))
-        { 
-            HandleBreakableHit(collision);
-        }
+        //else if (collision.gameObject.CompareTag("BreakableObjs"))
+        //{ 
+        //    HandleBreakableHit(collision);
+        //}
     }
 
     //Stick to system 
