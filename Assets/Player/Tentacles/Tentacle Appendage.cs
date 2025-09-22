@@ -116,10 +116,13 @@ public class TentacleAppendage : MonoBehaviour
         targetPosition = (Vector2)tentacleAnchor.position + direction * distance; //Calculate final taret position.
 
         // Raycast to grab object
-        Collider2D hit = Physics2D.OverlapCircle(targetPosition, 2f, LayerMask.GetMask("Objects"));
-        if (hit != null && hit.attachedRigidbody != null)
+        //Collider2D hit = Physics2D.OverlapCircle(targetPosition, 2f, LayerMask.GetMask("Objects"));
+
+        RaycastHit2D hit = Physics2D.Raycast(tentacleAnchor.position, direction, distance, LayerMask.GetMask("Objects"));
+
+        if (hit != null && hit.rigidbody != null)
         {
-            grabbedObject = hit.attachedRigidbody;
+            grabbedObject = hit.rigidbody;
 
             grabbedObject.gravityScale = 0f; //Disable gravity for smooth dragging.
             originalGrabPos = grabbedObject.position; //Store original position.

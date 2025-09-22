@@ -46,6 +46,8 @@ public class PlayerShoot : MonoBehaviour
         projrb.SetDirection(direction);
         projrb.maxDistance = 10f;
 
+        projrb.damage = (int)damage;
+
         Collider2D[] playerColliders = GetComponentsInChildren<Collider2D>();
         Collider2D[] bulletColliders = projrb.GetComponentsInChildren<Collider2D>();
         foreach (Collider2D playerCols in playerColliders)

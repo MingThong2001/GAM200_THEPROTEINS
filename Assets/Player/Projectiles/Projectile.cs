@@ -9,7 +9,7 @@ public class Projectile : MonoBehaviour
     //Projectile Settings
     public float speed = 10f;
     public float maxDistance;
-    public int damage = 10;
+    public int damage = 2;
 
     //Just in case.
     public Transform FirePoint;
@@ -74,8 +74,8 @@ public class Projectile : MonoBehaviour
         {
             //Track how far it travelled.
             float distancetravelled = Vector3.Distance(startPosition, transform.position);
-            Debug.Log($"Distance travelled: {distancetravelled} / Max distance: {maxDistance}");
-            Debug.Log($"Current position: {transform.position}, Velocity: {bodyParts[0].linearVelocity}");
+          //  Debug.Log($"Distance travelled: {distancetravelled} / Max distance: {maxDistance}");
+           // Debug.Log($"Current position: {transform.position}, Velocity: {bodyParts[0].linearVelocity}");
 
             if (distancetravelled > maxDistance) //If it exceed max ranged, we return to the pool.
             {

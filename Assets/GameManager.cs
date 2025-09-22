@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     #endregion
 
     public static GameManager instance;
+    private CheckPoints checkPoints;    
+
    // public PlayerStats playerStats;
     public GameObject player;
     private GameObject[] collectibles;
@@ -32,6 +34,13 @@ public class GameManager : MonoBehaviour
     public bool gamePaused = false;
     public bool gameOver = false;
 
+    //CheckPoint
+    private Vector2 checkpointPosition;
+    private CheckPoints activecheckPoints;
+
+    //Player stats
+    private int checkpointHealth;
+    private int checkpointSegmentcount;
 
     public void Awake()
     {
@@ -64,6 +73,12 @@ public class GameManager : MonoBehaviour
         {
             TogglePaused();
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        { 
+            RespawnPlayer();
+        }
+
     }
     public void StartGame()
     {
@@ -85,6 +100,7 @@ public class GameManager : MonoBehaviour
     }
 
 
+    
     public void TogglePaused()
     {
         gamePaused = !gamePaused;
@@ -134,7 +150,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         cleanupScene();
-     //   resetplayerState();
+    
         StartGame();
     }
 
@@ -145,20 +161,111 @@ public class GameManager : MonoBehaviour
 
     }
 
+  
     public void cleanupScene()
     {
+        //Destroy all enemies
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
+        foreach (GameObject enemy in enemies)
+        { 
+            Destroy(enemy);
+        
+        }
+
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("Objects");
+        foreach (GameObject obj in objects)
+        {
+            Destroy(obj);
+
+        }
+
+        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectiles");
+        foreach (GameObject proj in projectiles)
+        {
+            Destroy(proj);
+
+        }
+
+        GameObject[] collectibles = GameObject.FindGameObjectsWithTag("Collectibles");
+        foreach (GameObject coll in collectibles)
+        {
+            Destroy(coll);
+
+        }
+
+        if (player != null)
+        { 
+            SoftBodyPhyiscs softbody = player.GetComponent<SoftBodyPhyiscs>();
+            if (softbody != null)
+            {
+              //  softbody.Reset();
+            }
+        }
+
+
 
     }
 
-    /*public void resetplayerState()
-    {
-        if (playerStats != null)
-        {
-            playerStats.resetStats();
-        }
-    }*/
+    #region CHECKPOINTS
 
-    #region Segmentation
+    public void RegisterPlayer(GameManager playerObj)
+    {
+     //   GameManager.RegisterPlayer(playerObj.gameObject);
+    }
+    public void SetCheckpoint(CheckPoints newCheckpoint, GameObject playerObj)
+    {
+        //Deactivate previous checkpoint.
+        if (activecheckPoints != null && activecheckPoints != newCheckpoint)
+        {
+            activecheckPoints.Deactivate();
+        }
+
+        activecheckPoints = newCheckpoint;
+        activecheckPoints.Activatethischeckpoint();
+        checkpointPosition = activecheckPoints.transform.position;
+
+
+        //Player Stats
+        PlayerStats stats = playerObj.GetComponent<PlayerStats>();
+        if (stats != null)
+        {
+            //  checkpointHealth = stats.health;
+
+
+
+            //SoftBody Physics here
+
+        }
+
+    }
+
+    public void RespawnPlayer()
+    {
+        if (player == null || activecheckPoints == null)
+        {
+            return;
+        }
+
+        //Move player to checkpoint
+        player.transform.position = checkpointPosition;
+
+        //Restore health.
+        PlayerStats stats = player.GetComponent<PlayerStats>();
+        if (stats != null)
+        {
+            //  stats.health = checkpointHealth;
+        }
+
+        //Restore Segments.
+        SoftBodyPhyiscs softbody = player.GetComponent<SoftBodyPhyiscs>();
+        if (softbody != null)
+        {
+            //  softbody.ResetSegments(checkpointSegmentcount);
+        }
+    }
+    #endregion  
+
+        #region Segmentation
     public void collectSegment(Transform newSegment)
     {
         SoftBodyPhyiscs softbodyphysic = GetComponent<SoftBodyPhyiscs>();
@@ -174,3 +281,4 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 }
+

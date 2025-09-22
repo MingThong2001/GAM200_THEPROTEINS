@@ -11,22 +11,17 @@ public class PlayerStats : MonoBehaviour
     public static PlayerStats instance;
 
     //Health
-    public float maxHealth = 100f;
-
+    public float baseMaxHealth = 100f;
     public int lives = 5;
     private float currentHealth;
 
-
-
-    //Mass-Related values
-    public int currentSegments = 12;
-    public int maxSegments = 12;
-    public float healthperSegment = 10f;
-    public float massperSegment = 1f;
-
+    //Checkpoint
+    public int currentSegments;
     //References
     private Rigidbody2D rb;
     public PlayerMovement movement;
+    
+
 
     private void Awake()
     {
@@ -34,45 +29,26 @@ public class PlayerStats : MonoBehaviour
         { 
             instance = this;
         }
+        rb = GetComponent<Rigidbody2D>();   
+        movement = GetComponent<PlayerMovement>();  
+        currentHealth = baseMaxHealth;
 
-        rb = GetComponent<Rigidbody2D>();
-        currentHealth = maxHealth;
-
-        updateStatsbasedonMess();
+      
     }
 
-   
-
-    public void updateStatsbasedonMess()
+  
+    public void SetHealth(float maxHealth, float currentHealthPercent = -1f)
     {
-       
-       currentHealth = maxHealth + (currentHealth * healthperSegment);
-        if (rb != null)
-        { 
-            rb.mass = currentSegments * massperSegment;
+        if (currentHealthPercent < 0)
+        {
+            currentHealthPercent = baseMaxHealth > 0 ? currentHealth / baseMaxHealth : 1f;
         }
+
+        baseMaxHealth = maxHealth;  
+        currentHealth = baseMaxHealth * Mathf.Clamp01(currentHealthPercent);
     }
 
-    //Add a segment to the player ensuring we do not exceed the max segments.
-    public void AddSegment()
-    { 
-        currentSegments = Mathf.Min(currentSegments +1, maxSegments);
-
-        //Give bonus health when gaining a segment
-        currentHealth  = Mathf.Min(currentHealth + healthperSegment, maxHealth);
-        updateStatsbasedonMess();
-    }
-
-    public void MinusSegment()
-    {
-        currentSegments = Mathf.Max(currentSegments - 1, 1);
-
-        //Reduce health
-        currentHealth = Mathf.Min(currentHealth, maxHealth);
-        updateStatsbasedonMess();
-
-    }
-
+    
     public void TakeDamage(float Damage)
     { 
         currentHealth -= Damage;
@@ -135,11 +111,22 @@ public class PlayerStats : MonoBehaviour
         currentHealth = checkpoint.savedHealth;
         currentSegments = checkpoint.savedSegment;
         transform.position = checkpoint.savedPosition;
-        updateStatsbasedonMess();
+
+        MassSegment masssegment = GetComponent<MassSegment>();
+
+        if (masssegment != null)
+        {
+            masssegment.SetSegmentCount(currentSegments);
+        }
 
     }
     public float GetCurrentHealth()
     { return currentHealth; }
+
+    public float GetMaxHealth()
+    {
+        return baseMaxHealth;
+    }
 
   
     

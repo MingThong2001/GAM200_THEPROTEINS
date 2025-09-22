@@ -8,6 +8,8 @@ TagManager:
   - Object
   - Projectile
   - Surface
+  - GlooSegment
+  - BreakableObjs
   layers:
   - Default
   - TransparentFX
@@ -19,7 +21,7 @@ TagManager:
   - Objects
   - Projectile
   - Player
-  - 
+  - GlooSegment
   - 
   - 
   - 

@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     public float segmentedmovementspeed = 3f; //Segmented state movement speed.
 
     //Jumping 
-    public float jumpforce = 10f; //Force applied for jumping.
+    public float jumpforce = 0.5f; //Force applied for jumping.
     public float childforcemultiplier = 0.25f;      
     private bool isJumping;
     private bool isGrounded;
@@ -46,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
     //Reference to RigidBody2D
     private Rigidbody2D rb;
+    private MassStats massStats;
 
     
     //Input Variables
@@ -67,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
     //Spline shape only for slime body (Used to update slime's shape and movement).
     [SerializeField] private SpriteShapeController spriteShape;
     [SerializeField] private List<Transform> slimePoints;
-
+    [SerializeField] private MassSegment massSegment;
 
 
 
@@ -76,6 +77,25 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.freezeRotation = true; //Prevent rotation of the player (WIP).
         rb.gravityScale = 5f;
+
+        if (massStats != null)
+        {
+            massStats = massSegment.gloomassStats;
+        }
+        else
+        {
+            massSegment = GetComponent<MassSegment>();
+            if (massSegment != null)
+            {
+                massStats = massSegment.gloomassStats;
+            }
+
+        }
+
+
+
+
+
     }
     public void Update()
     {
@@ -127,8 +147,9 @@ public class PlayerMovement : MonoBehaviour
         { 
             isJumping = true;
             Debug.Log("Jump input detected and grounded!");
+
         }
-      
+
         //State Input
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -182,8 +203,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void normalMovement(float speed)
     {
-
-        float horizontalInput = 0f;
+        horizontalInput = 0f;
         if (Input.GetKey(KeyCode.A))
         {
             horizontalInput = -1f; // Move Left
@@ -192,8 +212,13 @@ public class PlayerMovement : MonoBehaviour
         {
             horizontalInput = 1f; // Move Right
         }
-        Vector2 newPos = rb.position + new Vector2(horizontalInput * normalmovementSpeed *Time.fixedDeltaTime, 0f);
+        float adjustedSpeed = massStats.currentMoveSpeed;
+
+        Vector2 newPos = rb.position + new Vector2(horizontalInput * adjustedSpeed * Time.fixedDeltaTime, 0f);
         rb.MovePosition(newPos);
+
+      //  Debug.Log($"[Normal Move] Input: {horizontalInput}, Speed: {adjustedSpeed}, Position: {rb.position}");
+
     }
 
 
@@ -281,13 +306,18 @@ public class PlayerMovement : MonoBehaviour
         //Handle jumping behaviour.
         if (isJumping && isGrounded)
         {
-            rb.AddForce(rb.position + Vector2.up * jumpforce * Time.fixedDeltaTime);
+            //Scale Jump with mass.
+            float mass = massStats.currentSegments * massStats.massPerSegment;
+            float adjustedJump = Mathf.Max(massStats.baseJump / (1f + mass * 0.1f), massStats.baseJump * 0.3f);
 
+              rb.AddForce(Vector2.up * adjustedJump, ForceMode2D.Impulse);
+            
+            Debug.Log($"[Jump] Segments: {massStats.currentSegments}, Mass: {mass:F2}, Adjusted Jump: {adjustedJump:F2}");
             foreach (Rigidbody2D segmentsRB in GetComponentsInChildren<Rigidbody2D>())
             {
                 if (segmentsRB != rb)
                 {
-                    segmentsRB.AddForce(Vector2.up * jumpforce * childforcemultiplier, ForceMode2D.Impulse);
+                    segmentsRB.AddForce(Vector2.up * adjustedJump * childforcemultiplier, ForceMode2D.Impulse);
                 }
             
             }
