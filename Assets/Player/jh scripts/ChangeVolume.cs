@@ -5,6 +5,14 @@ public class ChangeVolume : MonoBehaviour
 {
     SpringJoint2D[] springJointList;
     List<float> originalDistanceList = new List<float>();
+    List<float> originalFrequencyList = new List<float>();
+    List<float> originalDampList = new List<float>();
+    public float oriSize = 1f;
+    public float shrinkSize = 0.5f;
+    public float growSize = 2f;
+    public float lowerStr = 0.5f;
+    public float oriStr = 1f;
+
 
     void Start()
     {
@@ -12,30 +20,32 @@ public class ChangeVolume : MonoBehaviour
         foreach (SpringJoint2D joint in springJointList)
         {
             originalDistanceList.Add(joint.distance);
+            originalFrequencyList.Add(joint.frequency);
+            originalDampList.Add(joint.dampingRatio);
         }
     }
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Y))
+        if (Input.GetKey(KeyCode.X))
         {
-            Change(2f);
+            Change(growSize);
         }
         if (Input.GetKey(KeyCode.C))
         {
-            Change(0.5f);
+            Change(shrinkSize);
         }
         if (Input.GetKey(KeyCode.V))
         {
-            Change(1f);
+            Change(oriSize);
         }
         if (Input.GetKey(KeyCode.N))
         {
-            ChangeJointStr(0.01f);
+            ChangeJointStr(oriStr);
         }
         if (Input.GetKey(KeyCode.M))
         {
-            ChangeJointStr(-0.01f);
+            ChangeJointStr(lowerStr);
         }
 
 
@@ -55,8 +65,9 @@ public class ChangeVolume : MonoBehaviour
         int i = 0;
         foreach (SpringJoint2D joint in springJointList)
         {
-            joint.frequency = joint.frequency + value;
-            joint.dampingRatio = joint.dampingRatio + value;
+            joint.frequency = originalFrequencyList[i] * value;
+            joint.dampingRatio = originalDampList[i] + value;
+            i++;
         }
     }
 
