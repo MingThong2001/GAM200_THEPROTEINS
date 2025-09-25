@@ -11604,7 +11604,7 @@ GameObject:
   - component: {fileID: 1178822449}
   - component: {fileID: 1178822459}
   m_Layer: 0
-  m_Name: Point0
+  m_Name: Point00
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12075,7 +12075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85627c3d22cd45a47b7f3445c8173706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tentacleAnchor: {fileID: 2094881689}
+  tentacleAnchor: {fileID: 1178822457}
   tentacleTip: {fileID: 1282032711}
   maxtentacleLength: 5
   extensinSpeed: 10
