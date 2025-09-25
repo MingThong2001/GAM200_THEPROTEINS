@@ -3,8 +3,9 @@ using UnityEngine;
 public class PlayerShoot : MonoBehaviour
 {
     //Projectile Settings
-    public GameObject projectilePrefab;
+    public Projectile projectilePrefab;
     public Transform firePoint;
+    public MassSegment massSegment;
 
     public float cooldown = 0.5f;
     public float maxDistance = 5f;
@@ -22,44 +23,35 @@ public class PlayerShoot : MonoBehaviour
             Shoot();
             lastFiretime = Time.time;
         }
+
     }
-
-   
-
     private void Shoot()
     {
+        //Remove segment before shooting
+        massSegment.RemoveSegment(1);
         //Direction toward mouse
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPos.z = 0; 
         Vector3 direction = (mouseWorldPos - firePoint.position).normalized;
 
         //Spawn a projectile
-        Projectile projrb = ProjectilePool.Instance.GetProjectile();
-        if (projrb == null)
-        {
-            Debug.LogError("Projectile was null! Make sure your pool is correctly initialized.");
+        Projectile projrb = Instantiate(projectilePrefab);
+        //projrb.GetComponent<Projectile>().enabled = false;
+        //if (projrb == null)
+        //{
+        //    Debug.LogError("Projectile was null! Make sure your pool is correctly initialized.");
 
-            projrb = Instantiate(projectilePrefab).GetComponent<Projectile>();
-        }
+        //    projrb = Instantiate(projectilePrefab).GetComponent<Projectile>();
+        //}
 
         projrb.transform.position = firePoint.position;
         projrb.SetDirection(direction);
         projrb.maxDistance = 10f;
 
         projrb.damage = (int)damage;
+        projrb.gameObject.tag = "Player";
 
-        Collider2D[] playerColliders = GetComponentsInChildren<Collider2D>();
-        Collider2D[] bulletColliders = projrb.GetComponentsInChildren<Collider2D>();
-        foreach (Collider2D playerCols in playerColliders)
-        {
-            foreach (Collider2D bulletCols in bulletColliders)
-            {
-                Physics2D.IgnoreCollision(bulletCols, playerCols);
-
-            }
-
-
-        }
+     
         Debug.Log("Fired projectile at time: " + Time.time);
 
 

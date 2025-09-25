@@ -1,10 +1,62 @@
 using System.ComponentModel;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MassSegment : MonoBehaviour
 {
+    #region Mass Stats Settings
+    //Mass Configuration
+    public int currentSegments = 13;
+    public int minSegments = 12;
+    public int maxSegments = 30;
+    public float massPerSegment = 0.1f;
+
+    //Base Stats
+    public float basemoveSpeed = 5f;
+    public float baseJump = 0.5f;
+    public float baseHealth = 100f;
+
+    //Mass Modifiers
+    [Range(0f, 2f)]
+    public float speedmodifierRange = 0.8f;
+
+    [Range(0f, 2f)]
+    public float jumpmodifierRange = 0.8f;
+
+    [Range(0f, 2f)]
+    public float healthmodifierRange = 0.8f;
+
+    //Stats Update
+    public float TotalMass;
+    public float currentMoveSpeed;
+    public float currentJumpPower;
+    public float currentMaxHealth;
+    #endregion
+   
+    public float MassRatio()
+    {
+        return Mathf.Clamp01((float)(currentSegments - minSegments) / (maxSegments - minSegments));
+
+    }
+
+    //Modified Stats
+    public void Updatemovespeed()
+    {
+        currentMoveSpeed = basemoveSpeed * (1f + MassRatio() * speedmodifierRange);
+    }
+
+    public void Updatejumppower()
+    {
+        currentJumpPower = baseJump * (1f + MassRatio() * jumpmodifierRange);
+    }
+
+    public void Updatemaxhealth()
+    {
+        currentMaxHealth = baseHealth * (1f + MassRatio() * healthmodifierRange);
+    }
     [SerializeField] public MassStats gloomassStats = new MassStats();
+
+    public List <Projectile> ProjectileSegments = new List<Projectile> ();
 
     //Reference to components
     public PlayerMovement playermovement;
@@ -15,6 +67,9 @@ public class MassSegment : MonoBehaviour
     public HealthBarUI HealthbarUI;
     public int savedSegment;
 
+
+    //Reference
+    private Projectile projectilePrefab;
     public void Awake()
     {
         if (playerstats == null)
@@ -91,6 +146,26 @@ public class MassSegment : MonoBehaviour
             pickup.isBeingProcessed = false;
         }
         
+        //To pickup projectile
+        //ProjectillePickup projectilepickup = coll.GetComponentInParent<ProjectillePickup>();
+        //if (projectilepickup != null && projectilepickup.canBeCollected)
+        //{ 
+        //    AddSegment(projectilepickup.segmentAmount);
+
+        //    Projectile proj = projectilepickup.GetComponent<Projectile>();
+
+        //    if (proj != null)
+        //    {
+
+        //        proj.();
+        //    }
+        //   processed = true;    
+        //}
+        //if (!processed)
+        //{
+        //    Debug.Log("[MassSegment] Pickup ignored (not valid or cannot process)");
+
+        //}
     }
     #region Segment Count
 
@@ -121,6 +196,8 @@ public class MassSegment : MonoBehaviour
     public void AddSegment(int amount = 1)
     {
         int oldSegment = gloomassStats.currentSegments;
+
+        Debug.Log($"[AddSegment] Current: {oldSegment}, Adding: {amount}"); 
         int newsegmentCount = Mathf.Min(gloomassStats.maxSegments, oldSegment + amount);
         if (newsegmentCount != oldSegment)
         {
@@ -137,6 +214,8 @@ public class MassSegment : MonoBehaviour
     public void RemoveSegment(int amount = 1)
     {
         int oldSegment = gloomassStats.currentSegments;
+        Debug.Log($"[RemoveSegment] Current: {oldSegment}, Removing: {amount}");
+
         int newsegmentCount = Mathf.Max(gloomassStats.minSegments, oldSegment - amount);
         if (newsegmentCount != oldSegment)
         {
@@ -160,6 +239,14 @@ public class MassSegment : MonoBehaviour
     }
     #endregion
 
+    public void CollectProjectile(Projectile projectilePrefab)
+    {
+
+        if (projectilePrefab == null) return;
+        //projectile.returntoprojectilePool();
+        AddSegment(projectilePrefab.segmentAmount);
+        Destroy(projectilePrefab.gameObject); 
+    }
 
 
     #region Stats Update

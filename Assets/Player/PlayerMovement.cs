@@ -13,7 +13,6 @@ public enum slimeState
 public class PlayerMovement : MonoBehaviour
 {
     //Movement speed for different states.
-    public Transform targetPosition;
     public float normalmovementSpeed = 1f; //Normal state movement speed.
     public float puddlemovementSpeed = 2f; //Puddle state movement speed.
     public float segmentedmovementspeed = 3f; //Segmented state movement speed.
@@ -25,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private float groundcheckRadius = 1f;
+    [SerializeField] private float groundcheckRadius = 10f;
 
 
     //Normal Movement
@@ -280,15 +279,26 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion */
 
-    //Check if the player is grounded by checking the vertical velocity of each Rigidbody2D component.
     public void CheckGrounded()
     {
-        Vector2 checkPos = (Vector2)transform.position + Vector2.down * 0.5f;
-        isGrounded = Physics2D.OverlapCircle(checkPos, groundcheckRadius, groundLayer);
+        //Find the lowest point of the player.
+        float lowestYpoint = transform.position.y;
+
+        //Loop through all child springJoint2D components.
+        foreach (SpringJoint2D joint in GetComponentsInChildren<SpringJoint2D>())
+        { 
+            //Update lowestY to the smallest Y-position found.
+            lowestYpoint = Mathf.Min(lowestYpoint, joint.transform.position.y);
+        }
+        //Define the position where we check for ground and make it slightly below the lowest segment to avoid floating point error.
+        Vector2 checkPos = new Vector2(transform.position.x, lowestYpoint - 0.1f);
+        isGrounded = Physics2D.OverlapCircle(checkPos, 0.2f, groundLayer);
     }
+
+  
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("groundLayer"))
+        if (collision.CompareTag("groundLayer") || collision.CompareTag("Objects"))
         {
             isGrounded = true;
         }
@@ -296,7 +306,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("groundLayer"))
+        if (collision.CompareTag("groundLayer") || collision.CompareTag("Objects"))
         {
             isGrounded = false;
         }
@@ -310,8 +320,8 @@ public class PlayerMovement : MonoBehaviour
             float mass = massStats.currentSegments * massStats.massPerSegment;
             float adjustedJump = Mathf.Max(massStats.baseJump / (1f + mass * 0.1f), massStats.baseJump * 0.3f);
 
-              rb.AddForce(Vector2.up * adjustedJump, ForceMode2D.Impulse);
-            
+            rb.AddForce(Vector2.up * adjustedJump, ForceMode2D.Impulse);
+
             Debug.Log($"[Jump] Segments: {massStats.currentSegments}, Mass: {mass:F2}, Adjusted Jump: {adjustedJump:F2}");
             foreach (Rigidbody2D segmentsRB in GetComponentsInChildren<Rigidbody2D>())
             {
@@ -319,20 +329,15 @@ public class PlayerMovement : MonoBehaviour
                 {
                     segmentsRB.AddForce(Vector2.up * adjustedJump * childforcemultiplier, ForceMode2D.Impulse);
                 }
-            
+
             }
 
-            //foreach (SpringJoint2D spring in GetComponentsInChildren<SpringJoint2D>())
-            //{
-            //    spring.dampingRatio = 0.5f;
-            //    spring.frequency = 4f;
-            //}
+        
+            isJumping = false;
+
+
         }
-        isJumping = false;
-
-
     }
-
 
     //Switch between different slime states.
     public void switchState(slimeState slimeState)  

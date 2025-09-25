@@ -51,6 +51,21 @@ public class gloopickup : MonoBehaviour
 
 
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!enabled) return;
+
+        if (collision.CompareTag("Player"))
+        {
+            //MassSegment massSeg = collision.GetComponent<MassSegment>();
+            //if (massSeg != null)
+            //{
+            //    massSeg.AddSegment(segmentAmount);
+            //    CollectPickup();
+            //}
+        }
+    }
     //public void OnTriggerEnter2D(Collider2D other)
     //{
     //    Debug.Log("Something entered the trigger area!");
@@ -83,7 +98,7 @@ public class gloopickup : MonoBehaviour
     //                    massSegment.RemoveSegment(segmentAmount);
     //                    CollectPickup();
     //                }
-                    
+
     //            }
     //            break;
     //        }

@@ -12,11 +12,16 @@ public class PickupDetector : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("PickupDetector triggered by: " + collision.gameObject.name);
+        Debug.Log($"PickupDetector triggered by: {collision.gameObject.name}, tag: {collision.tag}");
 
-        if (collision.CompareTag("GlooSegment"))
+
+        if (collision.CompareTag("Player"))
         {
+            Debug.Log("Picupdetector works");
             parentMassSegment.handlepickupCollision(collision);
         }
+            
     }
 }
+
+

@@ -69,7 +69,7 @@ public class TentacleAppendage : MonoBehaviour
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         //Left click to extend toward target.
-        if (Input.GetMouseButtonDown(0) && grabbedObject == null)
+        if (Input.GetMouseButtonDown(1) && grabbedObject == null)
         {
             StartExtend(mousePosition);
         }
@@ -77,7 +77,7 @@ public class TentacleAppendage : MonoBehaviour
         
 
         // Release
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(1))
         {
             if (grabbedObject != null)
             {
@@ -88,7 +88,7 @@ public class TentacleAppendage : MonoBehaviour
 
 
         // While Holding left click with object.
-        if (Input.GetMouseButton(0) && grabbedObject != null)
+        if (Input.GetMouseButton(1) && grabbedObject != null)
         {
             dragObject();
            
@@ -116,23 +116,46 @@ public class TentacleAppendage : MonoBehaviour
         targetPosition = (Vector2)tentacleAnchor.position + direction * distance; //Calculate final taret position.
 
         // Raycast to grab object
-        //Collider2D hit = Physics2D.OverlapCircle(targetPosition, 2f, LayerMask.GetMask("Objects"));
+        Collider2D[] hit = Physics2D.OverlapCircleAll(targetPosition, 0.1f, LayerMask.GetMask("Jumpable"));
 
-        RaycastHit2D hit = Physics2D.Raycast(tentacleAnchor.position, direction, distance, LayerMask.GetMask("Objects"));
+        //   RaycastHit2D hit = Physics2D.Raycast(tentacleAnchor.position, direction, distance, LayerMask.GetMask("groundLayer"));
 
-        if (hit != null && hit.rigidbody != null)
+        foreach (Collider2D hit2 in hit)
         {
-            grabbedObject = hit.rigidbody;
+            if (hit2.CompareTag("Object"))
+            { 
+                Rigidbody2D rb = hit2.attachedRigidbody ?? hit2.GetComponentInParent<Rigidbody2D>();
+                if (rb != null)
+                { 
+                    grabbedObject = rb;
+                    grabbedObject.gravityScale = 0f;
+                    originalGrabPos = grabbedObject.position;
 
-            grabbedObject.gravityScale = 0f; //Disable gravity for smooth dragging.
-            originalGrabPos = grabbedObject.position; //Store original position.
-            springJoint.connectedBody = grabbedObject;
-            springJoint.frequency = 20f;
-            springJoint.distance = 0.1f;
-            springJoint.autoConfigureDistance = false;
-            springJoint.enabled = true;
-
+                    transform.position = grabbedObject.position;
+                    springJoint.connectedBody = grabbedObject;
+                    springJoint.frequency = 20f;
+                    springJoint.distance = 0.1f;
+                    springJoint.autoConfigureDistance = false;
+                    springJoint.enabled = true;
+                    break;
+                }
+            }
+        
         }
+
+        //if (hit != null && hit.rigidbody != null)
+        //{
+        //    grabbedObject = hit.rigidbody;
+
+        //    grabbedObject.gravityScale = 0f; //Disable gravity for smooth dragging.
+        //    originalGrabPos = grabbedObject.position; //Store original position.
+        //    springJoint.connectedBody = grabbedObject;
+        //    springJoint.frequency = 20f;
+        //    springJoint.distance = 0.1f;
+        //    springJoint.autoConfigureDistance = false;
+        //    springJoint.enabled = true;
+
+        //}
 
         isExtending = true;
         isRetracting = false;

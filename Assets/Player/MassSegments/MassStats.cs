@@ -3,10 +3,9 @@ using UnityEngine;
 public class MassStats
 {
     //Mass Configuration
-
-    public int currentSegments = 12;
+    public int currentSegments = 13;
     public int minSegments = 12;
-    public int maxSegments = 24;
+    public int maxSegments = 30;
     public float massPerSegment = 0.1f;
 
     //Base Stats

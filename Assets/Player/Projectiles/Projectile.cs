@@ -7,9 +7,12 @@ public class Projectile : MonoBehaviour
 {
 
     //Projectile Settings
-    public float speed = 10f;
+    public float speed = 0.2f;
     public float maxDistance;
     public int damage = 2;
+    public float delayTime = 0.5f;
+    public float fireTime;
+    public bool ignorePlayer = false;
 
     //Just in case.
     public Transform FirePoint;
@@ -25,22 +28,60 @@ public class Projectile : MonoBehaviour
     private Transform projectileTransform;
 
 
+    //Pickup Settings.
+    public bool canBeCollected = false;
+
+    public AudioClip pickupSound;
+    public int segmentAmount = 1;
+
+    //References.
+    private Collider2D pickupCollider;
+    public Projectile projectilePrefab;
+
+
     //Projectile States.
     private bool isActive = false;
     private bool isStuck = false;
     private float stickTime = 0f;
     private float stickDuration = 5f;
+    private bool Hashit = false;
 
+    //References
+    private ProjectillePickup pickup;
 
+    private void Awake()
+    {
+        //Reset Pickup
+        pickup = GetComponent<ProjectillePickup>();
+        if (pickup == null)
+        {
+            pickup = GetComponentInParent<ProjectillePickup>();
+        }
+        if (pickup != null)
+        {
+            pickup.ResetPickup();
+        }
+        else
+        {
+            Debug.LogError("Projectile: No ProjectillePickup found on this projectile or its parent!");
+        }
+    }
     private void OnEnable()
     {
         //Record initial position when activated.
         startPosition = transform.position;
         Debug.Log($"Projectile fired at position: {startPosition}");
 
+        pickup = GetComponentInChildren<ProjectillePickup>(true);
+        Debug.Log(pickup != null ? "Pickup found!" : "Pickup NOT found!");
+
+        if (pickup == null)
+            Debug.LogError("Projectile: No ProjectillePickup found on this projectile or its parent/children!");
+
         //Initialize all the body parts and joints.
         initializeProjectile();
-
+        SwitchTag(gameObject, "Player");
+        canBeCollected = false;
     }
    
     public void initializeProjectile()
@@ -55,7 +96,8 @@ public class Projectile : MonoBehaviour
         {
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-            rb.gravityScale = 0f; //Gravity setting but can be remove. Include this for debugging previously.
+            rb.gravityScale = 0.8f;
+            rb.linearDamping = 1f;
         }
 
         //Reactivate all the springJoints.
@@ -68,6 +110,11 @@ public class Projectile : MonoBehaviour
     }
     public void Update()
     {
+        //if (isActive && Time.time - fireTime >= delayTime && gameObject.tag != "Projectile")
+        //{
+        //    SwitchTag(gameObject, "Projectile");
+        //}
+
 
         //If projectile is flying and active.
         if (isActive && !isStuck)
@@ -79,16 +126,18 @@ public class Projectile : MonoBehaviour
 
             if (distancetravelled > maxDistance) //If it exceed max ranged, we return to the pool.
             {
-                returntoprojectilePool();
+                MakeCollectible();
             }
         }
         else if (isStuck) //If the projectile sticks, check the stick duration.
         {
             if (Time.time - stickTime >= stickDuration)
             {
-                returntoprojectilePool();
+               
             }
         }
+
+       
 
     }
 
@@ -101,21 +150,31 @@ public class Projectile : MonoBehaviour
         float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
 
-        if (bodyParts.Length > 0) //Apply force to the firstbody segment.
-        { 
-            Rigidbody2D body = bodyParts[0];
-            body.AddForce(moveDirection * speed, ForceMode2D.Impulse);
-            Debug.Log("Projectile velocity: " + body.linearVelocity);
+        foreach (Rigidbody2D rb in bodyParts)
+        {
+       
+            Rigidbody2D rootrb = bodyParts[0];
+            //rootrb.linearDamping = 7f;
+            //rootrb.AddForce(moveDirection * speed,ForceMode2D.Impulse);
+            rootrb.AddForce(transform.up * 1000f);
+
+            //Throw a spin for realism.
+            rootrb.AddTorque(Random.Range(-0.5f,2f),ForceMode2D.Impulse);
 
         }
+        fireTime = Time.time;
+
+        //SwitchTag(gameObject, "Player");
+        //pickup?.EnableCollection();
     }
 
     //Collision with tagged objects.
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Surface"))
+        if (collision.gameObject.CompareTag("groundLayer"))
         {
-            SticktoSurface(collision);
+            //SticktoSurface(collision);
+            Land();
         }
         else if (collision.gameObject.CompareTag("Enemy"))
         {
@@ -242,30 +301,35 @@ public class Projectile : MonoBehaviour
     //Enemy Collision.
     public void HandleEnemyHit(Collision2D collision)
     {
+        if (Hashit) return;
+        Hashit = true;
+
         GameObject targetPoint = collision.gameObject;
         Enemy enemy = targetPoint.GetComponent<Enemy>();
         if (enemy != null)
         {
             enemy.TakeDamage(damage);
         }
-        returntoprojectilePool();
+        //returntoprojectilePool();
     }
 
     //Breakable Object Collision.
     public void HandleBreakableHit(Collision2D collision)
     {
+        if (Hashit) return;
+        Hashit = true;
+
         BreakableObj breakable = collision.gameObject.GetComponent<BreakableObj>();
         if (breakable != null)
         {
             breakable.TakeDamage(damage);
         }
-        returntoprojectilePool();
+        //returntoprojectilePool();
     }
 
     //Reset project states.
     public void ResetProjectile()
     {
-
         //Reset transform positions.
         transform.position = startPosition;
         transform.rotation = Quaternion.identity;   
@@ -285,15 +349,132 @@ public class Projectile : MonoBehaviour
         }
         isActive = false;
         isStuck = false;
+
+        if (pickup != null)
+        {
+
+           pickup.ResetPickup();
+        }
+
+        SwitchTag(gameObject, "Player");
+        canBeCollected = false;
     }
 
     //Return projectile to the pool after resetting it.
-    private void returntoprojectilePool()
+    //public void returntoprojectilePool()
+    //{
+    //    ResetProjectile();
+    //    // Return the projectile to the pool
+    //    ProjectilePool.Instance.ReturnProjectile(this);
+    //    Debug.Log("Projectile returning to pool at time: " + Time.time);
+
+    //}
+
+
+    private void Land()
     {
-        ResetProjectile();
-        // Return the projectile to the pool
-        ProjectilePool.Instance.ReturnProjectile(this);
-        Debug.Log("Projectile returning to pool at time: " + Time.time);
+        Debug.Log("landed");
+        if (!isActive) return;
+        isActive = true;
+
+        foreach (Rigidbody2D rb in bodyParts)
+        {
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.linearVelocity = Vector2.zero;
+            rb.gravityScale = 1f;
+            rb.linearDamping = 3f;     
+           
+
+            float randomJitter = Random.Range(0.25f, 0.30f);
+            rb.AddForce(Vector2.up * randomJitter);
+        }
+        MakeCollectible();
+    }
+
+
+    #region Pickup System
+
+    public void EnableCollection()
+    {
+        canBeCollected = true;
+        if (pickupCollider != null)
+        {
+            pickupCollider.isTrigger = true;
+        }
+        Debug.Log($"ProjectilePickup: Collection ENABLED on {gameObject.name}");
+        //   CheckOverlap();
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log($"ProjectilePickup: Trigger entered by {other.name} with tag {other.tag}");
+        Debug.Log($"Can be collected: {canBeCollected}");
+
+        if (!canBeCollected) return;
+
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log($"Collecting via segment: {gameObject.name}");
+            MassSegment massSegment = other.GetComponentInParent<MassSegment>();
+            if (massSegment != null)
+            {
+                Collect(massSegment);
+            }
+        }
+
 
     }
+    public void Collect(MassSegment collector)
+    {
+        if (!canBeCollected) return;
+        Projectile projectilePrefab = GetComponentInParent<Projectile>();
+        if (projectilePrefab != null)
+        {
+            collector.CollectProjectile(projectilePrefab);
+            //canBeCollected = false;
+            //if (pickupCollider != null)
+            //{
+            //    pickupCollider.isTrigger = false;
+            //}
+            //Destroy(projectilePrefab);
+        }
+    }
+    public void ResetPickup()
+    {
+
+        canBeCollected = false;
+
+        // Reset the pickup collider back to non-trigger
+        //if (pickupCollider != null)
+        //{
+        //    pickupCollider.isTrigger = false;
+
+        //}
+    }
+    #endregion
+    public void MakeCollectible()
+    {
+        if (canBeCollected) return;
+        canBeCollected = true;
+        Debug.Log($"Projectile: MakeCollectible called on {gameObject.name} at time {Time.time}");
+
+        SwitchTag(gameObject, "Player");
+        Debug.Log($"Projectile: Calling EnableCollection on {pickup.gameObject.name}");
+
+        if (pickup != null) 
+        {
+            pickup.EnableCollection();
+        }
+    }
+
+    private void SwitchTag(GameObject obj, string newTag)
+    {
+        obj.tag = newTag;
+        foreach (Transform t in obj.transform)
+        {
+            SwitchTag(t.gameObject, newTag);
+
+        }
+    }
+    
 }

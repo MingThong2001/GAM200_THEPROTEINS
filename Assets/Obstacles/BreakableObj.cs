@@ -13,7 +13,7 @@ public class BreakableObj : MonoBehaviour
     public Image fillbar; //Image component that shows visually to represent the enemy's HP.
     private Transform HptoObjecthp; //Target enemy transform so the healthbar will follow.
     private Vector3 hptoObjectoffset; //The position offset between the enemy and the HP bar (To show it above the enemy head and for visual appeal).
-
+ //   private Text HPtext;
     //References.
     public GameObject healthbarPrefab;
     private GameObject healthbarinstance;
@@ -38,6 +38,7 @@ public class BreakableObj : MonoBehaviour
         healthbarinstance = Instantiate(healthbarPrefab, spawnPos, Quaternion.identity);
 
         fillbar = healthbarinstance.GetComponentInChildren<Image>();
+        //HPtext = healthbarinstance.GetComponentInChildren<Text>();
         HptoObjecthp = transform;
         hptoObjectoffset = new Vector3(0,1f,0);
     }
@@ -48,6 +49,11 @@ public class BreakableObj : MonoBehaviour
         { 
             fillbar.fillAmount = Objhealth /Objmaxhealth;
             Debug.Log($"fillAmount set to: {fillbar.fillAmount}");
+
+            //if (HPtext != null )
+            //{
+            //    HPtext.text = $"{Objhealth}/{Objmaxhealth}";
+            //}
 
 
         }
