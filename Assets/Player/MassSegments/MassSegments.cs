@@ -210,6 +210,9 @@ public class MassSegment : MonoBehaviour
             UpdateAllStats();
             LogStats("AddSegment");
         }
+        ChangeVolume ch = GetComponent<ChangeVolume>();
+        ch.AdjustFirePointDistance(1.5f);
+        ch.Change(1.5f);
     }
     public void RemoveSegment(int amount = 1)
     {
@@ -227,6 +230,9 @@ public class MassSegment : MonoBehaviour
             UpdateAllStats();
             LogStats("RemoveSegment");
         }
+        ChangeVolume ch = GetComponent<ChangeVolume>();
+        ch.Change(1f);
+        ch.AdjustFirePointDistance(1f);
     }
     public void SetSegmentCount(int count)
     {

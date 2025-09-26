@@ -7,13 +7,16 @@ public class ChangeVolume : MonoBehaviour
     List<float> originalDistanceList = new List<float>();
     List<float> originalFrequencyList = new List<float>();
     List<float> originalDampList = new List<float>();
+    public GameObject firePoint;
+    float firePointOriY;
     public float oriSize = 1f;
     public float shrinkSize = 0.5f;
     public float growSize = 2f;
     public float lowerStr = 0.5f;
     public float oriStr = 1f;
 
-
+    public MassSegment massSegment;
+    private int lastSegmentcount;
     void Start()
     {
         springJointList = GetComponentsInChildren<SpringJoint2D>();
@@ -23,13 +26,19 @@ public class ChangeVolume : MonoBehaviour
             originalFrequencyList.Add(joint.frequency);
             originalDampList.Add(joint.dampingRatio);
         }
+        firePointOriY = firePoint.transform.localPosition.y;
+        massSegment = GetComponentInParent<MassSegment>();
+      
     }
 
     void Update()
     {
         if (Input.GetKey(KeyCode.X))
         {
+         
             Change(growSize);
+            
+
         }
         if (Input.GetKey(KeyCode.C))
         {
@@ -48,10 +57,23 @@ public class ChangeVolume : MonoBehaviour
             ChangeJointStr(lowerStr);
         }
 
+        //if (massSegment == null) return;
+
+        //int currentSegmentCount = massSegment.gloomassStats.currentSegments;
+        //if (currentSegmentCount != lastSegmentcount)
+        //{
+        //    float scalefactor = GetvaluescalefromSegment();
+        //    Change(scalefactor);
+        //    ChangeJointStr(oriStr);
+
+        //    lastSegmentcount = currentSegmentCount;
+        //}
 
     }
 
-    void Change(float volumeFactor)
+
+
+    public void Change(float volumeFactor)
     {
         int i = 0;
         foreach (SpringJoint2D joint in springJointList)
@@ -60,7 +82,13 @@ public class ChangeVolume : MonoBehaviour
             i++;
         }
     }
-    void ChangeJointStr(float value)
+
+    public void AdjustFirePointDistance(float volumeFactor)
+    {
+        //firePoint.transform.localPosition = new Vector2(0, firePointOriY * volumeFactor);
+    }
+
+    public void ChangeJointStr(float value)
     {
         int i = 0;
         foreach (SpringJoint2D joint in springJointList)
@@ -82,4 +110,18 @@ public class ChangeVolume : MonoBehaviour
 
         }
     }
+
+    #region Volume Scale From Segments
+    //public float GetvaluescalefromSegment()
+    //{
+    //    if (massSegment == null)
+    //    {
+    //        return 1f;
+    //    }
+
+    //    float volumeRatio = (float)(massSegment.gloomassStats.currentSegments - massSegment.gloomassStats.minSegments) / (massSegment.gloomassStats.maxSegments - massSegment.gloomassStats.minSegments);
+    //    //Smooth interpolation.
+    //    return Mathf.Lerp(shrinkSize, growSize, volumeRatio);
+    //}
+    #endregion
 }
