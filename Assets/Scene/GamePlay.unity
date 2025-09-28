@@ -8773,8 +8773,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Slime your way through obstacles \nand press the button to slide the door
-    open!"
+  m_text: Slime your way through obstacles and press the button to open the door!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 780bcf24ed37cab4894568019567497f, type: 2}
   m_sharedMaterial: {fileID: 6334428950596633686, guid: 780bcf24ed37cab4894568019567497f, type: 2}
