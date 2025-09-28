@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class DoorButton : MonoBehaviour
@@ -8,15 +9,22 @@ public class DoorButton : MonoBehaviour
     private Color unpressedColor = Color.red;
   
     private SpriteRenderer buttonRender;
+    public TextMeshProUGUI messageText;
+    public string messageToShow = "Press W to leave the level";
 
 
     public void ResetButton()
     {
         hasbeenPressed = false;
         if (buttonRender != null)
-        { 
+        {
             buttonRender.color = unpressedColor;
         }
+        if (messageText != null)
+        {
+            messageText.text = "";
+        }
+
     }
     private void Start()
     {
@@ -26,7 +34,10 @@ public class DoorButton : MonoBehaviour
         {
             buttonRender.color = unpressedColor;
         }
-      
+        if (messageText != null)
+        {
+            messageText.text = "";
+        }
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -41,6 +52,10 @@ public class DoorButton : MonoBehaviour
 
                 Debug.Log("Button Pressed");
                 connectedDoor.UnlockedDoor();
+            }
+            if (messageText != null)
+            {
+                messageText.text = messageToShow;
             }
         }
     }

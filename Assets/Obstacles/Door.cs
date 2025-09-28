@@ -10,6 +10,7 @@ public class Door : MonoBehaviour
     private GameManager gameManager;
     public bool Playerinreange = false;
     private GameObject player;
+   
     public void ResetDoor()
     {
         isOpening = false;
@@ -38,6 +39,8 @@ public class Door : MonoBehaviour
         {
             whitecoverdoor = transform.Find("whitecoverdoor").gameObject;
         }
+
+        
     }
 
     public void Update()
