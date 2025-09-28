@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+//Define game states.
 public enum GameState
 {
     Play,
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject objectivePanel;
     #endregion
 
+    //Players and checkpoints.
     public static GameManager instance;
     private CheckPoints checkPoints;
 
@@ -59,8 +61,6 @@ public class GameManager : MonoBehaviour
  
     public void Awake()
     {
-        Debug.Log($"GameManager Awake: name={gameObject.name}, instanceID={gameObject.GetInstanceID()}, scene={gameObject.scene.name}");
-
 
         if (instance == null)
         {
@@ -79,12 +79,14 @@ public class GameManager : MonoBehaviour
         playMenu.SetActive(true);
         pauseMenu.SetActive(false);
         victoryMenu.SetActive(false);
+
         //gameOverMenu.SetActive(false);
         //restartMenu.SetActive(false);
         objectivePanel.SetActive(false);
 
     }
 
+    //Get player controller.
     public void Start()
     {
         if (player != null)
@@ -98,9 +100,7 @@ public class GameManager : MonoBehaviour
     }
     public void Update()
     {
-
-        Debug.Log("GameManager Update running...");
-
+        //Toggle Pause on esc key.
         Debug.Log("Pause");
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -110,6 +110,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        //Disable playermovement and shoot when UI panel appears.
         if (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf)
         {
             if (playermovement != null)
@@ -122,7 +123,7 @@ public class GameManager : MonoBehaviour
             }
 
         }
-        else
+        else //Enable them back if its in the playstate.
         {
             if (currentState == GameState.Play)
             {
@@ -429,17 +430,7 @@ public class GameManager : MonoBehaviour
 
     }
     #endregion
-    private void OnEnable()
-    {
-        Debug.Log("GameManager enabled at frame: " + Time.frameCount);
-    }
-
-    private void OnDisable()
-    {
-        Debug.LogWarning("GameManager disabled at frame: " + Time.frameCount);
-        Debug.LogWarning("Stack trace:\n" + System.Environment.StackTrace);
-
-    }
+ 
 
 }
 

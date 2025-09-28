@@ -1,18 +1,24 @@
-using TMPro;
+using TMPro; 
 using UnityEngine;
 
 public class DoorButton : MonoBehaviour
 {
+    //Reference.
     public Door connectedDoor;
+
+    //Track whether the button has been pressed.
     public bool hasbeenPressed = false;
+
+    //Color Setting for visual feedback.
     private Color pressedColor = Color.green;
     private Color unpressedColor = Color.red;
   
+
     private SpriteRenderer buttonRender;
     public TextMeshProUGUI messageText;
     public string messageToShow = "Press W to leave the level";
 
-
+    //Reset the button to its unpressed state.
     public void ResetButton()
     {
         hasbeenPressed = false;
@@ -26,6 +32,8 @@ public class DoorButton : MonoBehaviour
         }
 
     }
+
+    //Initialize component.
     private void Start()
     {
         buttonRender = GetComponent<SpriteRenderer>();
@@ -39,10 +47,13 @@ public class DoorButton : MonoBehaviour
             messageText.text = "";
         }
     }
+
+    //Triggered when collider enter the trigger area.
     private void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("Button triggered by: " + other.name);
 
+        //React when the button hasn't been pressed and the object enter is the player.
         if (!hasbeenPressed && other.GetComponentInParent<PlayerMovement>() != null)
         {
             hasbeenPressed = true;
