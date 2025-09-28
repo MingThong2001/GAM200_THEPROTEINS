@@ -86,6 +86,7 @@ public class BreakableObj : MonoBehaviour
 
         Destroy(gameObject);
     }
+    
 
    
     void LateUpdate() //Called after all update functions have been called. This is for the HPUI to follow.

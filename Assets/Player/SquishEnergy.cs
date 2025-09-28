@@ -47,7 +47,6 @@ public class SquishEnergy : MonoBehaviour
 
         if (rb != null)
         {
-            Debug.Log($"Main RB - Mass: {rb.mass}, Drag: {rb.linearDamping}, IsKinematic: {rb.isKinematic}");
         }
 
         // Get all segment bodies

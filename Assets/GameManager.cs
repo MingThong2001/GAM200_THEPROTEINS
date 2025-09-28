@@ -2,6 +2,8 @@ using NUnit.Framework;
 using System.Diagnostics.Contracts;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum GameState
 {
@@ -9,6 +11,8 @@ public enum GameState
     Paused,
     GameOver,
     Restart,
+    Showobjectivedelay,
+    showobjective
  
 }
 public class GameManager : MonoBehaviour
@@ -17,15 +21,16 @@ public class GameManager : MonoBehaviour
     private GameState currentState;
     [SerializeField] private GameObject playMenu;
     [SerializeField] private GameObject pauseMenu;
-    [SerializeField] private GameObject gameOverMenu;
-    [SerializeField] private GameObject restartMenu;
+    //[SerializeField] private GameObject gameOverMenu;
+    //[SerializeField] private GameObject restartMenu;
     [SerializeField] private GameObject victoryMenu;
+    [SerializeField] private GameObject objectivePanel;
     #endregion
 
     public static GameManager instance;
-    private CheckPoints checkPoints;    
+    private CheckPoints checkPoints;
 
-   // public PlayerStats playerStats;
+    // public PlayerStats playerStats;
     public GameObject player;
     private GameObject[] collectibles;
 
@@ -42,71 +47,136 @@ public class GameManager : MonoBehaviour
     private int checkpointHealth;
     private int checkpointSegmentcount;
 
+    //Reset Door
+    public Door[] doors;
+    public DoorButton[] doorsButton;
+
+    //References
+    public PlayerShoot playershoot;
+    public PlayerMovement playermovement;
+    private Rigidbody2D playerRigid;
+
+ 
     public void Awake()
     {
+        Debug.Log($"GameManager Awake: name={gameObject.name}, instanceID={gameObject.GetInstanceID()}, scene={gameObject.scene.name}");
+
+
         if (instance == null)
         {
             instance = this;
-            //DontDestroyonLoad(this);
         }
         else
         {
+            Debug.LogWarning("Duplicate GameManager found! Destroying: " + gameObject.name);
             Destroy(gameObject);
             return;
         }
+        Debug.Log("GameManager Awake on object: " + gameObject.name);
 
         //Initialize state and menus.
         currentState = GameState.Play;
         playMenu.SetActive(true);
         pauseMenu.SetActive(false);
-        gameOverMenu.SetActive(false);
-        restartMenu.SetActive(false);
-        //Player body (list of body segments) For collectibles.
-
-
-
-    }
-
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape) && !gamePaused && currentState == GameState.Play)
-        {
-            TogglePaused();
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        { 
-            RespawnPlayer();
-        }
+        victoryMenu.SetActive(false);
+        //gameOverMenu.SetActive(false);
+        //restartMenu.SetActive(false);
+        objectivePanel.SetActive(false);
 
     }
-    public void StartGame()
+
+    public void Start()
     {
         if (player != null)
-        {
-            Destroy(player);
+        { 
+            playermovement = player.GetComponentInParent<PlayerMovement>();
+            playershoot = player.GetComponentInParent<PlayerShoot>();
+
+
         }
 
-        //Instantiate Player
-        //player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-       // playerStats = player.GetComponent<PlayerStats>();
+    }
+    public void Update()
+    {
 
-        //Reset Game State
-        currentState = GameState.Play;
-        gamePaused = false;
-        gameOver = false;
+        Debug.Log("GameManager Update running...");
 
-        playMenu.SetActive(false);
+        Debug.Log("Pause");
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (currentState == GameState.Play || currentState == GameState.Paused)
+            {
+                TogglePaused();
+            }
+        }
+
+        if (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf)
+        {
+            if (playermovement != null)
+            {
+                playermovement.enabled = false;
+            }
+            if (playershoot != null)
+            {
+                playershoot.enabled = false;
+            }
+
+        }
+        else
+        {
+            if (currentState == GameState.Play)
+            {
+                if (playermovement != null && !playermovement.enabled)
+                {
+                    playermovement.enabled = true;
+                }
+                if (playershoot != null && !playershoot.enabled)
+                {
+                    playershoot.enabled = true;
+                }
+            }
+        }
+
+
     }
 
+    #region Start
+    public void StartGame()
+    {
+       
+        playMenu.SetActive(false);
+        objectivePanel.SetActive(true);
+        currentState = GameState.showobjective;
 
-    
+        gamePaused = true;
+        gameOver = false;
+
+        Time.timeScale = 0f;
+
+
+    }
+   
+
+    public void afterObjective()
+    {
+        objectivePanel.SetActive(false);
+        Time.timeScale = 1f;
+        gamePaused = false;
+        currentState = GameState.Play;
+
+    }
+    #endregion
+
+
+
+    #region Pause & Resume
     public void TogglePaused()
     {
         gamePaused = !gamePaused;
 
         if (gamePaused)
         {
+
             currentState = GameState.Paused;
             Time.timeScale = 0f;
             pauseMenu.SetActive(true);
@@ -120,12 +190,27 @@ public class GameManager : MonoBehaviour
 
     public void resumeGame()
     {
+
         gamePaused = false;
         currentState = GameState.Play;
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
+        if (currentState == GameState.Play)
+        {
+            if (playermovement != null && !playermovement.enabled)
+            {
+                playermovement.enabled = true;
+            }
+            if (playershoot != null && !playershoot.enabled)
+            {
+                playershoot.enabled = true;
+            }
+        }
     }
 
+    #endregion
+
+    #region End Cycle
     public void endGame(bool isVictory)
     {
         gameOver = true;
@@ -135,25 +220,77 @@ public class GameManager : MonoBehaviour
 
         if (isVictory)
         {
+
             victoryMenu.SetActive(true);
+        }
+        else if (!isVictory)
+        {
+            victoryMenu.SetActive(false);
         }
         else
         {
-            gameOverMenu.SetActive(true);
+            resetVictory();
         }
+    }
+    public void resetVictory()
+    {
+        gameOver = false;
+        currentState = GameState.Play;
+        victoryMenu.SetActive(false);
+        ResetDoorandbutton();
+        }
+
+    public void BackToStartMenu()
+    {
+        cleanupScene();
+
+        victoryMenu.SetActive(false);
+        pauseMenu.SetActive(false);
+        objectivePanel.SetActive(false);
+
+        
+        Time.timeScale = 0f;
+        gameOver = false;
+        gamePaused = true;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        currentState = GameState.Play;
     }
 
     public void restartGame()
     {
-        gameOver = false;
-        gamePaused = false;
+        Debug.Log("StartGame() CALLED");
+
+        ResetDoorandbutton();
+
+        victoryMenu.SetActive(false);
+        objectivePanel.SetActive(false);
+        pauseMenu.SetActive(false);
+
+        currentState = GameState.Play;
+
         Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
         cleanupScene();
     
-        StartGame();
+        resetVictory();
     }
 
+    public void ResetDoorandbutton()
+    {
+        foreach (Door door in doors)
+        {
+            door.ResetDoor();
+            door.Playerinreange = false;
+
+        }
+
+        foreach (DoorButton button in doorsButton)
+        {
+            button.ResetButton();
+        }
+    }
     public void resetgameStats()
     {
         gamePaused = false;
@@ -164,48 +301,60 @@ public class GameManager : MonoBehaviour
   
     public void cleanupScene()
     {
-        //Destroy all enemies
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
-        foreach (GameObject enemy in enemies)
-        { 
-            Destroy(enemy);
+        ////Destroy all enemies
+        //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
+        //foreach (GameObject enemy in enemies)
+        //{ 
+        //    Destroy(enemy);
         
-        }
+        //}
 
-        GameObject[] objects = GameObject.FindGameObjectsWithTag("Objects");
-        foreach (GameObject obj in objects)
-        {
-            Destroy(obj);
+        //GameObject[] objects = GameObject.FindGameObjectsWithTag("Objects");
+        //foreach (GameObject obj in objects)
+        //{
+        //    Destroy(obj);
 
-        }
+        //}
 
-        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Projectiles");
+        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject proj in projectiles)
         {
-            Destroy(proj);
-
-        }
-
-        GameObject[] collectibles = GameObject.FindGameObjectsWithTag("Collectibles");
-        foreach (GameObject coll in collectibles)
-        {
-            Destroy(coll);
-
-        }
-
-        if (player != null)
-        { 
-            SoftBodyPhyiscs softbody = player.GetComponent<SoftBodyPhyiscs>();
-            if (softbody != null)
+            if (proj.name.Contains("projectileV3(Clone)"))
             {
-              //  softbody.Reset();
+
+                Destroy(proj);
             }
+          
+
         }
+
+        //GameObject[] collectibles = GameObject.FindGameObjectsWithTag("Collectibles");
+        //foreach (GameObject coll in collectibles)
+        //{
+        //    Destroy(coll);
+
+        //}
+
+        //if (player != null)
+        //{ 
+        //    SoftBodyPhyiscs softbody = player.GetComponent<SoftBodyPhyiscs>();
+        //    if (softbody != null)
+        //    {
+        //      //  softbody.Reset();
+        //    }
+        //}
 
 
 
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    #endregion
+  
     #region CHECKPOINTS
 
     public void RegisterPlayer(GameManager playerObj)
@@ -280,5 +429,17 @@ public class GameManager : MonoBehaviour
 
     }
     #endregion
+    private void OnEnable()
+    {
+        Debug.Log("GameManager enabled at frame: " + Time.frameCount);
+    }
+
+    private void OnDisable()
+    {
+        Debug.LogWarning("GameManager disabled at frame: " + Time.frameCount);
+        Debug.LogWarning("Stack trace:\n" + System.Environment.StackTrace);
+
+    }
+
 }
 

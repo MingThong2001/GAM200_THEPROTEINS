@@ -13,11 +13,11 @@ public class PlayerShoot : MonoBehaviour
     private float lastFiretime = 0f;
     public float damage = 2f;
 
-
+    
 
     private void Update()
     {
-
+       
         if (Input.GetMouseButtonDown(0) && Time.time >= lastFiretime + cooldown)
         {
             Shoot();

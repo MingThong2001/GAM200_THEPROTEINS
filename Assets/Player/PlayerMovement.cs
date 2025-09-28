@@ -70,7 +70,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private MassSegment massSegment;
 
 
-
     public void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -101,10 +100,14 @@ public class PlayerMovement : MonoBehaviour
        
         handleInput();
         CheckGrounded();
+
+     
     }
     
     public void FixedUpdate()
     {
+    
+
         handleJump();
         handleMovement();
 
