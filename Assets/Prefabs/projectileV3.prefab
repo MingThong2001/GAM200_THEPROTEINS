@@ -535,7 +535,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 232382953585771170}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46554cc854d756749a893be6cfc2f297, type: 3}
   m_Name: 
@@ -564,6 +564,10 @@ MonoBehaviour:
   ignorePlayer: 0
   FirePoint: {fileID: 0}
   segmentPrefab: {fileID: 0}
+  canBeCollected: 0
+  pickupSound: {fileID: 0}
+  segmentAmount: 1
+  projectilePrefab: {fileID: 0}
 --- !u!58 &5172542745779623136
 CircleCollider2D:
   m_ObjectHideFlags: 0

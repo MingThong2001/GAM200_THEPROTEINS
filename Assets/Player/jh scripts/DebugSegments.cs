@@ -8,7 +8,6 @@ public class DebugSegments : MonoBehaviour
     private void Start()
     {
         segmentScript = GetComponent<MassSegment>();
-        segmentScript.RemoveSegment();
     }
     void Update()
     {

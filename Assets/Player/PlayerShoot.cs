@@ -18,7 +18,7 @@ public class PlayerShoot : MonoBehaviour
     private void Update()
     {
        
-        if (Input.GetMouseButtonDown(0) && Time.time >= lastFiretime + cooldown)
+        if (Input.GetMouseButtonDown(0) && Time.time >= lastFiretime + cooldown && massSegment.GetCurrentSegments() > massSegment.GetMinSegments())
         {
             Shoot();
             lastFiretime = Time.time;
@@ -28,7 +28,7 @@ public class PlayerShoot : MonoBehaviour
     private void Shoot()
     {
         //Remove segment before shooting
-        massSegment.RemoveSegment(1);
+        massSegment.RemoveSegment(massSegment.GetMaxSegments());
         //Direction toward mouse
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPos.z = 0; 

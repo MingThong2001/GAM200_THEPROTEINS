@@ -6,9 +6,9 @@ public class MassSegment : MonoBehaviour
 {
     #region Mass Stats Settings
     //Mass Configuration
-    public int currentSegments = 13;
-    public int minSegments = 12;
-    public int maxSegments = 30;
+    public int currentSegments;
+    public int minSegments;
+    public int maxSegments;
     public float massPerSegment = 0.1f;
    
     //Base Stats
@@ -19,11 +19,11 @@ public class MassSegment : MonoBehaviour
     public float rawJump;
 
     //Mass Modifiers
-    [Range(0f, 2f)]
-    public float speedmodifierRange = 0.5f;
+    [Range(0f, 5f)]
+    public float speedmodifierRange = 2.5f;
 
-    [Range(0f, 2f)]
-    public float jumpmodifierRange = 0.5f;
+    [Range(0f, 5f)]
+    public float jumpmodifierRange = 2.5f;
 
     [Range(0f, 2f)]
     public float healthmodifierRange = 0.5f;
@@ -38,6 +38,18 @@ public class MassSegment : MonoBehaviour
     public Door masstoDoor;
     #endregion
  
+    public int GetCurrentSegments()
+    {
+        return currentSegments;
+    }
+    public int GetMinSegments()
+    {
+        return minSegments;
+    }
+    public int GetMaxSegments()
+    {
+        return maxSegments;
+    }
 
     public float MassRatio()
     {
@@ -222,8 +234,8 @@ public class MassSegment : MonoBehaviour
         }
         ChangeVolume ch = GetComponent<ChangeVolume>();
 
-        ch.AdjustFirePointDistance(1.1f);
-        ch.Change(1.1f);
+        ch.AdjustFirePointDistance(1.5f);
+        ch.Change(1.5f);
 
 
   }
@@ -244,8 +256,8 @@ public class MassSegment : MonoBehaviour
             LogStats("RemoveSegment");
         }
         ChangeVolume ch = GetComponent<ChangeVolume>();
-        ch.Change(0.7f);
-        ch.AdjustFirePointDistance(1f);
+        ch.Change(0.5f);
+        ch.AdjustFirePointDistance(0.5f);
         //CheckdoorMass();
     }
     public void SetSegmentCount(int count)

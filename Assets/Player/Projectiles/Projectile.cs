@@ -95,7 +95,7 @@ public class Projectile : MonoBehaviour
         foreach (Rigidbody2D rb in bodyParts)
         {
             rb.bodyType = RigidbodyType2D.Dynamic;
-            rb.collisionDetectionMode = CollisionDetectionMode2D.Discrete;
+            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
             rb.gravityScale = 0.8f;
             rb.linearDamping = 1f;
         }
@@ -405,25 +405,25 @@ public class Projectile : MonoBehaviour
         //   CheckOverlap();
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        Debug.Log($"ProjectilePickup: Trigger entered by {other.name} with tag {other.tag}");
-        Debug.Log($"Can be collected: {canBeCollected}");
+    //private void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    Debug.Log($"ProjectilePickup: Trigger entered by {other.name} with tag {other.tag}");
+    //    Debug.Log($"Can be collected: {canBeCollected}");
 
-        if (!canBeCollected) return;
+    //    if (!canBeCollected) return;
 
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log($"Collecting via segment: {gameObject.name}");
-            MassSegment massSegment = other.GetComponentInParent<MassSegment>();
-            if (massSegment != null)
-            {
-                Collect(massSegment);
-            }
-        }
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        Debug.Log($"Collecting via segment: {gameObject.name}");
+    //        MassSegment massSegment = other.GetComponentInParent<MassSegment>();
+    //        if (massSegment != null)
+    //        {
+    //            Collect(massSegment);
+    //        }
+    //    }
 
 
-    }
+    //}
     public void Collect(MassSegment collector)
     {
         if (!canBeCollected) return;
