@@ -11,7 +11,7 @@ public class DoorButton : MonoBehaviour
 
     //Color Setting for visual feedback.
     private Color pressedColor = Color.green;
-    private Color unpressedColor = Color.red;
+    private Color unpressedColor = new Color(186f / 255f, 79f / 255f, 97f / 255f);
   
 
     private SpriteRenderer buttonRender;

@@ -20,8 +20,8 @@ public class MassSegment : MonoBehaviour
     [Range(0f, 2f)]
     public float speedmodifierRange = 0.8f;
 
-    [Range(0f, 2f)]
-    public float jumpmodifierRange = 0.8f;
+    [Range(0f, 10f)]
+    public float jumpmodifierRange = 5f;
 
     [Range(0f, 2f)]
     public float healthmodifierRange = 0.8f;
@@ -47,7 +47,9 @@ public class MassSegment : MonoBehaviour
 
     public void Updatejumppower()
     {
-        currentJumpPower = baseJump * (1f + MassRatio() * jumpmodifierRange);
+        //currentJumpPower = baseJump * (1f * MassRatio() * jumpmodifierRange);
+        currentJumpPower = baseJump  * (MassRatio() * jumpmodifierRange) *2f ;
+
     }
 
     public void Updatemaxhealth()
