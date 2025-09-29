@@ -10,29 +10,35 @@ public class MassSegment : MonoBehaviour
     public int minSegments = 12;
     public int maxSegments = 30;
     public float massPerSegment = 0.1f;
-
+   
     //Base Stats
     public float basemoveSpeed = 5f;
     public float baseJump = 0.5f;
     public float baseHealth = 100f;
+    public float rawSpeed;
+    public float rawJump;
 
     //Mass Modifiers
     [Range(0f, 2f)]
-    public float speedmodifierRange = 0.8f;
-
-    [Range(0f, 10f)]
-    public float jumpmodifierRange = 5f;
+    public float speedmodifierRange = 0.5f;
 
     [Range(0f, 2f)]
-    public float healthmodifierRange = 0.8f;
+    public float jumpmodifierRange = 0.5f;
+
+    [Range(0f, 2f)]
+    public float healthmodifierRange = 0.5f;
 
     //Stats Update
     public float TotalMass;
     public float currentMoveSpeed;
     public float currentJumpPower;
     public float currentMaxHealth;
+
+    //Door
+    public Door masstoDoor;
     #endregion
-   
+ 
+
     public float MassRatio()
     {
         return Mathf.Clamp01((float)(currentSegments - minSegments) / (maxSegments - minSegments));
@@ -42,21 +48,22 @@ public class MassSegment : MonoBehaviour
     //Modified Stats
     public void Updatemovespeed()
     {
-        currentMoveSpeed = basemoveSpeed * (1f + MassRatio() * speedmodifierRange);
+        rawSpeed = basemoveSpeed * (1f - MassRatio() * speedmodifierRange);
+        currentMoveSpeed = Mathf.Clamp(rawSpeed, 1f, basemoveSpeed);
     }
 
     public void Updatejumppower()
     {
         //currentJumpPower = baseJump * (1f * MassRatio() * jumpmodifierRange);
-        currentJumpPower = baseJump  * (MassRatio() * jumpmodifierRange) *2f ;
-
+        rawJump = baseJump  * (1f - MassRatio() * jumpmodifierRange);
+        currentJumpPower = Mathf.Clamp(rawJump, 0.5f, baseJump);
     }
 
     public void Updatemaxhealth()
     {
         currentMaxHealth = baseHealth * (1f + MassRatio() * healthmodifierRange);
     }
-    [SerializeField] public MassStats gloomassStats = new MassStats();
+    
 
     public List <Projectile> ProjectileSegments = new List<Projectile> ();
 
@@ -88,12 +95,13 @@ public class MassSegment : MonoBehaviour
         {
             if (rb != null)
             {
-                rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+                rb.collisionDetectionMode = CollisionDetectionMode2D.Discrete;
             }
 
         }
         UpdateAllStats();
     }
+
     public void handlepickupCollision(Collider2D coll)
     {
         Debug.Log("handlepickupCollision triggered!");
@@ -173,7 +181,7 @@ public class MassSegment : MonoBehaviour
 
     public bool canaddSegment()
     {
-        if (gloomassStats.currentSegments < gloomassStats.maxSegments)
+        if (currentSegments < maxSegments)
         {
             return true;
         }
@@ -185,7 +193,7 @@ public class MassSegment : MonoBehaviour
 
     public bool canremoveSegment()
     {
-        if (gloomassStats.currentSegments > gloomassStats.minSegments)
+        if (currentSegments > minSegments)
         {
             return true;
         }
@@ -197,51 +205,55 @@ public class MassSegment : MonoBehaviour
 
     public void AddSegment(int amount = 1)
     {
-        int oldSegment = gloomassStats.currentSegments;
+        int oldSegment = currentSegments;
 
         Debug.Log($"[AddSegment] Current: {oldSegment}, Adding: {amount}"); 
-        int newsegmentCount = Mathf.Min(gloomassStats.maxSegments, oldSegment + amount);
+        int newsegmentCount = Mathf.Min(maxSegments, oldSegment + amount);
         if (newsegmentCount != oldSegment)
         {
-            gloomassStats.currentSegments = newsegmentCount;
+            currentSegments = newsegmentCount;
             playerstats.currentSegments = newsegmentCount;
 
-            savedSegment = gloomassStats.currentSegments;
-            Debug.Log($"Segment Added! New segment count: {gloomassStats.currentSegments}");
+            savedSegment = currentSegments;
+            Debug.Log($"Segment Added! New segment count: {currentSegments}");
 
             UpdateAllStats();
             LogStats("AddSegment");
         }
         ChangeVolume ch = GetComponent<ChangeVolume>();
-        ch.AdjustFirePointDistance(1.5f);
-        ch.Change(1.5f);
-    }
+
+        ch.AdjustFirePointDistance(1.1f);
+        ch.Change(1.1f);
+
+
+  }
     public void RemoveSegment(int amount = 1)
     {
-        int oldSegment = gloomassStats.currentSegments;
+        int oldSegment = currentSegments;
         Debug.Log($"[RemoveSegment] Current: {oldSegment}, Removing: {amount}");
 
-        int newsegmentCount = Mathf.Max(gloomassStats.minSegments, oldSegment - amount);
+        int newsegmentCount = Mathf.Max(minSegments, oldSegment - amount);
         if (newsegmentCount != oldSegment)
         {
-            gloomassStats.currentSegments = newsegmentCount;
+            currentSegments = newsegmentCount;
             playerstats.currentSegments = newsegmentCount;
 
-            savedSegment = gloomassStats.currentSegments ;
-            Debug.Log($"Segment Added! New segment count: {gloomassStats.currentSegments}");
+            savedSegment = currentSegments ;
+            Debug.Log($"Segment Added! New segment count: {currentSegments}");
             UpdateAllStats();
             LogStats("RemoveSegment");
         }
         ChangeVolume ch = GetComponent<ChangeVolume>();
-        ch.Change(1f);
+        ch.Change(0.7f);
         ch.AdjustFirePointDistance(1f);
+        //CheckdoorMass();
     }
     public void SetSegmentCount(int count)
     {
-        int newsegmentCount = Mathf.Clamp(count, gloomassStats.minSegments, gloomassStats.maxSegments);
-        if (newsegmentCount != gloomassStats.currentSegments)
+        int newsegmentCount = Mathf.Clamp(count, minSegments, maxSegments);
+        if (newsegmentCount != currentSegments)
         {
-            gloomassStats.currentSegments = newsegmentCount;
+            currentSegments = newsegmentCount;
             UpdateAllStats();
         }
     }
@@ -260,9 +272,9 @@ public class MassSegment : MonoBehaviour
     #region Stats Update
     public void UpdateAllStats()
     {
-        gloomassStats.Updatemaxhealth();
-        gloomassStats.Updatejumppower();
-        gloomassStats.Updatemovespeed();
+        Updatemaxhealth();
+        Updatejumppower();
+        Updatemovespeed();
 
         UpdatemovementStats();
         UpdatehealthStats();
@@ -272,11 +284,11 @@ public class MassSegment : MonoBehaviour
 
     private void UpdatemovementStats()
     {
-        if (playermovement != null && gloomassStats != null)
+        if (playermovement != null)
         {
-            playermovement.normalmovementSpeed = gloomassStats.currentMoveSpeed;
-            playermovement.puddlemovementSpeed = gloomassStats.currentMoveSpeed * 0.4f;
-            playermovement.jumpforce = gloomassStats.currentJumpPower;
+            playermovement.normalmovementSpeed = currentMoveSpeed;
+            playermovement.puddlemovementSpeed = currentMoveSpeed * 0.4f;
+            playermovement.jumpforce = currentJumpPower;
         }
     }
 
@@ -285,7 +297,7 @@ public class MassSegment : MonoBehaviour
         if (playerstats != null)
         {
             float healthPercentage = playerstats.GetMaxHealth() > 0 ? playerstats.GetCurrentHealth() / playerstats.GetMaxHealth() : 1f;
-            playerstats.SetHealth(gloomassStats.currentMaxHealth, healthPercentage);
+            playerstats.SetHealth(currentMaxHealth, healthPercentage);
 
             if (HealthbarUI != null)
             {
@@ -302,7 +314,7 @@ public class MassSegment : MonoBehaviour
         {
             if (rb != null)
             {
-                rb.mass = gloomassStats.massPerSegment;
+                rb.mass = massPerSegment;
 
             }
         }
@@ -315,6 +327,11 @@ public class MassSegment : MonoBehaviour
             HealthbarUI.SetHealth(playerstats.GetCurrentHealth(), playerstats.GetMaxHealth());
         }
 
+    }
+
+    public float GetTotalMass()
+    {
+        return currentSegments * massPerSegment;
     }
 
     //private void UpdateCheckpoint(int newsegmentCount)
@@ -370,7 +387,7 @@ public class MassSegment : MonoBehaviour
         //}
     private void LogStats(string action)
     {
-        Debug.Log($"[{ action}] Segments: { gloomassStats.currentSegments}, " + $"MaxHealth: {gloomassStats.currentMaxHealth}, " + 
+        Debug.Log($"[{ action}] Segments: {currentSegments}, " + $"MaxHealth: {currentMaxHealth}, " + 
             $"PlayerHealth: {playerstats.GetCurrentHealth()}, " + $"MoveSpeed: {playermovement.normalmovementSpeed}, " + $"JumpForce: {playermovement.jumpforce}");
     
     }
@@ -389,5 +406,15 @@ public class MassSegment : MonoBehaviour
             Debug.LogWarning("No active checkpoint found or checkpoint is not activated.");
         }
     }
+    public void CheckdoorMass()
+    {
+        if (!masstoDoor != null && !masstoDoor.isUnlocked)
+        {
+            if (GetTotalMass() >= masstoDoor.massThreshold)
+            {
+                masstoDoor.UnlockedDoor();
+            }
+        }
 
+    }
 }

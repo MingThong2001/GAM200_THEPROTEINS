@@ -14,7 +14,7 @@ public class gloopickup : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         { 
-            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            rb.collisionDetectionMode = CollisionDetectionMode2D.Discrete;
         
         }
         //GameObject player = GameObject.FindGameObjectWithTag("Player");

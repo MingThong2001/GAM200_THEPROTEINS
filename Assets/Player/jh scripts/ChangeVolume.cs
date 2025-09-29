@@ -5,6 +5,7 @@ public class ChangeVolume : MonoBehaviour
 {
     SpringJoint2D[] springJointList;
     List<float> originalDistanceList = new List<float>();
+    List<float> modifiedDistanceList = new List<float>();
     List<float> originalFrequencyList = new List<float>();
     List<float> originalDampList = new List<float>();
     public GameObject firePoint;
@@ -23,6 +24,7 @@ public class ChangeVolume : MonoBehaviour
         foreach (SpringJoint2D joint in springJointList)
         {
             originalDistanceList.Add(joint.distance);
+            modifiedDistanceList.Add(joint.distance);
             originalFrequencyList.Add(joint.frequency);
             originalDampList.Add(joint.dampingRatio);
         }
@@ -33,21 +35,21 @@ public class ChangeVolume : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.X))
-        {
+        //if (Input.GetKey(KeyCode.X))
+        //{
          
-            Change(growSize);
+        //    Change(growSize);
             
 
-        }
-        if (Input.GetKey(KeyCode.C))
-        {
-            Change(shrinkSize);
-        }
-        if (Input.GetKey(KeyCode.V))
-        {
-            Change(oriSize);
-        }
+        //}
+        //if (Input.GetKey(KeyCode.C))
+        //{
+        //    Change(shrinkSize);
+        //}
+        //if (Input.GetKey(KeyCode.V))
+        //{
+        //    Change(oriSize);
+        //}
         if (Input.GetKey(KeyCode.N))
         {
             ChangeJointStr(oriStr);
@@ -78,7 +80,8 @@ public class ChangeVolume : MonoBehaviour
         int i = 0;
         foreach (SpringJoint2D joint in springJointList)
         {
-            joint.distance = originalDistanceList[i] * volumeFactor;
+            joint.distance = modifiedDistanceList[i] + (volumeFactor - 1) * originalDistanceList[i];
+            modifiedDistanceList[i] = joint.distance;
             i++;
         }
     }

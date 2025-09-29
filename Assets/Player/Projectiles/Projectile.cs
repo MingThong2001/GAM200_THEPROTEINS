@@ -95,7 +95,7 @@ public class Projectile : MonoBehaviour
         foreach (Rigidbody2D rb in bodyParts)
         {
             rb.bodyType = RigidbodyType2D.Dynamic;
-            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            rb.collisionDetectionMode = CollisionDetectionMode2D.Discrete;
             rb.gravityScale = 0.8f;
             rb.linearDamping = 1f;
         }

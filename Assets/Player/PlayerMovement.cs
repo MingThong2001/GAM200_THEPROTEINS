@@ -45,7 +45,6 @@ public class PlayerMovement : MonoBehaviour
 
     //Reference to RigidBody2D
     private Rigidbody2D rb;
-    private MassStats massStats;
 
     
     //Input Variables
@@ -76,25 +75,23 @@ public class PlayerMovement : MonoBehaviour
         rb.freezeRotation = true; //Prevent rotation of the player (WIP).
         rb.gravityScale = 5f;
 
-        if (massStats != null)
+        if (massSegment == null)
         {
-            massStats = massSegment.gloomassStats;
+            massSegment = GetComponent<MassSegment>();
+
         }
         else
         {
-            massSegment = GetComponent<MassSegment>();
-            if (massSegment != null)
-            {
-                massStats = massSegment.gloomassStats;
-            }
+           
+                massSegment.UpdateAllStats();
 
+           
         }
 
 
 
 
-
-    }
+        }
     public void Update()
     {
        
@@ -214,12 +211,12 @@ public class PlayerMovement : MonoBehaviour
         {
             horizontalInput = 1f; // Move Right
         }
-        float adjustedSpeed = massStats.currentMoveSpeed;
+        float adjustedSpeed = massSegment.currentMoveSpeed;
 
         Vector2 newPos = rb.position + new Vector2(horizontalInput * adjustedSpeed * Time.fixedDeltaTime, 0f);
         rb.MovePosition(newPos);
 
-      //  Debug.Log($"[Normal Move] Input: {horizontalInput}, Speed: {adjustedSpeed}, Position: {rb.position}");
+       Debug.Log($"[Normal Move] Input: {horizontalInput}, Speed: {adjustedSpeed}, Position: {rb.position}");
 
     }
 
@@ -320,12 +317,12 @@ public class PlayerMovement : MonoBehaviour
         if (isJumping && isGrounded)
         {
             //Scale Jump with mass.
-            float mass = massStats.currentSegments * massStats.massPerSegment;
-            float adjustedJump = Mathf.Max(massStats.baseJump / (1f + mass * 0.1f), massStats.baseJump * 0.3f);
-
+            float mass = massSegment.currentSegments * massSegment.massPerSegment;
+            //float adjustedJump = Mathf.Max(massStats.baseJump / (1f + mass * 0.1f), massStats.baseJump * 0.3f);
+            float adjustedJump = massSegment.baseJump / (1f + (massSegment.currentSegments - massSegment.minSegments) * 0.1f);
             rb.AddForce(Vector2.up * adjustedJump, ForceMode2D.Impulse);
 
-            Debug.Log($"[Jump] Segments: {massStats.currentSegments}, Mass: {mass:F2}, Adjusted Jump: {adjustedJump:F2}");
+            Debug.Log($"[Jump] Segments: {massSegment.currentSegments}, Mass: {mass:F2}, Adjusted Jump: {adjustedJump:F2}");
             foreach (Rigidbody2D segmentsRB in GetComponentsInChildren<Rigidbody2D>())
             {
                 if (segmentsRB != rb)

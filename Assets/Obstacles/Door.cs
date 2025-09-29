@@ -12,6 +12,7 @@ public class Door : MonoBehaviour
     private GameManager gameManager;
     public bool Playerinreange = false;
     private GameObject player;
+    public float massThreshold = 2f;
    
     //Reset the door to default closed and locked state.
     public void ResetDoor()
