@@ -9,14 +9,14 @@ public class MassSegment : MonoBehaviour
     public int currentSegments;
     public int minSegments;
     public int maxSegments;
-    public float massPerSegment = 0.1f;
+    public float massPerSegment = 2f;
    
     //Base Stats
     public float basemoveSpeed = 5f;
     public float baseJump = 0.5f;
     public float baseHealth = 100f;
-    public float rawSpeed;
-    public float rawJump;
+    public float calculatedSpeed;
+    public float calculatedJump;
 
     //Mass Modifiers
     [Range(0f, 5f)]
@@ -60,15 +60,15 @@ public class MassSegment : MonoBehaviour
     //Modified Stats
     public void Updatemovespeed()
     {
-        rawSpeed = basemoveSpeed * (1f - MassRatio() * speedmodifierRange);
-        currentMoveSpeed = Mathf.Clamp(rawSpeed, 1f, basemoveSpeed);
+        calculatedSpeed = basemoveSpeed * (1f - MassRatio() * speedmodifierRange);
+        currentMoveSpeed = Mathf.Clamp(calculatedSpeed, 1f, basemoveSpeed);
     }
 
     public void Updatejumppower()
     {
         //currentJumpPower = baseJump * (1f * MassRatio() * jumpmodifierRange);
-        rawJump = baseJump  * (1f - MassRatio() * jumpmodifierRange);
-        currentJumpPower = Mathf.Clamp(rawJump, 0.5f, baseJump);
+        calculatedJump = baseJump  * (1f + MassRatio() * jumpmodifierRange);
+        currentJumpPower = Mathf.Clamp(calculatedJump, 0.5f, baseJump);
     }
 
     public void Updatemaxhealth()
@@ -292,6 +292,8 @@ public class MassSegment : MonoBehaviour
         UpdatehealthStats();
         UpdatephysicsMass();
         UpdateUi();
+
+        TotalMass = GetTotalMass();
     }
 
     private void UpdatemovementStats()
@@ -418,11 +420,12 @@ public class MassSegment : MonoBehaviour
             Debug.LogWarning("No active checkpoint found or checkpoint is not activated.");
         }
     }
-    public void CheckdoorMass()
+    public void CheckdoorMass() 
     {
-        if (!masstoDoor != null && !masstoDoor.isUnlocked)
+        if (masstoDoor != null && !masstoDoor.isUnlocked)
         {
-            if (GetTotalMass() >= masstoDoor.massThreshold)
+            float totalMass = GetTotalMass();
+            if (totalMass >= masstoDoor.minMassThreshold && totalMass <= masstoDoor.maxMassThreshold)
             {
                 masstoDoor.UnlockedDoor();
             }

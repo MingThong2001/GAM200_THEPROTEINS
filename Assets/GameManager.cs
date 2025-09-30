@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     //[SerializeField] private GameObject restartMenu;
     [SerializeField] private GameObject victoryMenu;
     [SerializeField] private GameObject objectivePanel;
+    [SerializeField] private GameObject[] inGameText;
     #endregion
 
     //Players and checkpoints.
@@ -84,6 +85,10 @@ public class GameManager : MonoBehaviour
         //restartMenu.SetActive(false);
         objectivePanel.SetActive(false);
 
+        foreach (GameObject text in inGameText)
+        {
+            text.SetActive(true);
+        }
     }
 
     //Get player controller.
@@ -110,35 +115,42 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        //Disable playermovement and shoot when UI panel appears.
-        if (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf)
+        ////Disable playermovement and shoot when UI panel appears.
+        //if (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf)
+        //{
+        //    if (playermovement != null)
+        //    {
+        //        playermovement.enabled = false;
+        //    }
+        //    if (playershoot != null)
+        //    {
+        //        playershoot.enabled = false;
+        //    }
+
+        //}
+        //else //Enable them back if its in the playstate.
+        //{
+        //    if (currentState == GameState.Play)
+        //    {
+        //        if (playermovement != null && !playermovement.enabled)
+        //        {
+        //            playermovement.enabled = true;
+        //        }
+        //        if (playershoot != null && !playershoot.enabled)
+        //        {
+        //            playershoot.enabled = true;
+        //        }
+        //    }
+        //}
+
+        bool uiActive = (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf);
+       playermovement.enabled = !uiActive;
+        playershoot.enabled = !uiActive;
+
+        foreach (GameObject text in inGameText)
         {
-            if (playermovement != null)
-            {
-                playermovement.enabled = false;
-            }
-            if (playershoot != null)
-            {
-                playershoot.enabled = false;
-            }
-
+            text.SetActive(!uiActive);
         }
-        else //Enable them back if its in the playstate.
-        {
-            if (currentState == GameState.Play)
-            {
-                if (playermovement != null && !playermovement.enabled)
-                {
-                    playermovement.enabled = true;
-                }
-                if (playershoot != null && !playershoot.enabled)
-                {
-                    playershoot.enabled = true;
-                }
-            }
-        }
-
-
     }
 
     #region Start

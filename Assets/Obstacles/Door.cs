@@ -13,6 +13,10 @@ public class Door : MonoBehaviour
     public bool Playerinreange = false;
     private GameObject player;
     public float massThreshold = 2f;
+
+    //Unlock Range
+    public float minMassThreshold = 0f;
+    public float maxMassThreshold = 1f;
    
     //Reset the door to default closed and locked state.
     public void ResetDoor()

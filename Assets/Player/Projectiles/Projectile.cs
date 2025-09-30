@@ -48,7 +48,17 @@ public class Projectile : MonoBehaviour
 
     //References
     private ProjectillePickup pickup;
+    public MassSegment projectilemass;
 
+
+    public float GetProjectileMass()
+    {
+        if (projectilemass != null)
+        {
+            return projectilemass.massPerSegment;
+        }
+        return 0f;
+    }
     private void Awake()
     {
         //Reset Pickup
