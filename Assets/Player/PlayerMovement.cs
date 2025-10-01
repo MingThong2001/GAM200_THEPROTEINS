@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
            
         }
 
-
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
 
 
     }

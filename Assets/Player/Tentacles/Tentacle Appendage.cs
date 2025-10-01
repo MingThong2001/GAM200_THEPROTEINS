@@ -32,6 +32,7 @@ public class TentacleAppendage : MonoBehaviour
     private Rigidbody2D grabbedObject = null;
     private SpringJoint2D springJoint;
     private Vector2 originalGrabPos;
+    private AudioManager audioManager;
 
     public void Start()
     {
@@ -51,6 +52,7 @@ public class TentacleAppendage : MonoBehaviour
 
         springJoint.connectedAnchor = tentacleAnchor.position; //Connect it to anchor.
         transform.position = tentacleAnchor.position; //Start tentacle at anchor.
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
 
     }
 
@@ -71,9 +73,11 @@ public class TentacleAppendage : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && grabbedObject == null)
         {
             StartExtend(mousePosition);
+            audioManager.PlaySFX(audioManager.grab);
+
         }
 
-        
+
 
         // Release
         if (Input.GetMouseButtonUp(1))

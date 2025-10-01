@@ -16,6 +16,7 @@ public class AudioManager : MonoBehaviour
     public  AudioClip pickup;
     public  AudioClip shootOut;
     public  AudioClip jump;
+    public AudioClip grab;
     public static AudioClip movement;
     //public AudioClip enemy;
 

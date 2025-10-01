@@ -6,18 +6,19 @@ public class Door : MonoBehaviour
     public bool isOpening = false;
     public bool hasOpened = false;
     public bool isUnlocked = false;
-    
+
     //References
     public GameObject whitecoverdoor;
     private GameManager gameManager;
     public bool Playerinreange = false;
     private GameObject player;
+    public DoorButton doorbutton;
     public float massThreshold = 2f;
 
     //Unlock Range
     public float minMassThreshold = 0f;
     public float maxMassThreshold = 1f;
-   
+
     //Reset the door to default closed and locked state.
     public void ResetDoor()
     {
@@ -25,7 +26,7 @@ public class Door : MonoBehaviour
         hasOpened = false;
         isUnlocked = false;
         Playerinreange = false;
-        
+
         //Find the whitecover door if its not assigned.
         if (whitecoverdoor == null)
         {
@@ -52,8 +53,11 @@ public class Door : MonoBehaviour
         {
             whitecoverdoor = transform.Find("whitecoverdoor").gameObject;
         }
+        if (doorbutton == null)
+        {
+            doorbutton.GetComponentInChildren<DoorButton>();
+        }
 
-        
     }
 
     public void Update()
@@ -115,10 +119,14 @@ public class Door : MonoBehaviour
         isUnlocked = true;
         Debug.Log("Door unlocked!");
 
+        if (whitecoverdoor == null)
+        {
+            whitecoverdoor = transform.Find("whitecoverdoor")?.gameObject;
+        }
         //Remove the door cover to visually indicate that it is unlocked.
         if (whitecoverdoor != null)
         {
-            Destroy(whitecoverdoor);
+            whitecoverdoor.SetActive(false);
         }
         else
         {
@@ -126,7 +134,21 @@ public class Door : MonoBehaviour
 
         }
     }
+    public void LockDoor()
+    {
+        isUnlocked = false;
+        doorbutton.locktimer = 0f;
 
+        if (whitecoverdoor != null)
+        {
+            whitecoverdoor.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("whitecoverdoor is null.");
+
+        }
+    }
     //Handle victory by calling gameManager.
     public void handleVictory()
     {

@@ -123,6 +123,11 @@ public class MassSegment : MonoBehaviour
         UpdateAllStats();
     }
 
+    private void Start()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+
+    }
     public void handlepickupCollision(Collider2D coll)
     {
 

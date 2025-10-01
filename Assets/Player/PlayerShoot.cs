@@ -16,6 +16,10 @@ public class PlayerShoot : MonoBehaviour
     //References
     private AudioManager audioManager;
 
+    private void Start()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
     private void Update()
     {
        

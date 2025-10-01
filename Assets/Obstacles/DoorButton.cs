@@ -14,6 +14,10 @@ public class DoorButton : MonoBehaviour
     public float holdDuration = 5f;
     public float holdTimer = 0f;
 
+    //To reactivate the door
+    public float lockbacktime = 2f;
+    public float locktimer = 0f;
+
     //Track whether the button has been pressed.
     public bool hasbeenPressed = false;
 
@@ -31,6 +35,7 @@ public class DoorButton : MonoBehaviour
     public string messageToShow = "Press W to leave the level";
     public string buttonmessageToShow = "Hold the button to unlock the door";
 
+    
     //Reset the button to its unpressed state.
     public void ResetButton()
     {
@@ -71,7 +76,6 @@ public class DoorButton : MonoBehaviour
 
     private void Update()
     {   
-        if (hasbeenPressed) return;
         float totalMass = 0f;
 
         for (int i = 0; i < segmentsonButton.Count; i++)
@@ -97,7 +101,8 @@ public class DoorButton : MonoBehaviour
         if (totalMass >= requiredMass)
         {
             holdTimer += Time.deltaTime;
-            if (buttonRender != null) buttonRender.color = unpressedColor;
+            locktimer = 0f;
+            if (buttonRender != null) buttonRender.color = pressedColor;
             if (holdTimer >= holdDuration)
             { 
                 ActivateButton();
@@ -107,6 +112,16 @@ public class DoorButton : MonoBehaviour
         else
         {
             holdTimer = 0f;
+
+            if (hasbeenPressed)
+            {
+                    locktimer += Time.deltaTime;
+                if (locktimer >= lockbacktime)
+                {
+                    DeactivateButton();
+                }
+            
+            }
             if (buttonRender != null)
             {
                 buttonRender.color = unpressedColor;
@@ -206,4 +221,21 @@ public class DoorButton : MonoBehaviour
             holdTimer = 0f;
         }
     }
+    public void DeactivateButton()
+    {
+        hasbeenPressed = false;
+
+        if (buttonRender != null)
+        {
+            buttonRender.color = unpressedColor;
+        }
+        if (connectedDoor != null)
+        {
+            connectedDoor.LockDoor();
+        }
+        if (messageText != null) buttonText.text = buttonmessageToShow;
+
+
+    }
+
 }
