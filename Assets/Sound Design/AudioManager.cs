@@ -6,19 +6,18 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioSource SFX;
 
     //References
-    AudioManager audiomanager;
 
     public AudioClip background;
-    public AudioClip death;
-    public AudioClip checkpoint;
-    public AudioClip walltouch;
-    public AudioClip doorIn;
-    public AudioClip doorOut;
-    public AudioClip pickup;
-    public AudioClip shootOut;
-    public AudioClip jump;
-    public AudioClip movement;
-    public AudioClip enemy;
+    //public AudioClip death;
+    //public AudioClip checkpoint;
+    //public AudioClip walltouch;
+    //public AudioClip doorIn;
+    //public AudioClip doorOut;
+    public  AudioClip pickup;
+    public  AudioClip shootOut;
+    public  AudioClip jump;
+    public static AudioClip movement;
+    //public AudioClip enemy;
 
     public void Awake()
     {

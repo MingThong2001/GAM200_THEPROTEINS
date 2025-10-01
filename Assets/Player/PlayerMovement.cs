@@ -68,7 +68,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private List<Transform> slimePoints;
     [SerializeField] private MassSegment massSegment;
 
-
+    //Audio
+    private AudioManager audioManager;
+    private float movementSFXCD = 0.2f;
+    private float movementSFXTimer = 0f;
     public void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -91,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-        }
+    }
     public void Update()
     {
        
@@ -103,7 +106,8 @@ public class PlayerMovement : MonoBehaviour
     
     public void FixedUpdate()
     {
-    
+        movementSFXTimer -= Time.deltaTime; 
+
 
         handleJump();
         handleMovement();
@@ -218,6 +222,11 @@ public class PlayerMovement : MonoBehaviour
 
        Debug.Log($"[Normal Move] Input: {horizontalInput}, Speed: {adjustedSpeed}, Position: {rb.position}");
 
+        if (horizontalInput != 0f && movementSFXTimer <= 0f)
+        {
+            audioManager.PlaySFX(AudioManager.movement);
+            movementSFXTimer = movementSFXCD;
+        }
     }
 
 
@@ -317,22 +326,28 @@ public class PlayerMovement : MonoBehaviour
         if (isJumping && isGrounded)
         {
             //Scale Jump with mass.
-            float mass = massSegment.currentSegments * massSegment.massPerSegment;
+            //float mass = massSegment.currentSegments * massSegment.massPerSegment;
             //float adjustedJump = Mathf.Max(massStats.baseJump / (1f + mass * 0.1f), massStats.baseJump * 0.3f);
-            float adjustedJump = massSegment.baseJump / (1f + (massSegment.currentSegments - massSegment.minSegments) * 0.1f);
+            float adjustedJump = massSegment.currentJumpPower;
+                
             rb.AddForce(Vector2.up * adjustedJump, ForceMode2D.Impulse);
 
-            Debug.Log($"[Jump] Segments: {massSegment.currentSegments}, Mass: {mass:F2}, Adjusted Jump: {adjustedJump:F2}");
+            //Debug.Log($"[Jump] Segments: {massSegment.currentSegments}, Mass: {mass:F2}, Adjusted Jump: {adjustedJump:F2}");
             foreach (Rigidbody2D segmentsRB in GetComponentsInChildren<Rigidbody2D>())
             {
                 if (segmentsRB != rb)
                 {
-                    segmentsRB.AddForce(Vector2.up * adjustedJump * childforcemultiplier, ForceMode2D.Impulse);
+                    segmentsRB.AddForce(Vector2.up * adjustedJump , ForceMode2D.Impulse);
                 }
 
             }
 
-        
+            if (audioManager != null)
+            {
+                audioManager.PlaySFX(audioManager.jump);
+
+            }
+
             isJumping = false;
 
 

@@ -13,22 +13,24 @@ public class PlayerShoot : MonoBehaviour
     private float lastFiretime = 0f;
     public float damage = 2f;
 
-    
+    //References
+    private AudioManager audioManager;
 
     private void Update()
     {
        
         if (Input.GetMouseButtonDown(0) && Time.time >= lastFiretime + cooldown && massSegment.GetCurrentSegments() > massSegment.GetMinSegments())
         {
-            Shoot();
             lastFiretime = Time.time;
+            Shoot();
         }
 
     }
     private void Shoot()
     {
         //Remove segment before shooting
-        massSegment.RemoveSegment(massSegment.GetMaxSegments());
+        //massSegment.RemoveSegment(massSegment.GetMaxSegments());
+        massSegment.RemoveSegment(1);
         //Direction toward mouse
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPos.z = 0; 
@@ -36,6 +38,7 @@ public class PlayerShoot : MonoBehaviour
 
         //Spawn a projectile
         Projectile projrb = Instantiate(projectilePrefab);
+        projrb.projectilemass = massSegment;
         //projrb.GetComponent<Projectile>().enabled = false;
         //if (projrb == null)
         //{
@@ -54,6 +57,10 @@ public class PlayerShoot : MonoBehaviour
      
         Debug.Log("Fired projectile at time: " + Time.time);
 
+        if (audioManager != null)
+        {
+            audioManager.PlaySFX(audioManager.shootOut);
+        }
 
     }
 

@@ -58,52 +58,10 @@ public class gloopickup : MonoBehaviour
 
         if (collision.CompareTag("Player"))
         {
-            //MassSegment massSeg = collision.GetComponent<MassSegment>();
-            //if (massSeg != null)
-            //{
-            //    massSeg.AddSegment(segmentAmount);
-            //    CollectPickup();
-            //}
+
         }
     }
-    //public void OnTriggerEnter2D(Collider2D other)
-    //{
-    //    Debug.Log("Something entered the trigger area!");
-
-    //    Debug.Log("Pickup Triggered: " + other.gameObject.name);
-    //    foreach (Collider2D col in GetComponentsInChildren<Collider2D>())
-    //    {
-
-    //        if (other.CompareTag("GlooSegment"))
-    //        {
-    //            Debug.DrawLine(transform.position, other.transform.position, Color.red, 1f);
-    //            MassSegment massSegment = other.GetComponent<MassSegment>();
-
-    //            Debug.Log("Processing Pickup...");
-
-    //            if (massSegment != null && !isBeingProcessed)
-    //            {
-    //                isBeingProcessed = true;
-    //                if (isAdditive && massSegment.canaddSegment())
-    //                {
-    //                    Debug.Log("Adding Segment");
-
-    //                    massSegment.AddSegment(segmentAmount);
-    //                    CollectPickup();
-    //                }
-    //                else if (!isAdditive && massSegment.canremoveSegment())
-    //                {
-    //                    Debug.Log("Removing Segment");
-
-    //                    massSegment.RemoveSegment(segmentAmount);
-    //                    CollectPickup();
-    //                }
-
-    //            }
-    //            break;
-    //        }
-    //    }
-    //}
+   
     public void CollectPickup()
     {
         Debug.Log("Collecting pickup");

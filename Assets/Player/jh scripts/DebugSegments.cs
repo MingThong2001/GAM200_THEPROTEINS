@@ -8,6 +8,7 @@ public class DebugSegments : MonoBehaviour
     private void Start()
     {
         segmentScript = GetComponent<MassSegment>();
+        segmentScript.RemoveSegment(1); //start with 1 segment, rework later
     }
     void Update()
     {
@@ -34,7 +35,7 @@ public class DebugSegments : MonoBehaviour
     IEnumerator Remove()
     {
         activatable = false;
-        segmentScript.RemoveSegment();
+        segmentScript.RemoveSegment(1);
         yield return new WaitForSeconds(0.3f);
         activatable = true;
     }
