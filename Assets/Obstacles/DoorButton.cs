@@ -152,7 +152,7 @@ public class DoorButton : MonoBehaviour
     }
 
     //Triggered when collider enter the trigger area.
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         //Debug.Log("Button triggered by: " + other.name);
 
@@ -211,14 +211,20 @@ public class DoorButton : MonoBehaviour
         if (mass != null && segmentsonButton.Contains(mass))
         {
             segmentsonButton.Remove(mass);
-            holdTimer = 0f;
+            if (segmentsonButton.Count == 0 && projectilesOnButton.Count == 0)
+            {
+                holdTimer = 0;
+            }
         }
 
         Projectile proj = other.GetComponentInParent<Projectile>();
         if (proj != null && projectilesOnButton.Contains(proj))
         {
             projectilesOnButton.Remove(proj);
-            holdTimer = 0f;
+            if (segmentsonButton.Count == 0 && projectilesOnButton.Count == 0)
+            {
+                holdTimer = 0;
+            }
         }
     }
     public void DeactivateButton()
