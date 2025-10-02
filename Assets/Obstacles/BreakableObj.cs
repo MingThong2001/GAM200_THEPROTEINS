@@ -39,10 +39,25 @@ public class BreakableObj : MonoBehaviour
 
         Transform fillTransform = healthbarinstance.transform.Find("Fill");
         if (fillTransform != null)
-        { 
+        {
             Fill = fillTransform.GetComponent<Image>();
         }
-        
+
+        //foreach (Image img in healthbarinstance.GetComponentsInChildren<Image>(true))
+        //{
+        //    if (img.name == "Fill")
+        //    {
+        //        Fill = img;
+        //        Debug.Log("Correct Fill assigned!");
+        //        break;
+        //    }
+        //}
+
+        //if (Fill == null)
+        //{
+        //    Debug.LogError("No child named 'Fill' found in prefab!");
+        //}
+
         //HPtext = healthbarinstance.GetComponentInChildren<Text>();
         HptoObjecthp = transform;
         hptoObjectoffset = new Vector3(0,1f,0);
