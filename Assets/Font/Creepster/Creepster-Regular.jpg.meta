@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Creepster-Regular_0: 189244865307640494
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -279,7 +279,7 @@ public class MassSegment : MonoBehaviour
         {
             playermovement.normalmovementSpeed = currentMoveSpeed;
             playermovement.puddlemovementSpeed = currentMoveSpeed * 0.4f;
-            playermovement.jumpforce = currentJumpPower;
+            //playermovement.jumpforce = currentJumpPower;
         }
     }
 
@@ -378,8 +378,8 @@ public class MassSegment : MonoBehaviour
         //}
     private void LogStats(string action)
     {
-        Debug.Log($"[{ action}] Segments: {currentSegments}, " + $"MaxHealth: {currentMaxHealth}, " + 
-            $"PlayerHealth: {playerstats.GetCurrentHealth()}, " + $"MoveSpeed: {playermovement.normalmovementSpeed}, " + $"JumpForce: {playermovement.jumpforce}");
+        //Debug.Log($"[{ action}] Segments: {currentSegments}, " + $"MaxHealth: {currentMaxHealth}, " + 
+            //$"PlayerHealth: {playerstats.GetCurrentHealth()}, " + $"MoveSpeed: {playermovement.normalmovementSpeed}, " + $"JumpForce: {playermovement.jumpforce}");
     
     }
 
