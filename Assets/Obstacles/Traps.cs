@@ -7,9 +7,13 @@ public class Traps : MonoBehaviour
     public float bounceForce = 20f;
     public bool isRectractable = false;
     public bool isActive = true;
+
+
+
     private Collider2D trapCollider;
     private Renderer spikeRenderer;
     //private Animator spikeAnimator;
+
     public void Start()
     {
         trapCollider = GetComponent<Collider2D>();
@@ -42,27 +46,50 @@ public class Traps : MonoBehaviour
 
     private void DeactivateTrap()
     {
-        isActive = true;
+        isActive = false;
         trapCollider.enabled = false;
         spikeRenderer.enabled = false;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!isActive)
+        { return; }
+
         if (collision.gameObject.CompareTag("Player"))
         { 
-            HandlePlayerBounce(collision.gameObject);
+            Rigidbody2D rb = collision.GetComponentInParent<Rigidbody2D>();
+            PlayerStats healthstats = collision.GetComponentInParent<PlayerStats>();
+
+            if (healthstats != null)
+            {
+                healthstats.TakeDamage(spikedamage);
+            }
+
+            if (rb != null)
+            {
+                //apply bounce force
+                rb.AddForce(Vector2.up * bounceForce, ForceMode2D.Impulse);
+            }
+          
+            //HandlePlayerBounce(collision.gameObject);
         }
     }
-
-    private void HandlePlayerBounce(GameObject Player)
-    { 
     
-        Rigidbody2D rb = Player.GetComponent<Rigidbody2D>();
 
-        if (rb)
-        {
-            //apply bounce force
-            rb.AddForce(Vector2.up * bounceForce, ForceMode2D.Impulse);
-        }
-    }
+    //private void HandlePlayerBounce(GameObject Player)
+    //{ 
+
+    //    Rigidbody2D rb = Player.GetComponent<Rigidbody2D>();
+
+
+
+    //    PlayerStats healthstats = Player.GetComponent<PlayerStats>();
+    //    if (healthstats != null)
+    //    {
+    //        healthstats.TakeDamage(spikedamage);
+    //    }
+    //}
+
+
+
 }
