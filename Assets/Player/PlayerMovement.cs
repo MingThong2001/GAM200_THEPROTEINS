@@ -351,7 +351,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 float distanceToBottom = originalLocalPos.y - lowestY;
                 float topFactor = (originalLocalPos.y - centerY) / (originalLocalPos.y - lowestY + 0.0001f);
-                targetLocalPos.y -= distanceToBottom * squeezeCharge * topFactor;
+                float minheightFactor = 0.19f;
+                float adjustedcharge = squeezeCharge * (1f - minheightFactor);
+                targetLocalPos.y -= distanceToBottom * adjustedcharge * topFactor;
             }
 
             Vector3 targetWorldPos = segmentTransforms[i].parent.TransformPoint(targetLocalPos);
