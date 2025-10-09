@@ -2950,7 +2950,6 @@ MonoBehaviour:
   normalmovementSpeed: 4
   puddlemovementSpeed: 2
   segmentedmovementspeed: 3
-  jumpforce: 0.5
   childforcemultiplier: 2
   groundLayer:
     serializedVersion: 2
@@ -3197,7 +3196,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseMaxHealth: 100
-  lives: 5
   currentSegments: 0
   movement: {fileID: 266268424}
 --- !u!114 &266268435
@@ -3228,7 +3226,7 @@ MonoBehaviour:
   currentMoveSpeed: 0
   currentJumpPower: 0
   currentMaxHealth: 0
-  masstoDoor: {fileID: 0}
+  masstoDoor: {fileID: 499119434}
   ProjectileSegments: []
   playermovement: {fileID: 266268424}
   playerstats: {fileID: 266268434}
@@ -25064,6 +25062,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BGM: {fileID: 0}
   SFX: {fileID: 1649651862}
+  myMixer: {fileID: 0}
+  musicSlider: {fileID: 0}
+  sfxSlider: {fileID: 0}
   background: {fileID: 0}
   pickup: {fileID: 8300000, guid: e6d82a1ef7ad0094393f3f47fad4a7f8, type: 3}
   shootOut: {fileID: 8300000, guid: 9a73440a359b04b4791b82492769cef4, type: 3}
@@ -25266,7 +25267,6 @@ MonoBehaviour:
   normalmovementSpeed: 1
   puddlemovementSpeed: 2
   segmentedmovementspeed: 3
-  jumpforce: 3
   childforcemultiplier: 0.25
   groundLayer:
     serializedVersion: 2
@@ -25913,7 +25913,6 @@ MonoBehaviour:
   normalmovementSpeed: 2
   puddlemovementSpeed: 2
   segmentedmovementspeed: 3
-  jumpforce: 6
   childforcemultiplier: 0
   groundLayer:
     serializedVersion: 2
