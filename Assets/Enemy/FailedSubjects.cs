@@ -52,6 +52,8 @@ public class FailedSubjects : MonoBehaviour
         if (isCharging)
         {
             //Vector3 direction = (player.position - transform.position).normalized;
+            float wobble = Random.Range(-5f, 5f);
+            chargeDirection = Quaternion.Euler(0,0,wobble) * chargeDirection;
             transform.position += chargeDirection * chargeSpeed * Time.deltaTime;
             Debug.Log($"[HelperWelper] Charging towards player. Position: {transform.position}");
 
@@ -80,6 +82,10 @@ public class FailedSubjects : MonoBehaviour
                 Vector3 directiontoplayer = (player.position - transform.position).normalized;  
                 float angleoffset = Random.Range(-maxAngleOffset, maxAngleOffset);
                 chargeDirection = Quaternion.Euler(0,0, angleoffset) * directiontoplayer;
+
+                chargeSpeed = Random.Range(chargeSpeed * 0.7f, chargeSpeed * 1.3f);
+                Debug.Log($"[FailedSubjects] Charge started. Speed: {chargeSpeed:F2}, Direction: {chargeDirection}");
+
                 if (chargePatrol != null)
                 {
                     chargePatrol.chargeVelocity = chargeDirection * chargeSpeed;

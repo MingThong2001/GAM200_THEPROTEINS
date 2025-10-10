@@ -8,12 +8,14 @@ public class ChargePatrol : MonoBehaviour
     [SerializeField] private Transform pointB;
 
     [SerializeField] private Transform enemy;
+    [SerializeField] private float speedBurstInterval = 0.3f; 
 
     [SerializeField] private float speed;
     [SerializeField] private float idleDuration;
     private float idleTimer;
     private bool movingLeft;
-
+    private float currentSpeed;
+    private float speedTimer = 0f;
 
     //Chase
     [SerializeField] private Transform Player;
@@ -37,6 +39,7 @@ public class ChargePatrol : MonoBehaviour
     }
     private void Update()
     {
+        UpdateSpeedBurst();
         if (isCharging)
         {
             Debug.Log($"Chasing player! Enemy X: {enemy.position.x}, Player X: {Player.position.x}");
@@ -80,12 +83,23 @@ public class ChargePatrol : MonoBehaviour
 
         }
     }
+
+    private void UpdateSpeedBurst()
+    {
+        speedTimer += Time.deltaTime;
+        if (speedTimer >= speedBurstInterval)
+        {
+            currentSpeed = speed * Random.Range(0.5f, 2f);
+            speedTimer = 0f;
+        }
+    }
     private void chasePlayer()
     {
         int direction = (Player.position.x > enemy.position.x) ? 1 : -1;
+        Debug.Log($"[Chase] Current Speed: {currentSpeed:F2}");
 
         enemy.position = new Vector3(
-        enemy.position.x + direction * speed * Time.deltaTime + extravelocity.x * Time.deltaTime,
+        enemy.position.x + direction * currentSpeed * Time.deltaTime + extravelocity.x * Time.deltaTime,
         enemy.position.y + extravelocity.y * Time.deltaTime,
         enemy.position.z + extravelocity.z * Time.deltaTime);
 
@@ -112,8 +126,10 @@ public class ChargePatrol : MonoBehaviour
     {
         idleTimer = 0;
         enemy.localScale = new Vector3(Mathf.Abs(initialScale.x) * direction, initialScale.y, initialScale.z);
+        Debug.Log($"[Patrol] Current Speed: {currentSpeed:F2}");
+
         enemy.position = new Vector3(
-      enemy.position.x + Time.deltaTime * direction * speed + extravelocity.x * Time.deltaTime,
+      enemy.position.x + Time.deltaTime * direction * currentSpeed + extravelocity.x * Time.deltaTime,
       enemy.position.y + extravelocity.y * Time.deltaTime,
       enemy.position.z + extravelocity.z * Time.deltaTime);
     }
