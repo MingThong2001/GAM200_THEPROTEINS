@@ -73,7 +73,7 @@ public class Projectile : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Projectile: No ProjectillePickup found on this projectile or its parent!");
+            //Debug.LogError("Projectile: No ProjectillePickup found on this projectile or its parent!");
         }
     }
     private void OnEnable()
