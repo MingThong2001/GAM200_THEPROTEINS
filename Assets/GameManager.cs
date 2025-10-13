@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     public PlayerShoot playershoot;
     public PlayerMovement playermovement;
     private Rigidbody2D playerRigid;
-
+    public SceneController sceneController;
  
     public void Awake()
     {
@@ -265,8 +265,8 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         gameOver = false;
         gamePaused = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
+        SceneController.instance.LoadMenu();
         currentState = GameState.Play;
     }
 
@@ -283,7 +283,7 @@ public class GameManager : MonoBehaviour
         currentState = GameState.Play;
 
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneController.instance.Restart();
 
         cleanupScene();
     
