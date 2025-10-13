@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.HableCurve;
 
 public class Projectile : MonoBehaviour
 {
@@ -120,11 +119,7 @@ public class Projectile : MonoBehaviour
     }
     public void Update()
     {
-        //if (isActive && Time.time - fireTime >= delayTime && gameObject.tag != "Projectile")
-        //{
-        //    SwitchTag(gameObject, "Projectile");
-        //}
-
+        
 
         //If projectile is flying and active.
         if (isActive && !isStuck)
@@ -196,6 +191,7 @@ public class Projectile : MonoBehaviour
         //}
     }
 
+    #region Stick Logic (Not In Used)
     //Stick to system 
     public void SticktoSurface(Collision2D collision)
     {
@@ -307,7 +303,9 @@ public class Projectile : MonoBehaviour
 
         }
     }
-    
+
+#endregion
+
     //Enemy Collision.
     public void HandleEnemyHit(Collision2D collision)
     {
@@ -320,7 +318,6 @@ public class Projectile : MonoBehaviour
         {
             enemy.TakeDamage(damage);
         }
-        //returntoprojectilePool();
     }
 
     //Breakable Object Collision.
@@ -334,8 +331,8 @@ public class Projectile : MonoBehaviour
         {
             breakable.TakeDamage(damage);
         }
-        //returntoprojectilePool();
     }
+
 
     //Reset project states.
     public void ResetProjectile()
@@ -370,16 +367,9 @@ public class Projectile : MonoBehaviour
         canBeCollected = false;
     }
 
-    //Return projectile to the pool after resetting it.
-    //public void returntoprojectilePool()
-    //{
-    //    ResetProjectile();
-    //    // Return the projectile to the pool
-    //    ProjectilePool.Instance.ReturnProjectile(this);
-    //    Debug.Log("Projectile returning to pool at time: " + Time.time);
 
-    //}
 
+    #region Pickup System
 
     private void Land()
     {
@@ -402,7 +392,6 @@ public class Projectile : MonoBehaviour
     }
 
 
-    #region Pickup System
 
     public void EnableCollection()
     {
@@ -415,25 +404,7 @@ public class Projectile : MonoBehaviour
         //   CheckOverlap();
     }
 
-    //private void OnTriggerEnter2D(Collider2D other)
-    //{
-    //    Debug.Log($"ProjectilePickup: Trigger entered by {other.name} with tag {other.tag}");
-    //    Debug.Log($"Can be collected: {canBeCollected}");
-
-    //    if (!canBeCollected) return;
-
-    //    if (other.CompareTag("Player"))
-    //    {
-    //        Debug.Log($"Collecting via segment: {gameObject.name}");
-    //        MassSegment massSegment = other.GetComponentInParent<MassSegment>();
-    //        if (massSegment != null)
-    //        {
-    //            Collect(massSegment);
-    //        }
-    //    }
-
-
-    //}
+  
     public void Collect(MassSegment collector)
     {
         if (!canBeCollected) return;
@@ -441,12 +412,7 @@ public class Projectile : MonoBehaviour
         if (projectilePrefab != null)
         {
             collector.CollectProjectile(projectilePrefab);
-            //canBeCollected = false;
-            //if (pickupCollider != null)
-            //{
-            //    pickupCollider.isTrigger = false;
-            //}
-            //Destroy(projectilePrefab);
+         
         }
     }
     public void ResetPickup()
@@ -454,14 +420,8 @@ public class Projectile : MonoBehaviour
 
         canBeCollected = false;
 
-        // Reset the pickup collider back to non-trigger
-        //if (pickupCollider != null)
-        //{
-        //    pickupCollider.isTrigger = false;
-
-        //}
+ 
     }
-    #endregion
     public void MakeCollectible()
     {
         if (canBeCollected) return;
@@ -486,5 +446,6 @@ public class Projectile : MonoBehaviour
 
         }
     }
-    
+    #endregion
+
 }
