@@ -70,7 +70,9 @@ public class PlayerMovement : MonoBehaviour
     //List to manage segmented parts (Slime's segmented state).
     private List<GameObject> segmentedobjects = new List<GameObject>();
 
-   
+
+    //FX
+    public ParticleSystem slimeFX;
 
     //Spline shape only for slime body (Used to update slime's shape and movement).
     [SerializeField] private SpriteShapeController spriteShape;
@@ -133,11 +135,15 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             verticalInput = 1f; // Move Up
+            slimeFX.Play();
+
         }
-        
+
         if (Input.GetKey(KeyCode.S))
         {
             verticalInput = -1f; // Move Down
+            slimeFX.Play();
+
         }
 
         //Handle Jump input
@@ -146,6 +152,8 @@ public class PlayerMovement : MonoBehaviour
             squeezeTimer = 0f;
             isCharging = false;
             isJumping = true;       // always set for normal jump first
+            slimeFX.Play();
+
         }
 
         if (Input.GetKey(KeyCode.Space) && isGrounded)
@@ -223,10 +231,14 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             horizontalInput = -1f; // Move Left
+            slimeFX.Play();
+
         }
         if (Input.GetKey(KeyCode.D))
         {
             horizontalInput = 1f; // Move Right
+            slimeFX.Play();
+
         }
         float adjustedSpeed = massSegment.currentMoveSpeed;
 
