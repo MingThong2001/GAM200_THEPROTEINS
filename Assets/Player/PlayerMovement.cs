@@ -27,7 +27,6 @@ public class PlayerMovement : MonoBehaviour
 
     //Squeeze Jump
     private bool isCharging = false;
-    private float  jumpChargetimer = 0f;
     private bool isSqueezing = false;
     private float squeezeTimer = 0f;
     private float squeezeChargeduration = 2f;
@@ -126,21 +125,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    //Used to adjust the shape of the slime's body (WIP).
-    /* public void LateUpdate()
-     {
-         Spline spline = spriteShape.spline;
-         for (int i = 0; i < slimePoints.Count; i++)
-         {
-             Vector3 localPos = spriteShape.transform.InverseTransformPoint(slimePoints[i].position);
-             spline.SetPosition( i, localPos );
-         }
-
-         spriteShape.BakeMesh();
-     }*/
-
-
-
+ 
 
     //User input for movement and state changes.
     public void handleInput()
@@ -195,11 +180,6 @@ public class PlayerMovement : MonoBehaviour
             squeezeTimer = 0f;
             isCharging = false;
         }
-
-
-
-
-
         //State Input
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -214,19 +194,6 @@ public class PlayerMovement : MonoBehaviour
             switchState(slimeState.Segmented);
         }
 
-        //More controls
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            switchState(slimeState.Normal);
-        }
-        else if (Input.GetKeyDown(KeyCode.K))
-        {
-            switchState(slimeState.Puddle);
-        }
-        else if (Input.GetKeyDown(KeyCode.L))
-        {
-            switchState(slimeState.Segmented);
-        }
 
     }
 
@@ -241,8 +208,7 @@ public class PlayerMovement : MonoBehaviour
                 normalMovement(speed);
                 break;
             case slimeState.Puddle:
-                speed = puddlemovementSpeed;
-                puddleMovement();
+                normalMovement(puddlemovementSpeed);
                 break;
             case slimeState.Segmented:
                 speed = segmentedmovementspeed;
@@ -317,51 +283,43 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdatesqueezeProgress(float squeezeCharge)
     {
-        //Return if there is no segments to move.
-        if (segmentTransforms.Count == 0 || originalloclPos.Count == 0) return;
+        if (segmentTransforms.Count == 0) return;
+        squeezeCharge = Mathf.Clamp01(squeezeCharge);
 
-        //Initialze variable to calculate the average Y position.
-        float centerY = 0f;
-   
-        //Initialize variable to find the lowest Y position among all segments.
+        // Find lowest and highest segments in world space
         float lowestY = float.MaxValue;
-
-
-        //Loop over each segment transforms to update its position.
+        float highestY = float.MinValue;
         for (int i = 0; i < segmentTransforms.Count; i++)
         {
-            Vector3 pos = originalloclPos[i];
-            centerY += pos.y;
-            if (pos.y < lowestY) lowestY = pos.y;
+            Transform seg = segmentTransforms[i];
+            if (seg == null) continue;
+            lowestY = Mathf.Min(lowestY, seg.position.y);
+            highestY = Mathf.Max(highestY, seg.position.y);
         }
-        centerY /= originalloclPos.Count;
+
+        float totalHeight = Mathf.Max(highestY - lowestY, 0.01f); // avoid divide by zero
+        float maxFraction = 0.75f; // max top-to-bottom squeeze
 
         for (int i = 0; i < segmentTransforms.Count; i++)
         {
-            if (segmentTransforms[i] == null) continue;
+            Transform seg = segmentTransforms[i];
+            if (seg == null) continue;
 
-            Rigidbody2D segmentRb = segmentTransforms[i].GetComponent<Rigidbody2D>();
-            if (segmentRb == null) continue;
+            Rigidbody2D rbSeg = seg.GetComponent<Rigidbody2D>();
+            if (rbSeg == null) continue;
 
-            Vector3 originalLocalPos = originalloclPos[i];
-            Vector3 targetLocalPos = originalLocalPos;
+            // Calculate relative height: bottom=0, top=1
+            float relativeHeight = (seg.position.y - lowestY) / totalHeight;
+            relativeHeight = Mathf.Clamp01(relativeHeight);
 
-            // Only move segments above center
-            if (originalLocalPos.y > centerY)
-            {
-                float distanceToBottom = originalLocalPos.y - lowestY;
-                float topFactor = (originalLocalPos.y - centerY) / (originalLocalPos.y - lowestY + 0.0001f);
-                float minheightFactor = 0.19f;
-                float adjustedcharge = squeezeCharge * (1f - minheightFactor);
-                targetLocalPos.y -= distanceToBottom * adjustedcharge * topFactor;
-            }
+            // Compute target Y based on squeezeCharge
+            float dropAmount = totalHeight * squeezeCharge * maxFraction * relativeHeight;
+            Vector3 targetPos = seg.position;
+            targetPos.y -= dropAmount;
 
-            Vector3 targetWorldPos = segmentTransforms[i].parent.TransformPoint(targetLocalPos);
-
-            // Move towards target using a fixed max speed for consistency
-            float moveSpeed = 50f; // Adjust as needed
-            Vector2 newPos = Vector2.MoveTowards(segmentRb.position, targetWorldPos, moveSpeed * Time.fixedDeltaTime);
-            segmentRb.MovePosition(newPos);
+            // Move smoothly
+            float moveSpeed = 20f; // tweak for consistency
+            rbSeg.MovePosition(Vector3.Lerp(rbSeg.position, targetPos, moveSpeed * Time.fixedDeltaTime));
         }
     }
     
@@ -422,62 +380,125 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
     #region Puddle State
-    //Puddle State movement. (WIP)
-    public void puddleMovement()
+    private bool isPuddled = false;
+    private List<Transform> puddleSegments = new List<Transform>();
+    private List<Vector3> originalLocalPositions = new List<Vector3>();
+    private float maxPuddleFraction = 0.75f; // how much the top drops
+    public void StartPuddle()
     {
+        if (isPuddled) return;
+        isPuddled = true;
 
-        // Calculate current horizontal speed
-        Vector2 velocityAtPoint = rb.GetPointVelocity(rb.position);
-        float horizontalSpeed = velocityAtPoint.x;
+        puddleSegments.Clear();
+        originalLocalPositions.Clear();
 
-        // Apply force only if under max speed
-        if (Mathf.Abs(horizontalSpeed) < maxSpeed)
+        foreach (SpringJoint2D joint in GetComponentsInChildren<SpringJoint2D>())
         {
-            rb.AddForce(new Vector2(horizontalInput * moveForce, 0), ForceMode2D.Force);
+            if (joint == null) continue;
+            puddleSegments.Add(joint.transform);
+            originalLocalPositions.Add(joint.transform.localPosition);
         }
 
-        // Apply drag when no input
-        rb.linearDamping = (horizontalInput == 0 && isGrounded) ? groundDrag : 0f;
+        ApplyPuddle(); // apply instantly
     }
+
+    public void EndPuddle()
+    {
+        if (!isPuddled) return;
+        isPuddled = false;
+
+        // Restore all segment positions
+        for (int i = 0; i < puddleSegments.Count; i++)
+        {
+            if (puddleSegments[i] != null)
+            {
+                puddleSegments[i].localPosition = originalLocalPositions[i];
+            }
+        }
+
+        puddleSegments.Clear();
+        originalLocalPositions.Clear();
+    }
+
+    private void ApplyPuddle()
+    {
+        // Find lowest and highest segments in world space
+        float lowestY = float.MaxValue;
+        float highestY = float.MinValue;
+
+        for (int i = 0; i < segmentTransforms.Count; i++)
+        {
+            Transform seg = segmentTransforms[i];
+            if (seg == null) continue;
+            lowestY = Mathf.Min(lowestY, seg.position.y);
+            highestY = Mathf.Max(highestY, seg.position.y);
+        }
+
+        float totalHeight = Mathf.Max(highestY - lowestY, 0.01f); // avoid divide by zero
+        float maxFraction = 0.75f; // max top-to-bottom squeeze
+
+        for (int i = 0; i < segmentTransforms.Count; i++)
+        {
+            Transform seg = segmentTransforms[i];
+            if (seg == null) continue;
+
+            Rigidbody2D rbSeg = seg.GetComponent<Rigidbody2D>();
+            if (rbSeg == null) continue;
+
+            // Calculate relative height: bottom=0, top=1
+            float relativeHeight = (seg.position.y - lowestY) / totalHeight;
+            relativeHeight = Mathf.Clamp01(relativeHeight);
+
+            // Compute target Y based on squeezeCharge
+            float dropAmount = totalHeight * maxFraction * relativeHeight;
+            Vector3 targetPos = seg.position;
+            targetPos.y -= dropAmount;
+
+            // Move smoothly
+            float moveSpeed = 20f; // tweak for consistency
+            rbSeg.MovePosition(Vector3.Lerp(rbSeg.position, targetPos, moveSpeed * Time.fixedDeltaTime));
+        }
+    }
+
     #endregion
 
 
 
     #region Segmented State
-    
+
 
     //Transform the player into segmented state and separate the segment. (WIP)
-  /*  public void transformSegmented()
-    {
-        currentstate = slimeState.Segmented;
+    /*  public void transformSegmented()
+      {
+          currentstate = slimeState.Segmented;
 
-        //Get all the circle segments.
-        Transform[] circlesegments = GetComponentsInChildren<Transform>();
+          //Get all the circle segments.
+          Transform[] circlesegments = GetComponentsInChildren<Transform>();
 
-        foreach (Transform circlesegment in circlesegments)
-        {
-            //Make each segment independent by removing its SpringJoint2D.
-            if (circlesegment != this.transform)
-            {
-                GameObject segmentObj = circlesegment.gameObject;
+          foreach (Transform circlesegment in circlesegments)
+          {
+              //Make each segment independent by removing its SpringJoint2D.
+              if (circlesegment != this.transform)
+              {
+                  GameObject segmentObj = circlesegment.gameObject;
 
-                //Remove springjoint to break them apart.
-                SpringJoint2D circlejoint = segmentObj.GetComponent<SpringJoint2D>();
-                if (circlejoint != null)
-                {
-                    Destroy(circlejoint); //Break the spring connection.
-                }
+                  //Remove springjoint to break them apart.
+                  SpringJoint2D circlejoint = segmentObj.GetComponent<SpringJoint2D>();
+                  if (circlejoint != null)
+                  {
+                      Destroy(circlejoint); //Break the spring connection.
+                  }
 
-                //Add projectle behaviour
-                segmentObj.AddComponent<SegmentProjectile>();
+                  //Add projectle behaviour
+                  segmentObj.AddComponent<SegmentProjectile>();
 
-                //Launch the segment toward the mouse target.
-                //  LaunchSegment(segmentObj);
-            }
-        }
-    }
+                  //Launch the segment toward the mouse target.
+                  //  LaunchSegment(segmentObj);
+              }
+          }
+      }*/
 
-    #endregion */
+    #endregion
 
     public void CheckGrounded()
     {
@@ -551,14 +572,20 @@ public class PlayerMovement : MonoBehaviour
 
         if (currentstate == slimeState.Segmented)
         {
-           // transformSegmented();
+            // transformSegmented();
         }
-        else if (currentstate == slimeState.Puddle)
+        else
         {
-         //   transformPuddle();
+            resettonormalstate();
+        }
+
+        if (currentstate == slimeState.Puddle)
+        {
+            StartPuddle();
         }
         else
         { 
+            EndPuddle();
             resettonormalstate();
         }
     }
@@ -566,7 +593,6 @@ public class PlayerMovement : MonoBehaviour
     public void resettonormalstate()
     { 
         transform.localScale = Vector3.one; //Reset scale
-        rb.linearDamping = 0f;
     }
 
 
@@ -575,4 +601,3 @@ public class PlayerMovement : MonoBehaviour
 
    
 }
-#endregion  
