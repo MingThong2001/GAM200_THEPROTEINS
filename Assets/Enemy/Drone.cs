@@ -13,11 +13,23 @@ public class Drone : MonoBehaviour
     [SerializeField] private LayerMask defaultlayer;
 
     private PlayerStats healthstats;
-    private EnemyPatrol enemypatrol;
-    void Awake()
-    {
+    public EnemyPatrol enemypatrol;
+
+    private void Awake()
+   {
         enemypatrol = GetComponentInParent<EnemyPatrol>();
     }
+
+
+    private void Start()
+    {
+        //Spawn the enemy at the designated spawn point.
+        if (enemypatrol != null)
+        {
+            enemypatrol.SpawnAtPointDrone();
+        }
+    }
+
 
     // Update is called once per frame
     void Update()

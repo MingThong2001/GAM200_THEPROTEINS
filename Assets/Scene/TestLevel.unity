@@ -1057,6 +1057,7 @@ MonoBehaviour:
   defaultlayer:
     serializedVersion: 2
     m_Bits: 0
+  enemypatrol: {fileID: 0}
 --- !u!50 &120481913
 Rigidbody2D:
   serializedVersion: 5
@@ -14271,7 +14272,7 @@ Transform:
   m_GameObject: {fileID: 838072917}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 9.02, y: 2.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14542,6 +14543,7 @@ MonoBehaviour:
   defaultlayer:
     serializedVersion: 2
     m_Bits: 0
+  enemypatrol: {fileID: 0}
 --- !u!50 &848748400
 Rigidbody2D:
   serializedVersion: 5
@@ -25875,7 +25877,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1780908592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26586,7 +26588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1841099949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26602,7 +26604,7 @@ MonoBehaviour:
   pointA: {fileID: 838072918}
   pointB: {fileID: 303441415}
   enemy: {fileID: 120481910}
-  enemySpawnPos: {fileID: 0}
+  enemySpawnPos: {fileID: 838072918}
   speed: 2
   idleDuration: 1
   Player: {fileID: 266268436}
@@ -27453,6 +27455,7 @@ MonoBehaviour:
   defaultlayer:
     serializedVersion: 2
     m_Bits: 0
+  enemypatrol: {fileID: 0}
 --- !u!50 &1945149444
 Rigidbody2D:
   serializedVersion: 5

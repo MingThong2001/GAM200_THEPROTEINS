@@ -178,6 +178,21 @@ public class EnemyPatrol : MonoBehaviour
         enemy.localScale = new Vector3(Mathf.Abs(initialScale.x), initialScale.y, initialScale.z);
     }
 
+    public void SpawnAtPointDrone()
+    {
+        if (enemySpawnPos == null || enemy == null) return;
+
+        //Move the enmy to spawn position.
+        enemy.position = enemySpawnPos.position;
+        enemy.gameObject.SetActive(true);
+
+        // Reset patrol state
+        state = State.Patrol;
+        isIdling = false;
+        movingLeft = true; // or false depending on your design
+        enemy.localScale = new Vector3(Mathf.Abs(initialScale.x), initialScale.y, initialScale.z);
+    }
+
 
     // Visual debug for detection box
     private void OnDrawGizmosSelected()

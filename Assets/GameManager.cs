@@ -311,6 +311,7 @@ public class GameManager : MonoBehaviour
     }
         Debug.Log("Returned to in-scene Main Menu.");
         spawnHelperWelper();
+        spawnDrone();
     }
 
     public void restartGame()
@@ -333,6 +334,7 @@ public class GameManager : MonoBehaviour
         resetVictory();
         SpawnPlayer();
         spawnHelperWelper();
+        spawnDrone();
 
 
     }
@@ -368,10 +370,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+   
     public void spawnDrone()
-    { 
-    
+    {
+        if (drone != null && drone.enemypatrol != null)
+        {
+            drone.enemypatrol.SpawnAtPointDrone();
+        }
     }
   
     public void cleanupScene()
