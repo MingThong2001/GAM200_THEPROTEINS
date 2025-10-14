@@ -45,8 +45,10 @@ public class CheckPoints : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //Only activate the checkpoints if player touches the checkpoint capsules.
-        if (!collision.CompareTag("Player"))
+        // Check if the collider has a parent, and that parent's name is "Player"
+        Transform parentTransform = collision.transform.parent;
+
+        if (parentTransform == null || parentTransform.name != "Player")
         {
             return;
         }
