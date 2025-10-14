@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8546713784471927961}
   m_Layer: 0
   m_Name: Checkpoint
-  m_TagString: Untagged
+  m_TagString: Checkpoints
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3395951644042457148}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.52, y: -2.97, z: 0}
   m_LocalScale: {x: 0.7796, y: 0.7796, z: 0.7796}
   m_ConstrainProportionsScale: 0
@@ -141,6 +141,7 @@ MonoBehaviour:
   isActivated: 0
   cpActivated: {r: 0, g: 1, b: 0.040927887, a: 1}
   cpDisabled: {r: 1, g: 0, b: 0, a: 1}
-  health: 0
-  segmentCount: 0
-  Position: {x: 0, y: 0}
+  player: {fileID: 0}
+  savedHealth: 0
+  savedSegment: 0
+  savedPosition: {x: 0, y: 0}
