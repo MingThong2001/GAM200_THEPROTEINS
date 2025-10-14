@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using System.Diagnostics.Contracts;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
@@ -22,20 +21,22 @@ public class GameManager : MonoBehaviour
     private GameState currentState;
     [SerializeField] private GameObject playMenu;
     [SerializeField] private GameObject pauseMenu;
-    //[SerializeField] private GameObject gameOverMenu;
+    [SerializeField] private GameObject gameOverMenu;
     //[SerializeField] private GameObject restartMenu;
     [SerializeField] private GameObject victoryMenu;
     [SerializeField] private GameObject objectivePanel;
+    [SerializeField] private GameObject SettingsPanel;
+
     [SerializeField] private GameObject[] inGameText;
     #endregion
 
     //Players and checkpoints.
     public static GameManager instance;
-    private CheckPoints checkPoints;
+    [SerializeField] private CheckPoints checkPoints;
 
     // public PlayerStats playerStats;
     public GameObject player;
-    private GameObject[] collectibles;
+    [SerializeField] private  Transform playerspawnPos;
 
 
     //Game State Flag
@@ -46,7 +47,20 @@ public class GameManager : MonoBehaviour
     private Vector2 checkpointPosition;
     private CheckPoints activecheckPoints;
 
-    //Player stats
+    //Enemies
+    [SerializeField] EnemyPatrol enemyPatrol;
+
+    [SerializeField] private Drone drone;
+
+    [SerializeField] public HelperWelper helperWelper;
+
+    [SerializeField] private FailedSubjects failedSubjects;
+
+
+
+
+    //CheckPoints
+    private CheckPoints checkpoint;
     private int checkpointHealth;
     private int checkpointSegmentcount;
 
@@ -57,15 +71,18 @@ public class GameManager : MonoBehaviour
     //References
     public PlayerShoot playershoot;
     public PlayerMovement playermovement;
-    private Rigidbody2D playerRigid;
     public SceneController sceneController;
- 
+    private Rigidbody2D playerRigid;
+      
+
+
     public void Awake()
     {
-
+        
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -89,6 +106,8 @@ public class GameManager : MonoBehaviour
         {
             text.SetActive(true);
         }
+
+    
     }
 
     //Get player controller.
@@ -115,37 +134,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        ////Disable playermovement and shoot when UI panel appears.
-        //if (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf)
-        //{
-        //    if (playermovement != null)
-        //    {
-        //        playermovement.enabled = false;
-        //    }
-        //    if (playershoot != null)
-        //    {
-        //        playershoot.enabled = false;
-        //    }
 
-        //}
-        //else //Enable them back if its in the playstate.
-        //{
-        //    if (currentState == GameState.Play)
-        //    {
-        //        if (playermovement != null && !playermovement.enabled)
-        //        {
-        //            playermovement.enabled = true;
-        //        }
-        //        if (playershoot != null && !playershoot.enabled)
-        //        {
-        //            playershoot.enabled = true;
-        //        }
-        //    }
-        //}
-
-        bool uiActive = (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf);
+       bool uiActive = (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf);
        playermovement.enabled = !uiActive;
-        playershoot.enabled = !uiActive;
+       playershoot.enabled = !uiActive;
 
         foreach (GameObject text in inGameText)
         {
@@ -165,7 +157,7 @@ public class GameManager : MonoBehaviour
         gameOver = false;
 
         Time.timeScale = 0f;
-
+        SpawnPlayer();
 
     }
    
@@ -189,15 +181,29 @@ public class GameManager : MonoBehaviour
 
         if (gamePaused)
         {
-
             currentState = GameState.Paused;
             Time.timeScale = 0f;
             pauseMenu.SetActive(true);
+
+            // Disable movement and shooting when paused
+            if (playermovement != null)
+                playermovement.enabled = false;
+
+            if (playershoot != null)
+                playershoot.enabled = false;
         }
         else
         {
             Time.timeScale = 1f;
             pauseMenu.SetActive(false);
+            currentState = GameState.Play;
+
+            // Re-enable movement and shooting when unpaused
+            if (playermovement != null)
+                playermovement.enabled = true;
+
+            if (playershoot != null)
+                playershoot.enabled = true;
         }
     }
 
@@ -223,6 +229,18 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+
+    #region Player
+    private void SpawnPlayer()
+    {
+        if (player != null && playerspawnPos != null) 
+        {
+            player.transform.position = playerspawnPos.position;
+
+        }
+    }
+
+    #endregion
     #region End Cycle
     public void endGame(bool isVictory)
     {
@@ -233,16 +251,15 @@ public class GameManager : MonoBehaviour
 
         if (isVictory)
         {
-
+            // Win Condition
             victoryMenu.SetActive(true);
-        }
-        else if (!isVictory)
-        {
-            victoryMenu.SetActive(false);
+            gameOverMenu.SetActive(false);
         }
         else
         {
-            resetVictory();
+            // Lose Condition
+            victoryMenu.SetActive(false);
+            gameOverMenu.SetActive(true);
         }
     }
     public void resetVictory()
@@ -251,23 +268,49 @@ public class GameManager : MonoBehaviour
         currentState = GameState.Play;
         victoryMenu.SetActive(false);
         ResetDoorandbutton();
-        }
+    }
 
     public void BackToStartMenu()
     {
-        cleanupScene();
+        Debug.Log("BackToStartMenu called");
 
-        victoryMenu.SetActive(false);
-        pauseMenu.SetActive(false);
-        objectivePanel.SetActive(false);
+    // Reset time scale
+    Time.timeScale = 0f;
 
-        
-        Time.timeScale = 0f;
-        gameOver = false;
-        gamePaused = true;
+    // Reset game state
+    gamePaused = true;
+    gameOver = false;
+    currentState = GameState.Play;
 
-        SceneController.instance.LoadMenu();
-        currentState = GameState.Play;
+    // Clean up any scene elements like enemies, projectiles, etc.
+    cleanupScene();
+
+    // Reset checkpoints
+    activecheckPoints = null;
+    checkpointPosition = Vector2.zero;
+    CheckPoints.allCheckPoints.Clear();
+
+    // Disable all gameplay UI
+    if (pauseMenu != null) pauseMenu.SetActive(false);
+    if (victoryMenu != null) victoryMenu.SetActive(false);
+    if (gameOverMenu != null) gameOverMenu.SetActive(false);
+    if (objectivePanel != null) objectivePanel.SetActive(false);
+    if (SettingsPanel != null) SettingsPanel.SetActive(false);
+
+    // Show main menu UI
+    if (playMenu != null) playMenu.SetActive(true);
+
+    // Disable player controls
+    if (playermovement != null) playermovement.enabled = false;
+    if (playershoot != null) playershoot.enabled = false;
+
+    // Hide in-game text
+    foreach (GameObject text in inGameText)
+    {
+        text.SetActive(false);
+    }
+        Debug.Log("Returned to in-scene Main Menu.");
+        spawnHelperWelper();
     }
 
     public void restartGame()
@@ -288,6 +331,10 @@ public class GameManager : MonoBehaviour
         cleanupScene();
     
         resetVictory();
+        SpawnPlayer();
+        spawnHelperWelper();
+
+
     }
 
     public void ResetDoorandbutton()
@@ -311,15 +358,43 @@ public class GameManager : MonoBehaviour
 
     }
 
+
+
+    public void spawnHelperWelper()
+    {
+        if (helperWelper != null && helperWelper.enemyPatrol != null)
+        {
+            helperWelper.enemyPatrol.SpawnAtPoint();
+        }
+    }
+
+
+    public void spawnDrone()
+    { 
+    
+    }
   
     public void cleanupScene()
     {
+        Debug.Log("Cleanup found");
+        GameObject[] checkpointObjects = GameObject.FindGameObjectsWithTag("Checkpoints");
+        foreach (GameObject obj in checkpointObjects)
+        {
+            CheckPoints cp = obj.GetComponent<CheckPoints>();
+            if (cp != null)
+            {
+                cp.ResetCheckpoint();
+            }
+        }
+        activecheckPoints = null;
+        checkpointPosition = Vector2.zero;
+
         ////Destroy all enemies
         //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
         //foreach (GameObject enemy in enemies)
-        //{ 
+        //{
         //    Destroy(enemy);
-        
+
         //}
 
         //GameObject[] objects = GameObject.FindGameObjectsWithTag("Objects");

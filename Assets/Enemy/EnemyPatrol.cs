@@ -7,6 +7,8 @@ public class EnemyPatrol : MonoBehaviour
     [SerializeField] public Transform pointA;
     [SerializeField] public Transform pointB;
     [SerializeField] private Transform enemy; // optional, will default to this.transform if null
+    [SerializeField] private Transform enemySpawnPos; // optional, will default to this.transform if null
+
     [SerializeField] private float speed = 2f;
     [SerializeField] private float idleDuration = 0.6f;
     private bool movingLeft = true;
@@ -32,6 +34,7 @@ public class EnemyPatrol : MonoBehaviour
     {
         if (enemy == null) enemy = transform;
         initialScale = enemy.localScale;
+
     }
 
     private void Update()
@@ -159,6 +162,22 @@ public class EnemyPatrol : MonoBehaviour
         bool inRange = Mathf.Abs(Player.position.x - enemy.position.x) <= chaseRange;
         return inRange && distanceToPlayer <= maxchaseRange;
     }
+
+    public void SpawnAtPoint()
+    {
+        if (enemySpawnPos == null || enemy == null) return;
+
+        //Move the enmy to spawn position.
+        enemy.position = enemySpawnPos.position;
+        enemy.gameObject.SetActive(true);
+
+        // Reset patrol state
+        state = State.Patrol;
+        isIdling = false;
+        movingLeft = true; // or false depending on your design
+        enemy.localScale = new Vector3(Mathf.Abs(initialScale.x), initialScale.y, initialScale.z);
+    }
+
 
     // Visual debug for detection box
     private void OnDrawGizmosSelected()

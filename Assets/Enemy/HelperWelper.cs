@@ -13,15 +13,27 @@ public class HelperWelper : MonoBehaviour
 
     //References
     private Rigidbody2D grabbedSegments;
-    private EnemyPatrol enemyPatrol;
+    public EnemyPatrol  enemyPatrol;
     private Collider2D enemyCollider;
+
+    //spawn
+    private Vector3 startPos;
 
     private void Start()
     {
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
         enemyCollider = GetComponent<Collider2D>();
-    }
 
+        //Store Helper's start position.
+        startPos = transform.position;
+
+        //Spawn the enemy at the designated spawn point.
+        if (enemyPatrol != null)
+        {
+            enemyPatrol.SpawnAtPoint();
+        }
+    }
+ 
     private void OnTriggerStay2D(Collider2D other)
     {
         if (isHolding) return;

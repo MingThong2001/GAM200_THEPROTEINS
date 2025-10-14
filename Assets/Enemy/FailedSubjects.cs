@@ -25,8 +25,13 @@ public class FailedSubjects : MonoBehaviour
 
     private Transform player;
     private ChargePatrol chargePatrol;
+    [SerializeField] private Transform spawnPoint;
 
 
+    private void Awake()
+    {
+      
+    }
     public void Start()
     {
         GameObject p = GameObject.FindWithTag("Player");
@@ -34,7 +39,6 @@ public class FailedSubjects : MonoBehaviour
         { 
             player = p.transform;
         }
-
         chargePatrol = GetComponentInParent<ChargePatrol>();
     }
     private void Update()
