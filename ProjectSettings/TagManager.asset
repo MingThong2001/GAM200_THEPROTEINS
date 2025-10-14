@@ -12,6 +12,7 @@ TagManager:
   - BreakableObjs
   - Enemy
   - Audio
+  - Checkpoints
   layers:
   - Default
   - TransparentFX
