@@ -202,7 +202,6 @@ public class MassSegment : MonoBehaviour
             Debug.Log($"Segment Added! New segment count: {currentSegments}");
 
             UpdateAllStats();
-            LogStats("AddSegment");
 
             if (audioManager != null)
             {
@@ -230,7 +229,7 @@ public class MassSegment : MonoBehaviour
             savedSegment = currentSegments ;
             Debug.Log($"Segment Added! New segment count: {currentSegments}");
             UpdateAllStats();
-            LogStats("RemoveSegment");
+            
         }
         ChangeVolume ch = GetComponent<ChangeVolume>();
         ch.Change(0.8f);
@@ -376,12 +375,7 @@ public class MassSegment : MonoBehaviour
         //#endregion
 
         //}
-    private void LogStats(string action)
-    {
-        //Debug.Log($"[{ action}] Segments: {currentSegments}, " + $"MaxHealth: {currentMaxHealth}, " + 
-            //$"PlayerHealth: {playerstats.GetCurrentHealth()}, " + $"MoveSpeed: {playermovement.normalmovementSpeed}, " + $"JumpForce: {playermovement.jumpforce}");
-    
-    }
+ 
 
     private void UpdateCheckpoint(int newSegmentCount)
     {
