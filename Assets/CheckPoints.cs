@@ -122,4 +122,9 @@ public class CheckPoints : MonoBehaviour
 
     }
 
+    public void ResetCheckpoint()
+    {
+        isActivated = false;
+        UpdateColor();
+    }
 }
