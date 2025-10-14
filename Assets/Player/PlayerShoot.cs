@@ -22,7 +22,11 @@ public class PlayerShoot : MonoBehaviour
     }
     private void Update()
     {
-       
+        //If the game is paused, don't shoot.
+        if (Time.timeScale == 0f)
+        {
+            return;
+        }
         if (Input.GetMouseButtonDown(0) && Time.time >= lastFiretime + cooldown && massSegment.GetCurrentSegments() > massSegment.GetMinSegments())
         {
             lastFiretime = Time.time;
