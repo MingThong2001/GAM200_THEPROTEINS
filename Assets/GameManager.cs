@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] inGameText;
     #endregion
 
+    //Settings
+    private GameObject previousMenu;
+
     //Players and checkpoints.
     public static GameManager instance;
     [SerializeField] private CheckPoints checkPoints;
@@ -230,7 +233,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
-    #region Player
+    #region Player/Enemies
     private void SpawnPlayer()
     {
         if (player != null && playerspawnPos != null) 
@@ -240,7 +243,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void spawnHelperWelper()
+    {
+        if (helperWelper != null && helperWelper.enemyPatrol != null)
+        {
+            helperWelper.enemyPatrol.SpawnAtPoint();
+        }
+    }
+
+
+    public void spawnDrone()
+    {
+        if (drone != null && drone.enemypatrol != null)
+        {
+            drone.enemypatrol.SpawnAtPointDrone();
+        }
+    }
+
     #endregion
+
     #region End Cycle
     public void endGame(bool isVictory)
     {
@@ -316,28 +337,62 @@ public class GameManager : MonoBehaviour
 
     public void restartGame()
     {
-        Debug.Log("StartGame() CALLED");
-
-        ResetDoorandbutton();
-
-        victoryMenu.SetActive(false);
-        objectivePanel.SetActive(false);
-        pauseMenu.SetActive(false);
-
+        // Reset time scale
+        gamePaused = false;
+        gameOver = false;
         currentState = GameState.Play;
 
+        // 2. Resume time
         Time.timeScale = 1f;
-        SceneController.instance.Restart();
 
+        // 3. Hide all menus
+        if (playMenu != null) playMenu.SetActive(false);
+        if (pauseMenu != null) pauseMenu.SetActive(false);
+        if (victoryMenu != null) victoryMenu.SetActive(false);
+        if (gameOverMenu != null) gameOverMenu.SetActive(false);
+        if (objectivePanel != null) objectivePanel.SetActive(false);
+        if (SettingsPanel != null) SettingsPanel.SetActive(false);
+
+        // 4. Reset doors and buttons
+        ResetDoorandbutton();
+
+        // 5. Clean up scene (destroy projectiles, reset checkpoints, etc.)
         cleanupScene();
-    
-        resetVictory();
-        SpawnPlayer();
+
+        // 6. Reset player
+        if (player != null)
+        {
+            // Move to spawn or last checkpoint
+            if (activecheckPoints != null)
+            {
+                player.transform.position = checkpointPosition;
+                PlayerStats stats = player.GetComponent<PlayerStats>();
+                if (stats != null)
+                {
+                    stats.restorefromCheckpoint(activecheckPoints);
+                }
+            }
+            else if (playerspawnPos != null)
+            {
+                player.transform.position = playerspawnPos.position;
+                PlayerStats stats = player.GetComponent<PlayerStats>();
+                if (stats != null)
+                {
+                    stats.SetHealth(stats.GetMaxHealth(), 1f);
+                }
+            }
+
+            // Enable movement and shooting
+            if (playermovement != null) playermovement.enabled = true;
+            if (playershoot != null) playershoot.enabled = true;
+        }
+
+        // 7. Respawn helpers or drones if needed
         spawnHelperWelper();
         spawnDrone();
 
-
     }
+
 
     public void ResetDoorandbutton()
     {
@@ -360,24 +415,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-
-
-    public void spawnHelperWelper()
-    {
-        if (helperWelper != null && helperWelper.enemyPatrol != null)
-        {
-            helperWelper.enemyPatrol.SpawnAtPoint();
-        }
-    }
-
-   
-    public void spawnDrone()
-    {
-        if (drone != null && drone.enemypatrol != null)
-        {
-            drone.enemypatrol.SpawnAtPointDrone();
-        }
-    }
   
     public void cleanupScene()
     {
@@ -447,7 +484,44 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
-  
+
+
+    #region Settings Menu
+    public void OpenSettings(GameObject fromMenu)
+    {
+        // Store the reference to the menu that opened settings
+        previousMenu = fromMenu;
+
+        // Hide that menu
+        previousMenu.SetActive(false);
+
+        // Show settings panel
+        SettingsPanel.SetActive(true);
+    }
+
+    public void CloseSettings()
+    {
+        // Hide settings
+        SettingsPanel.SetActive(false);
+
+        // Return to previous menu if available
+        if (previousMenu != null)
+        {
+            previousMenu.SetActive(true);
+            previousMenu = null;
+        }
+    }
+
+    public void OpenSettingsFromPlayMenu()
+    {
+        OpenSettings(playMenu);
+    }
+
+    public void OpenSettingsFromPauseMenu()
+    {
+        OpenSettings(pauseMenu);
+    }
+    #endregion
     #region CHECKPOINTS
 
     public void RegisterPlayer(GameManager playerObj)

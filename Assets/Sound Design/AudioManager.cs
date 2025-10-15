@@ -28,7 +28,7 @@ public class AudioManager : MonoBehaviour
 
     public void Awake()
     {
-        // audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        //audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
     public void Start()
@@ -55,7 +55,7 @@ public class AudioManager : MonoBehaviour
     public void SetMusicVolume()
     {
         float volume = musicSlider.value;
-        myMixer.SetFloat("music", Mathf.Log10(volume)*20);
+        myMixer.SetFloat("Music", Mathf.Log10(volume)*20);
         PlayerPrefs.SetFloat("musicVolume", volume);
 
     }
