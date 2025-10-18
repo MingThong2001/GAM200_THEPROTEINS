@@ -245,7 +245,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 newPos = rb.position + new Vector2(horizontalInput * adjustedSpeed * Time.fixedDeltaTime, 0f);
         rb.MovePosition(newPos);
 
-       Debug.Log($"[Normal Move] Input: {horizontalInput}, Speed: {adjustedSpeed}, Position: {rb.position}");
+       //Debug.Log($"[Normal Move] Input: {horizontalInput}, Speed: {adjustedSpeed}, Position: {rb.position}");
 
         if (horizontalInput != 0f && movementSFXTimer <= 0f)
         {

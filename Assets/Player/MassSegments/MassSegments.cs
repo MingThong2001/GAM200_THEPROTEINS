@@ -51,6 +51,7 @@ public class MassSegment : MonoBehaviour
         return maxSegments;
     }
 
+
     public float MassRatio()
     {
         //return Mathf.Clamp01((float)(currentSegments - minSegments) / (maxSegments - minSegments));
@@ -401,6 +402,5 @@ public class MassSegment : MonoBehaviour
                 masstoDoor.UnlockedDoor();
             }
         }
-
     }
 }

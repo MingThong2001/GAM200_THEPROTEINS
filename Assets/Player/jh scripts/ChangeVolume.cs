@@ -35,21 +35,6 @@ public class ChangeVolume : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKey(KeyCode.X))
-        //{
-         
-        //    Change(growSize);
-            
-
-        //}
-        //if (Input.GetKey(KeyCode.C))
-        //{
-        //    Change(shrinkSize);
-        //}
-        //if (Input.GetKey(KeyCode.V))
-        //{
-        //    Change(oriSize);
-        //}
         if (Input.GetKey(KeyCode.N))
         {
             ChangeJointStr(oriStr);
@@ -59,21 +44,7 @@ public class ChangeVolume : MonoBehaviour
             ChangeJointStr(lowerStr);
         }
 
-        //if (massSegment == null) return;
-
-        //int currentSegmentCount = massSegment.gloomassStats.currentSegments;
-        //if (currentSegmentCount != lastSegmentcount)
-        //{
-        //    float scalefactor = GetvaluescalefromSegment();
-        //    Change(scalefactor);
-        //    ChangeJointStr(oriStr);
-
-        //    lastSegmentcount = currentSegmentCount;
-        //}
-
     }
-
-
 
     public void Change(float volumeFactor)
     {
