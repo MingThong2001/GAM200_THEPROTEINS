@@ -16,11 +16,12 @@ public class PlayerMovement : MonoBehaviour
     public float normalmovementSpeed = 1f; //Normal state movement speed.
     public float puddlemovementSpeed = 2f; //Puddle state movement speed.
     public float segmentedmovementspeed = 3f; //Segmented state movement speed.
+    public int facingDir { get; private set; } = 1;
 
     //Jumping 
     public float childforcemultiplier = 0.25f;      
     private bool isJumping;
-    private bool isGrounded;
+    public bool isGrounded;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundcheckRadius = 10f;
@@ -53,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     //Reference to RigidBody2D
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     
     //Input Variables
@@ -231,12 +232,14 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             horizontalInput = -1f; // Move Left
+            facingDir = -1;
             slimeFX.Play();
 
         }
         if (Input.GetKey(KeyCode.D))
         {
             horizontalInput = 1f; // Move Right
+            facingDir = 1;
             slimeFX.Play();
 
         }
