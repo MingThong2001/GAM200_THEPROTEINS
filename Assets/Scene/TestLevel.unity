@@ -9586,7 +9586,7 @@ RectTransform:
   m_Father: {fileID: 943983260}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -0.000015258789, y: 0.00000667572}
   m_SizeDelta: {x: 0.000022888, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -15029,8 +15029,8 @@ MonoBehaviour:
   patrolSpeedUpdateInterval: 0.5
   idleDuration: 1
   player: {fileID: 266268436}
-  chaseRange: 3
-  maxChaseRange: 4
+  chaseRange: 2
+  maxChaseRange: 5
   chargeSpeed: 5
   chargeSpeedUpdateInterval: 0.3
   obstacleTag: Object
@@ -17553,7 +17553,7 @@ Transform:
   m_GameObject: {fileID: 913016502}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.61, y: 0.12, z: 0}
+  m_LocalPosition: {x: 2.66, y: 0.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19514,7 +19514,7 @@ Transform:
   m_GameObject: {fileID: 1014074856}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.79, y: -0.110000014, z: 0}
+  m_LocalPosition: {x: 10.07, y: -1.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22310,8 +22310,8 @@ Transform:
   m_GameObject: {fileID: 1135621744}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.3933, y: -2.4688, z: 10}
-  m_LocalScale: {x: 33.141655, y: 3.8133502, z: 1}
+  m_LocalPosition: {x: 2.1005, y: -2.4688, z: 10}
+  m_LocalScale: {x: 49.72574, y: 3.8133502, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 489606622}
@@ -26587,7 +26587,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1502688977
 Transform:
   m_ObjectHideFlags: 0
@@ -27585,7 +27585,7 @@ Transform:
   m_GameObject: {fileID: 1645758387}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.67, y: -0.7, z: 0}
+  m_LocalPosition: {x: 3.29, y: -1.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -28178,7 +28178,7 @@ Transform:
   m_GameObject: {fileID: 1707400942}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.33, y: 0.14, z: 0}
+  m_LocalPosition: {x: 5.18, y: -0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -29689,7 +29689,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1780908592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31383,7 +31383,7 @@ MonoBehaviour:
   grabPoint: {fileID: 924275013}
   grabRange: 1
   grabDuration: 2
-  throwForce: 60
+  throwForce: 20
   playerRoot: {fileID: 266268436}
   enemyPatrol: {fileID: 0}
   maxHealth: 20
@@ -33271,8 +33271,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1030850069}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

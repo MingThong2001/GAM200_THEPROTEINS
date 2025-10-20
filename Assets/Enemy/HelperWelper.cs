@@ -10,11 +10,13 @@ public class HelperWelper : MonoBehaviour
     public float throwForce = 20f;
     public Transform playerRoot;
     private bool isHolding = false;
+    public float grabDamage = 15f;
 
     //References
     private Rigidbody2D grabbedSegments;
     public EnemyPatrol  enemyPatrol;
     private Collider2D enemyCollider;
+    private PlayerStats healthstats;
 
     //Health
     public float maxHealth = 20f;
@@ -62,6 +64,13 @@ public class HelperWelper : MonoBehaviour
         isHolding = true;
         grabbedSegments = targetRb;
 
+        // Get player health
+        healthstats = targetRb.GetComponentInParent<PlayerStats>();
+        if (healthstats != null)
+        {
+            healthstats.TakeDamage(grabDamage); // Damage immediately when grabbed
+            Debug.Log($"Drone dealt {grabDamage} damage to {healthstats.name} at time {Time.time}");
+        }
         //Stop enemy Patrol
         if (enemyPatrol != null) enemyPatrol.enabled = false;
 
@@ -90,9 +99,9 @@ public class HelperWelper : MonoBehaviour
        //Release player.
        grabbedSegments.bodyType = RigidbodyType2D.Dynamic;
 
-       //Apply throw face.
-       float throwdirectionX = Mathf.Sign(transform.localScale.x + 10f);
-        Vector2 throwDirection = new Vector2(throwdirectionX, 2f).normalized;
+        //Apply throw face.
+        float throwdirectionX = Mathf.Sign(transform.localScale.x) * 2f ;
+        Vector2 throwDirection = new Vector2(throwdirectionX, 2f);
         grabbedSegments.AddForce(throwDirection * (throwForce + 10f), ForceMode2D.Impulse);
 
         //Clear refernece to prevent double grab.
@@ -112,8 +121,7 @@ public class HelperWelper : MonoBehaviour
         }
         isHolding = false;  
     }
-
-
+   
     //Health Settings
     public void TakeDamage(float damage)
     {
