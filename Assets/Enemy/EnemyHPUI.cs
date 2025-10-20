@@ -58,6 +58,13 @@ public class EnemyHPUI : MonoBehaviour
         {
             transform.position = targetEnemy.position + hpOffset;
             transform.rotation = Quaternion.identity; // Keep upright
+            Vector3 newScale = transform.localScale;
+            // Counteract parent's flip
+            Vector3 parentScale = targetEnemy.localScale;
+            transform.localScale = new Vector3(
+                Mathf.Abs(transform.localScale.x) * Mathf.Sign(parentScale.x),
+                transform.localScale.y,
+                transform.localScale.z);
         }
     }
 

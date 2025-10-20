@@ -7,7 +7,7 @@ public class ChargePatrol : MonoBehaviour
     [SerializeField] private Transform pointA;
     [SerializeField] private Transform pointB;
     [SerializeField] private Transform enemy;
-    [SerializeField] private Transform enemySpawnPos; 
+    [SerializeField] private Transform enemySpawnPos;
 
     [Header("Patrol Settings")]
     [SerializeField] private float patrolSpeed = 2f;
@@ -59,17 +59,15 @@ public class ChargePatrol : MonoBehaviour
 
     private void PatrolUpdate()
     {
+        // --- Check if player is at the patrol point first ---
+        CheckPlayerAtPatrolPoint();
 
-
-        // Player detected? start charge
-        if (PlayerInSight())
-        {
-            StartCharge();
-            state = State.Chasing;
-            return;
-        }
+        // Skip patrol movement if just started chasing
+        if (state == State.Chasing) return;
 
         int dir = movingLeft ? -1 : 1;
+
+        if (isIdling) return;
 
         // Obstacle detection
         Vector2 boxCenter = (Vector2)enemy.position + new Vector2(dir * detectionOffset, 0f);
@@ -96,13 +94,11 @@ public class ChargePatrol : MonoBehaviour
         {
             currentPatrolSpeed = patrolSpeed * Random.Range(0.5f, 1.5f);
             patrolTimer = 0f;
-            Debug.Log($"[PATROL] New speed: {currentPatrolSpeed:F2}");
         }
 
         // Move
         enemy.position += new Vector3(dir * currentPatrolSpeed * Time.deltaTime, 0f, 0f);
         enemy.localScale = new Vector3(Mathf.Abs(initialScale.x) * dir, initialScale.y, initialScale.z);
-        Debug.Log($"[PATROL] Enemy X: {enemy.position.x:F2}, moving {(movingLeft ? "Left" : "Right")}");
 
         // Patrol endpoints
         if (movingLeft && enemy.position.x <= pointA.position.x + 0.01f)
@@ -111,12 +107,33 @@ public class ChargePatrol : MonoBehaviour
             StartCoroutine(IdleAndFlip());
     }
 
+    private void CheckPlayerAtPatrolPoint()
+    {
+        if (player == null) return;
+
+        float checkRadius = 0.3f; // Adjust as needed
+        Vector2 patrolPoint = movingLeft ? pointA.position : pointB.position;
+
+        Collider2D hit = Physics2D.OverlapCircle(patrolPoint, checkRadius, LayerMask.GetMask("Player"));
+        if (hit != null)
+        {
+            int dir = (player.position.x > enemy.position.x) ? 1 : -1;
+            StartCharge(dir);
+            isIdling = false;
+            state = State.Chasing;
+        }
+    }
+
     private IEnumerator IdleAndFlip()
     {
-        if (isIdling) yield break;
+        if (state == State.Chasing || isIdling)
+            yield break;
+
         isIdling = true;
         state = State.Idle;
+
         yield return new WaitForSeconds(idleDuration);
+
         movingLeft = !movingLeft;
         isIdling = false;
         state = State.Patrol;
@@ -124,7 +141,6 @@ public class ChargePatrol : MonoBehaviour
 
     private IEnumerator ReturnToPointRoutine(Vector3 target)
     {
-        Debug.Log($"[Returning] to {(Vector2.Distance(target, pointA.position) < 0.1f ? "Point A" : "Point B")}");
         state = State.Returning;
 
         float targetX = target.x;
@@ -151,42 +167,38 @@ public class ChargePatrol : MonoBehaviour
         }
 
         enemy.position += new Vector3((movingLeft ? -0.01f : 0.01f), 0f, 0f);
-        Debug.Log($"[Return Complete] now movingLeft={movingLeft} -> back to PATROL");
         state = State.Patrol;
     }
 
-    private void StartCharge()
+    private void StartCharge(int dir)
     {
+        if (dir == 0) dir = 1;
+
         isCharging = true;
-        int dir = (player.position.x > enemy.position.x) ? 1 : -1;
         chargeVelocity = new Vector3(dir * chargeSpeed, 0f, 0f);
         chargeTimer = 0f;
+        state = State.Chasing;
         Debug.Log("[CHARGE] Enemy started charging!");
     }
 
     private void ChaseUpdate()
     {
-        // Erratic charge
         chargeTimer += Time.deltaTime;
         if (chargeTimer >= chargeSpeedUpdateInterval)
         {
             float dir = chargeVelocity.x > 0 ? 1f : -1f;
             chargeVelocity = new Vector3(dir * chargeSpeed * Random.Range(0.7f, 1.3f), 0f, 0f);
             chargeTimer = 0f;
-            Debug.Log($"[CHARGE] New erratic speed: {chargeVelocity.x:F2}");
         }
 
         enemy.position += chargeVelocity * Time.deltaTime;
         int moveDir = chargeVelocity.x > 0 ? 1 : -1;
         enemy.localScale = new Vector3(Mathf.Abs(initialScale.x) * moveDir, initialScale.y, initialScale.z);
-        Debug.Log($"[CHARGE] Enemy X: {enemy.position.x:F2}, dir: {moveDir}, speed: {chargeVelocity.x:F2}");
 
-        // Stop charge if player out of range
         if (Vector2.Distance(enemy.position, player.position) > maxChaseRange)
         {
             isCharging = false;
             state = State.Patrol;
-            Debug.Log("[CHARGE] Enemy stopped charging, returning to patrol.");
         }
     }
 
@@ -194,26 +206,22 @@ public class ChargePatrol : MonoBehaviour
     {
         if (player == null) return false;
 
-        // horizontal distance only (enemy only moves left/right)
         float distanceX = Mathf.Abs(player.position.x - enemy.position.x);
-
-        // optional vertical tolerance
         float distanceY = Mathf.Abs(player.position.y - enemy.position.y);
 
-        return distanceX <= chaseRange && distanceY <= 1f; // 1f is vertical tolerance
+        return distanceX <= chaseRange && distanceY <= 1f;
     }
+
     public void SpawnAtPointFailedSubject()
     {
         if (enemySpawnPos == null || enemy == null) return;
 
-        //Move the enmy to spawn position.
         enemy.position = enemySpawnPos.position;
         enemy.gameObject.SetActive(true);
 
-        // Reset patrol state
         state = State.Patrol;
         isIdling = false;
-        movingLeft = true; // or false depending on your design
+        movingLeft = true;
         enemy.localScale = new Vector3(Mathf.Abs(initialScale.x), initialScale.y, initialScale.z);
     }
 
