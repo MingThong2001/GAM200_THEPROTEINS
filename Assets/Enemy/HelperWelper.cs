@@ -16,6 +16,11 @@ public class HelperWelper : MonoBehaviour
     public EnemyPatrol  enemyPatrol;
     private Collider2D enemyCollider;
 
+    //Health
+    public float maxHealth = 20f;
+    private float currentHealth;
+    private EnemyHPUI enemyHP;
+
     //spawn
     private Vector3 startPos;
 
@@ -106,5 +111,28 @@ public class HelperWelper : MonoBehaviour
             enemyPatrol.enabled = true;
         }
         isHolding = false;  
+    }
+
+
+    //Health Settings
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Max(0, currentHealth);
+
+        if (enemyHP != null)
+            enemyHP.SetHealth(currentHealth, maxHealth);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        if (enemyHP != null)
+            Destroy(enemyHP.gameObject);
+        Destroy(gameObject);
     }
 }

@@ -5,42 +5,72 @@ using UnityEngine.UI;
 //It will updates the health bar fill then follows the enemy on screen.
 public class EnemyHPUI : MonoBehaviour
 {
-    public Image fillbar; //Image component that shows visually to represent the enemy's HP.
-    private Transform HptoenemyHP; //Target enemy transform so the healthbar will follow.
-    private Vector3 Hptoenemyoffset; //The position offset between the enemy and the HP bar (To show it above the enemy head and for visual appeal).
+    [Header("Enemy Health")]
+    public float maxHealth;
+    private float currentHealth;
 
-    public void Initialize(Transform targettofollow, Vector3 folllowoffset) //Initializes the HP UI to follow a specific enemy and apply the offset.
+    [Header("HP Bar UI")]
+    public Image fillbar;      // Assign the Image component of the HP bar
+    public Vector3 hpOffset = new Vector3(0, 1f, 0); // Offset above the enemy
+
+    private Transform targetEnemy; // Enemy to follow
+
+    private void Awake()
     {
-        HptoenemyHP = targettofollow; //Set the enemy transform to follow.
-        Hptoenemyoffset = folllowoffset; //Set the offset for positioning the HP bar.
+        currentHealth = maxHealth;
 
-    }
-
-    void LateUpdate() //Called after all update functions have been called. This is for the HPUI to follow.
-    {
-        if (HptoenemyHP != null)
+        // Default to parent as the enemy
+        if (transform.parent != null)
         {
-            transform.position = HptoenemyHP.position + Hptoenemyoffset; //Set the UI position to follow the enemy with the given offset.
-            transform.rotation = Quaternion.identity;    //Keep the UI rotation fix so that it doesnt orientate or tilt with the enemy.
+            targetEnemy = transform.parent;
         }
     }
 
-    public void DestroyenemyHPUI() //To destory the enemy hp ui when the game is reseted or restarted.
+    private void LateUpdate()
     {
-        Destroy(gameObject);
-        Debug.Log("HP bar destroyed");
-
-    }
-    public void SetHealth(int current, int max) //Update the fill amount of the HP bar based on the current health.
-    {
-        fillbar.fillAmount = (float)current / max;  //Calculate the HP and apply the amount.
-        Debug.Log($"SetHealth called with current={current}, max={max}");
-
-
+        FollowEnemy();
     }
 
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Max(currentHealth, 0);
+        UpdateHPBar();
 
+        if (currentHealth <= 0)
+            Die();
+    }
 
+    private void UpdateHPBar()
+    {
+        if (fillbar != null)
+            fillbar.fillAmount = (float)currentHealth / maxHealth;
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject); // Only destroys HP bar, enemy remains
+    }
+
+    private void FollowEnemy()
+    {
+        if (targetEnemy != null)
+        {
+            transform.position = targetEnemy.position + hpOffset;
+            transform.rotation = Quaternion.identity; // Keep upright
+        }
+    }
+
+    public void SetHealth(float current, float max)
+    {
+        currentHealth = current;
+        maxHealth = max;
+
+        if (fillbar != null)
+        { 
+            fillbar.fillAmount = Mathf.Clamp01(currentHealth / maxHealth);
+        }
+    }
 }
 
 

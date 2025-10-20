@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class ProjectileSegment : MonoBehaviour
 {
+    /* This script is to handle collision for projectile*/
+
+
     //Reference to the parent projectile since projectile has multiple children (points).
     private Projectile parentProjectile;
 
@@ -16,7 +19,7 @@ public class ProjectileSegment : MonoBehaviour
         //Find the parent projectile this segment belongs to.
         parentProjectile = GetComponentInParent<Projectile>();
 
-        segmentRigidbody = GetComponent<Rigidbody2D>(); 
+        segmentRigidbody = GetComponent<Rigidbody2D>();
     }
 
     //Reset segment 
@@ -26,7 +29,7 @@ public class ProjectileSegment : MonoBehaviour
         segmentRigidbody.simulated = true;
         segmentRigidbody.bodyType = RigidbodyType2D.Dynamic; //Restore physics.
         segmentRigidbody.constraints = RigidbodyConstraints2D.None; //Remove any freeze constraints;
-    
+
     }
 
     //Handle collision.

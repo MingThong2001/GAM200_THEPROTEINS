@@ -15,6 +15,12 @@ public class Drone : MonoBehaviour
     private PlayerStats healthstats;
     public EnemyPatrol enemypatrol;
 
+
+    //Health
+    public float maxHealth = 20f;
+    private float currentHealth;
+    private EnemyHPUI enemyHP;
+
     private void Awake()
    {
         enemypatrol = GetComponentInParent<EnemyPatrol>();
@@ -85,5 +91,27 @@ public class Drone : MonoBehaviour
             Debug.Log($"Drone dealt {Damage} damage to {healthstats.name} at time {Time.time}");
 
         }
+    }
+
+    //Health Settings
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Max(0, currentHealth);
+
+        if (enemyHP != null)
+            enemyHP.SetHealth(currentHealth, maxHealth);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        if (enemyHP != null)
+            Destroy(enemyHP.gameObject);
+        Destroy(gameObject);
     }
 }

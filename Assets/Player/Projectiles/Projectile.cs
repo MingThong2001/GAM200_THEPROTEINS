@@ -119,8 +119,6 @@ public class Projectile : MonoBehaviour
     }
     public void Update()
     {
-        
-
         //If projectile is flying and active.
         if (isActive && !isStuck)
         {
@@ -174,7 +172,7 @@ public class Projectile : MonoBehaviour
     }
 
     //Collision with tagged objects.
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("groundLayer"))
         {
@@ -313,10 +311,22 @@ public class Projectile : MonoBehaviour
         Hashit = true;
 
         GameObject targetPoint = collision.gameObject;
-        Enemy enemy = targetPoint.GetComponent<Enemy>();
-        if (enemy != null)
+        FailedSubjects failedsubjects = targetPoint.GetComponentInChildren<FailedSubjects>();
+        if (failedsubjects != null)
         {
-            enemy.TakeDamage(damage);
+            failedsubjects.TakeDamage(damage);
+        }
+
+        Drone drone = targetPoint.GetComponentInChildren<Drone>();
+        if (drone != null)
+        {
+            drone.TakeDamage(damage);
+        }
+
+        HelperWelper helperwelper = targetPoint.GetComponentInChildren<HelperWelper>();
+        if (helperwelper != null)
+        {
+            helperwelper.TakeDamage(damage);
         }
     }
 

@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public HelperWelper helperWelper;
 
     [SerializeField] private FailedSubjects failedSubjects;
+    [SerializeField] ChargePatrol chargePatrol;
 
 
 
@@ -247,7 +248,7 @@ public class GameManager : MonoBehaviour
     {
         if (helperWelper != null && helperWelper.enemyPatrol != null)
         {
-            helperWelper.enemyPatrol.SpawnAtPoint();
+            helperWelper.enemyPatrol.SpawnAtPointHelperWelper();
         }
     }
 
@@ -259,6 +260,16 @@ public class GameManager : MonoBehaviour
             drone.enemypatrol.SpawnAtPointDrone();
         }
     }
+
+
+    public void spawnFailedSubjects()
+    {
+        if (failedSubjects != null && failedSubjects.chargePatrol != null)
+        {
+            failedSubjects.chargePatrol.SpawnAtPointFailedSubject();
+        }
+    }
+
 
     #endregion
 
@@ -333,6 +344,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Returned to in-scene Main Menu.");
         spawnHelperWelper();
         spawnDrone();
+        spawnFailedSubjects();
     }
 
     public void restartGame()
@@ -387,9 +399,10 @@ public class GameManager : MonoBehaviour
             if (playershoot != null) playershoot.enabled = true;
         }
 
-        // 7. Respawn helpers or drones if needed
         spawnHelperWelper();
         spawnDrone();
+        spawnFailedSubjects();
+
 
     }
 

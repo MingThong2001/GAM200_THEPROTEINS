@@ -59,6 +59,8 @@ public class ChargePatrol : MonoBehaviour
 
     private void PatrolUpdate()
     {
+
+
         // Player detected? start charge
         if (PlayerInSight())
         {
@@ -190,9 +192,15 @@ public class ChargePatrol : MonoBehaviour
 
     public bool PlayerInSight()
     {
-        float distanceToPlayer = Vector2.Distance(enemy.position, player.position);
-        bool inRange = Mathf.Abs(player.position.x - enemy.position.x) <= chaseRange;
-        return inRange && distanceToPlayer <= maxChaseRange;
+        if (player == null) return false;
+
+        // horizontal distance only (enemy only moves left/right)
+        float distanceX = Mathf.Abs(player.position.x - enemy.position.x);
+
+        // optional vertical tolerance
+        float distanceY = Mathf.Abs(player.position.y - enemy.position.y);
+
+        return distanceX <= chaseRange && distanceY <= 1f; // 1f is vertical tolerance
     }
     public void SpawnAtPointFailedSubject()
     {

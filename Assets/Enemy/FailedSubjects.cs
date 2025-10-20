@@ -23,8 +23,16 @@ public class FailedSubjects : MonoBehaviour
 
     private float lastHitTime = 0f;
 
+    //Health
+    public float maxHealth = 20f;
+    private float currentHealth;
+    private EnemyHPUI enemyHP;
+
+
     private Transform player;
     public ChargePatrol chargePatrol;
+
+
     //[SerializeField] private Transform spawnPoint;
 
     //spawn
@@ -35,6 +43,8 @@ public class FailedSubjects : MonoBehaviour
     }
     public void Start()
     {
+        currentHealth = maxHealth;
+
         GameObject p = GameObject.FindWithTag("Player");
         if (p != null)
         { 
@@ -47,6 +57,12 @@ public class FailedSubjects : MonoBehaviour
         if (chargePatrol != null)
         {
             chargePatrol.SpawnAtPointFailedSubject();
+        }
+
+        enemyHP = GetComponentInChildren<EnemyHPUI>();
+        if (enemyHP != null)
+        { 
+            enemyHP.SetHealth(currentHealth,maxHealth);
         }
     }
     private void Update()
@@ -125,5 +141,27 @@ public class FailedSubjects : MonoBehaviour
             Vector2 knockDir = (col.transform.position - transform.position).normalized;
             rb.AddForce(knockDir * knockbackForce, ForceMode2D.Impulse);
         }
+    }
+
+    //Health Settings
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Max(0, currentHealth);
+
+        if (enemyHP != null)
+            enemyHP.SetHealth(currentHealth, maxHealth);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        if (enemyHP != null)
+            Destroy(enemyHP.gameObject);
+        Destroy(gameObject);
     }
 }
