@@ -7,6 +7,7 @@ public class ChargePatrol : MonoBehaviour
     [SerializeField] private Transform pointA;
     [SerializeField] private Transform pointB;
     [SerializeField] private Transform enemy;
+    [SerializeField] private Transform enemySpawnPos; 
 
     [Header("Patrol Settings")]
     [SerializeField] private float patrolSpeed = 2f;
@@ -192,6 +193,20 @@ public class ChargePatrol : MonoBehaviour
         float distanceToPlayer = Vector2.Distance(enemy.position, player.position);
         bool inRange = Mathf.Abs(player.position.x - enemy.position.x) <= chaseRange;
         return inRange && distanceToPlayer <= maxChaseRange;
+    }
+    public void SpawnAtPointFailedSubject()
+    {
+        if (enemySpawnPos == null || enemy == null) return;
+
+        //Move the enmy to spawn position.
+        enemy.position = enemySpawnPos.position;
+        enemy.gameObject.SetActive(true);
+
+        // Reset patrol state
+        state = State.Patrol;
+        isIdling = false;
+        movingLeft = true; // or false depending on your design
+        enemy.localScale = new Vector3(Mathf.Abs(initialScale.x), initialScale.y, initialScale.z);
     }
 
     private void OnDrawGizmosSelected()

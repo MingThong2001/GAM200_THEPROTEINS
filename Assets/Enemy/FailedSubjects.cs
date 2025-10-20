@@ -24,10 +24,11 @@ public class FailedSubjects : MonoBehaviour
     private float lastHitTime = 0f;
 
     private Transform player;
-    private ChargePatrol chargePatrol;
-    [SerializeField] private Transform spawnPoint;
+    public ChargePatrol chargePatrol;
+    //[SerializeField] private Transform spawnPoint;
 
-
+    //spawn
+    private Vector3 startPos;
     private void Awake()
     {
       
@@ -40,6 +41,13 @@ public class FailedSubjects : MonoBehaviour
             player = p.transform;
         }
         chargePatrol = GetComponentInParent<ChargePatrol>();
+
+        startPos = transform.position;
+
+        if (chargePatrol != null)
+        {
+            chargePatrol.SpawnAtPointFailedSubject();
+        }
     }
     private void Update()
     {

@@ -30,7 +30,7 @@ public class HelperWelper : MonoBehaviour
         //Spawn the enemy at the designated spawn point.
         if (enemyPatrol != null)
         {
-            enemyPatrol.SpawnAtPoint();
+            enemyPatrol.SpawnAtPointHelperWelper();
         }
     }
  

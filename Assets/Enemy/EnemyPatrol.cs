@@ -163,7 +163,7 @@ public class EnemyPatrol : MonoBehaviour
         return inRange && distanceToPlayer <= maxchaseRange;
     }
 
-    public void SpawnAtPoint()
+    public void SpawnAtPointHelperWelper()
     {
         if (enemySpawnPos == null || enemy == null) return;
 
