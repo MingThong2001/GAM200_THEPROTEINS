@@ -1,7 +1,8 @@
 using System.Collections;
+
 using UnityEngine;
 
-public class EnemyPatrol : MonoBehaviour
+public class EnemyPatrolDrone : MonoBehaviour
 {
     [Header("Patrol Points")]
     [SerializeField] public Transform pointA;
@@ -159,7 +160,7 @@ public class EnemyPatrol : MonoBehaviour
     {
         if (Player == null) return false;
         if (!enemy) return false;
-        
+
         float distanceToPlayer = Vector2.Distance(enemy.position, Player.position);
         bool inRange = Mathf.Abs(Player.position.x - enemy.position.x) <= chaseRange;
         return inRange && distanceToPlayer <= maxchaseRange;
