@@ -172,7 +172,7 @@ public class Projectile : MonoBehaviour
     }
 
     //Collision with tagged objects.
-    private void OnTriggerEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("groundLayer"))
         {

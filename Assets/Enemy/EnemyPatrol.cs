@@ -39,6 +39,7 @@ public class EnemyPatrol : MonoBehaviour
 
     private void Update()
     {
+        if (enemy == null) return;
         switch (state)
         {
             case State.Patrol: PatrolUpdate(); break;
