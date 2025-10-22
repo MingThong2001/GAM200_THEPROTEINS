@@ -11,7 +11,7 @@ public class PuddleController : MonoBehaviour
     [Range(0.1f, 1f)]
     public float heightFactor = 0.5f;  // vertical compression (0.5 = half as tall)
     [Range(1f, 2f)]
-    public float widthFactor = 2f;   // horizontal stretch (1.3 = 30% wider)
+    public float widthFactor = 1.3f;   // horizontal stretch (1.3 = 30% wider)
 
     private void Start()
     {
