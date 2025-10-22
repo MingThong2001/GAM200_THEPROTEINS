@@ -23,9 +23,21 @@ public class HelperWelper : MonoBehaviour
     private float currentHealth;
     private EnemyHPUI enemyHP;
 
+   
+
     //spawn
     private Vector3 startPos;
+    public void Awake()
+    {
+        currentHealth = maxHealth;
+        Debug.Log($"[Start] {name} currentHealth: {currentHealth}, maxHealth: {maxHealth}");
 
+        enemyHP = GetComponentInChildren<EnemyHPUI>();
+        if (enemyHP != null)
+        {
+            enemyHP.SetHealth(currentHealth, maxHealth);
+        }
+    }
     private void Start()
     {
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
@@ -44,7 +56,10 @@ public class HelperWelper : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         if (isHolding) return;
-        if (!other.CompareTag("Player")) return;
+        // Skip projectiles
+        if (other.GetComponentInParent<Projectile>() != null) return;
+        if (!other.transform.root.name.Contains("Player")) return;
+
 
         Rigidbody2D rb = other.attachedRigidbody;
         if (rb == null) return; 
@@ -119,15 +134,40 @@ public class HelperWelper : MonoBehaviour
         {
             enemyPatrol.enabled = true;
         }
+
         isHolding = false;  
     }
-   
+
+
+    //This is to ignroe projectile if the projectile is collectible.
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Projectile proj = collision.gameObject.GetComponentInParent<Projectile>();
+        if (proj != null && proj.canBeCollected)
+        {
+            // Ignore physics interactions with this projectile
+            Collider2D enemyCollider = GetComponent<Collider2D>();
+            Collider2D[] projectileColliders = collision.gameObject.GetComponents<Collider2D>();
+
+            foreach (Collider2D col in projectileColliders)
+            {
+                Physics2D.IgnoreCollision(col, enemyCollider, true);
+            }
+
+            return; // Stop further interaction
+        }
+
+    
+    }
+
     //Health Settings
     public void TakeDamage(float damage)
     {
+
+        Debug.Log($"[DEBUG] {name} currentHealth BEFORE damage: {currentHealth}");
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
-
+        Debug.Log($"[DEBUG] {name} took {damage} damage. Remaining health: {currentHealth}");
         if (enemyHP != null)
             enemyHP.SetHealth(currentHealth, maxHealth);
 
