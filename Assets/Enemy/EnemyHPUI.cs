@@ -34,6 +34,8 @@ public class EnemyHPUI : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+        Debug.Log($"Took {damage} damage. Remaining health: {currentHealth}");
+
         currentHealth = Mathf.Max(currentHealth, 0);
         UpdateHPBar();
 
