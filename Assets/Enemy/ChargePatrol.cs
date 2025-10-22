@@ -13,6 +13,8 @@ public class ChargePatrol : MonoBehaviour
     [SerializeField] private float patrolSpeed = 2f;
     [SerializeField] private float patrolSpeedUpdateInterval = 0.5f;
     [SerializeField] private float idleDuration = 1f;
+    [SerializeField] private float maxYjump = 4f;
+
 
     [Header("Charge Settings")]
     [SerializeField] private Transform player;
@@ -97,7 +99,8 @@ public class ChargePatrol : MonoBehaviour
         }
 
         // Move
-        enemy.position += new Vector3(dir * currentPatrolSpeed * Time.deltaTime, 0f, 0f);
+        float randomY = Random.Range(-maxYjump, maxYjump) * Time.deltaTime;
+        enemy.position += new Vector3(dir * currentPatrolSpeed * Time.deltaTime, randomY, 0f);
         enemy.localScale = new Vector3(Mathf.Abs(initialScale.x) * dir, initialScale.y, initialScale.z);
 
         // Patrol endpoints

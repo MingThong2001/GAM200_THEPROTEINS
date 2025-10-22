@@ -124,7 +124,9 @@ public class FailedSubjects : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (!col.CompareTag("Player")) return;
+        //if (!col.CompareTag("Player")) return;
+
+        if (!col.name.Contains("Player")) return;
 
         if (Time.time - lastHitTime < cooldown) return;
         lastHitTime = Time.time;
@@ -143,11 +145,46 @@ public class FailedSubjects : MonoBehaviour
         }
     }
 
+    //This is to ignroe projectile if the projectile is collectible.
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Projectile proj = collision.gameObject.GetComponentInParent<Projectile>();
+        if (proj != null && proj.canBeCollected)
+        {
+            // Ignore physics interactions with all body parts
+            Collider2D enemyCollider = GetComponent<Collider2D>();
+
+            if (proj.bodyParts != null)
+            {
+                foreach (Rigidbody2D rb in proj.bodyParts)
+                {
+                    if (rb == null) continue;
+
+                    Collider2D[] cols = rb.GetComponents<Collider2D>();
+                    foreach (Collider2D col in cols)
+                    {
+                        Physics2D.IgnoreCollision(col, enemyCollider, true);
+                    }
+                }
+            }
+
+            return; // Stop further interaction
+        }
+
+        // Flying projectiles still hit normally
+        if (proj != null && !proj.canBeCollected)
+        {
+            proj.HandleEnemyHit(GetComponent<Collider2D>());
+        }
+    }
     //Health Settings
     public void TakeDamage(float damage)
     {
+
+        Debug.Log($"[DEBUG] {name} currentHealth BEFORE damage: {currentHealth}");
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
+        Debug.Log($"[DEBUG] {name} took {damage} damage. Remaining health: {currentHealth}");
 
         if (enemyHP != null)
             enemyHP.SetHealth(currentHealth, maxHealth);
