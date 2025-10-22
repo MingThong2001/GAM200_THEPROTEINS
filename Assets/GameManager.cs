@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] EnemyPatrol enemyPatrol;
 
     [SerializeField] private Drone drone;
+    [SerializeField] EnemyPatrolDrone enemyPatrolDrone;
 
     [SerializeField] public HelperWelper helperWelper;
 
@@ -255,9 +256,9 @@ public class GameManager : MonoBehaviour
 
     public void spawnDrone()
     {
-        if (drone != null && drone.enemypatrol != null)
+        if (drone != null && drone.enemyPatrolDrone != null)
         {
-            drone.enemypatrol.SpawnAtPointDrone();
+            drone.enemyPatrolDrone.SpawnAtPointDrone();
         }
     }
 
