@@ -116,8 +116,13 @@ public class HelperWelper : MonoBehaviour
 
         //Apply throw face.
         float throwdirectionX = Mathf.Sign(transform.localScale.x) * 2f ;
-        Vector2 throwDirection = new Vector2(throwdirectionX, 2f);
+        Vector2 throwDirection = new Vector2(throwdirectionX, 3f);
         grabbedSegments.AddForce(throwDirection * (throwForce + 10f), ForceMode2D.Impulse);
+
+        // Debug log to show throw info
+        Debug.Log($"[HelperWelper] Throwing player {grabbedSegments.name} from {grabPoint.position} " +
+                  $"with direction {throwDirection.normalized}, magnitude {throwForce + 10f}, " +
+                  $"final velocity will be approx: {(throwDirection.normalized * (throwForce + 10f))}");
 
         //Clear refernece to prevent double grab.
         grabbedSegments = null;
