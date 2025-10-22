@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class AudioManager : MonoBehaviour
 {
     [SerializeField] AudioSource BGM;
+   // [SerializeField] AudioSource BossBGM;
+
     [SerializeField] AudioSource SFX;
 
     [SerializeField] private AudioMixer myMixer;
@@ -13,18 +15,54 @@ public class AudioManager : MonoBehaviour
 
     //References
 
-    public AudioClip background;
+    public AudioClip Ambience;
+
+    #region GameState
     //public AudioClip death;
     //public AudioClip checkpoint;
+    //public AudioClip Victory;
+    //public AudioClip Endgame;
+
+    #endregion
+
+    #region Obstacles
     //public AudioClip walltouch;
     //public AudioClip doorIn;
     //public AudioClip doorOut;
-    public  AudioClip pickup;
+    //public AudioClip leverTriggered;
+    //public AudioClip levelUntriggered;
+    //public AudioClip spikesTriggered;
+    //public AudioClip spikesUnTriggered;
+
+    #endregion
+
+    #region Player 
+    public AudioClip pickup;
     public  AudioClip shootOut;
+
     public  AudioClip jump;
     public AudioClip grab;
     public static AudioClip movement;
-    //public AudioClip enemy;
+
+    #endregion
+
+    #region Drone SFX
+    public AudioClip Dmovemement;
+    public AudioClip Dattack;
+
+    #endregion
+
+    #region HelperWelper SFX
+    public AudioClip Hmovemement;
+    public AudioClip Hattack;
+
+    #endregion
+
+    #region FailedSubject SFX
+    public AudioClip Fmovemement;
+    public AudioClip Fattack;
+
+    #endregion
 
     public void Awake()
     {
@@ -43,7 +81,7 @@ public class AudioManager : MonoBehaviour
             SetSFXVolume();
         }
 
-            BGM.clip = background;
+            BGM.clip = Ambience;
         BGM.Play();
     }
 
