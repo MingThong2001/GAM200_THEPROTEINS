@@ -52,6 +52,8 @@ public class ChargePatrol : MonoBehaviour
 
     private void Update()
     {
+        if (enemy == null) return;
+
         switch (state)
         {
             case State.Patrol: PatrolUpdate(); break;
@@ -207,6 +209,8 @@ public class ChargePatrol : MonoBehaviour
 
     public bool PlayerInSight()
     {
+        if (!enemy) return false;
+
         if (player == null) return false;
 
         float distanceX = Mathf.Abs(player.position.x - enemy.position.x);
