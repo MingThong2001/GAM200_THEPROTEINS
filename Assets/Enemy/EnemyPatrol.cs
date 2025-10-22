@@ -6,8 +6,10 @@ public class EnemyPatrol : MonoBehaviour
     [Header("Patrol Points")]
     [SerializeField] public Transform pointA;
     [SerializeField] public Transform pointB;
-    [SerializeField] private Transform enemy; // optional, will default to this.transform if null
-    [SerializeField] private Transform enemySpawnPos; // optional, will default to this.transform if null
+
+
+    [SerializeField] private Transform enemy; 
+    [SerializeField] private Transform enemySpawnPos; 
 
     [SerializeField] private float speed = 2f;
     [SerializeField] private float idleDuration = 0.6f;
@@ -156,16 +158,17 @@ public class EnemyPatrol : MonoBehaviour
         enemy.localScale = new Vector3(Mathf.Abs(initialScale.x) * dir, initialScale.y, initialScale.z);
     }
 
-    private bool PlayerInSight()
+    public bool PlayerInSight()
     {
-        if (Player == null) return false;
         if (!enemy) return false;
-        
-        float distanceToPlayer = Vector2.Distance(enemy.position, Player.position);
-        bool inRange = Mathf.Abs(Player.position.x - enemy.position.x) <= chaseRange;
-        return inRange && distanceToPlayer <= maxchaseRange;
-    }
 
+        if (Player == null) return false;
+
+        float distanceX = Mathf.Abs(Player.position.x - enemy.position.x);
+        float distanceY = Mathf.Abs(Player.position.y - enemy.position.y);
+
+        return distanceX <= chaseRange && distanceY <= 1f;
+    }
     public void SpawnAtPointHelperWelper()
     {
         if (enemySpawnPos == null || enemy == null) return;
