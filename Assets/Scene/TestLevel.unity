@@ -8105,6 +8105,17 @@ Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 5227052087123239825, guid: 812627cece75c2345a570245f47173c3, type: 3}
   m_PrefabInstance: {fileID: 6153872019845562134}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &266268471 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2447649323181287657, guid: 812627cece75c2345a570245f47173c3, type: 3}
+  m_PrefabInstance: {fileID: 6153872019845562134}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266268423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3da68cc9a858f854cb5e603f57741ac0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &266268472 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4534176234348098683, guid: 812627cece75c2345a570245f47173c3, type: 3}
@@ -9317,7 +9328,7 @@ MonoBehaviour:
   - {fileID: 1174310639}
   - {fileID: 892572558}
   checkPoints: {fileID: 1186597739}
-  playerStats: {fileID: 0}
+  playerStats: {fileID: 266268471}
   player: {fileID: 266268423}
   playerspawnPos: {fileID: 31646845}
   gamePaused: 0
@@ -36069,6 +36080,10 @@ PrefabInstance:
       propertyPath: m_Distance
       value: 0.38078886
       objectReference: {fileID: 0}
+    - target: {fileID: 1071444231509186781, guid: 812627cece75c2345a570245f47173c3, type: 3}
+      propertyPath: m_Distance
+      value: 0.70000076
+      objectReference: {fileID: 0}
     - target: {fileID: 1212200605405999731, guid: 812627cece75c2345a570245f47173c3, type: 3}
       propertyPath: m_Distance
       value: 0.38078886
@@ -36157,6 +36172,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3631343981306349750, guid: 812627cece75c2345a570245f47173c3, type: 3}
+      propertyPath: m_Distance
+      value: 0.70000076
+      objectReference: {fileID: 0}
     - target: {fileID: 3715282675862623163, guid: 812627cece75c2345a570245f47173c3, type: 3}
       propertyPath: m_Distance
       value: 0.72111034
@@ -36172,6 +36191,10 @@ PrefabInstance:
     - target: {fileID: 4009612275130471942, guid: 812627cece75c2345a570245f47173c3, type: 3}
       propertyPath: m_Distance
       value: 0.38078886
+      objectReference: {fileID: 0}
+    - target: {fileID: 4029005949205656175, guid: 812627cece75c2345a570245f47173c3, type: 3}
+      propertyPath: m_Distance
+      value: 0.70000076
       objectReference: {fileID: 0}
     - target: {fileID: 4049290809631077076, guid: 812627cece75c2345a570245f47173c3, type: 3}
       propertyPath: m_Distance
@@ -36208,6 +36231,10 @@ PrefabInstance:
     - target: {fileID: 4619160280913755653, guid: 812627cece75c2345a570245f47173c3, type: 3}
       propertyPath: m_Distance
       value: 0.35355338
+      objectReference: {fileID: 0}
+    - target: {fileID: 4750934989430323352, guid: 812627cece75c2345a570245f47173c3, type: 3}
+      propertyPath: m_Distance
+      value: 0.70000076
       objectReference: {fileID: 0}
     - target: {fileID: 5102546959814484825, guid: 812627cece75c2345a570245f47173c3, type: 3}
       propertyPath: m_Distance
