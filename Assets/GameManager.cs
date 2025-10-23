@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 //Define game states.
 public enum GameState
@@ -37,7 +38,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     [SerializeField] private CheckPoints checkPoints;
 
-    // public PlayerStats playerStats;
+    public PlayerStats playerStats;
     public GameObject player;
     [SerializeField] private  Transform playerspawnPos;
 
@@ -141,8 +142,11 @@ public class GameManager : MonoBehaviour
 
 
        bool uiActive = (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf);
-       playermovement.enabled = !uiActive;
-       playershoot.enabled = !uiActive;
+        if (playermovement != null)
+            playermovement.enabled = !uiActive;
+
+        if (playershoot != null)
+            playershoot.enabled = !uiActive;
 
         foreach (GameObject text in inGameText)
         {
@@ -290,10 +294,13 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("[GameManager] gameOverMenu active: " + gameOverMenu.activeSelf);
+
             // Lose Condition
             victoryMenu.SetActive(false);
             gameOverMenu.SetActive(true);
         }
+
     }
     public void resetVictory()
     {
@@ -333,9 +340,9 @@ public class GameManager : MonoBehaviour
     // Show main menu UI
     if (playMenu != null) playMenu.SetActive(true);
 
-    // Disable player controls
-    if (playermovement != null) playermovement.enabled = false;
-    if (playershoot != null) playershoot.enabled = false;
+    //// Disable player controls
+    //if (playermovement != null) playermovement.enabled = false;
+    //if (playershoot != null) playershoot.enabled = false;
 
     // Hide in-game text
     foreach (GameObject text in inGameText)
@@ -346,8 +353,15 @@ public class GameManager : MonoBehaviour
         spawnHelperWelper();
         spawnDrone();
         spawnFailedSubjects();
-    }
 
+        if (playerStats != null)
+        {
+            playerStats.InitializePlayer();
+        }
+
+       
+    }
+    
     public void restartGame()
     {
         // Reset time scale
@@ -445,20 +459,21 @@ public class GameManager : MonoBehaviour
         activecheckPoints = null;
         checkpointPosition = Vector2.zero;
 
-        ////Destroy all enemies
-        //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
-        //foreach (GameObject enemy in enemies)
-        //{
-        //    Destroy(enemy);
 
-        //}
+        /*Destroy all enemies
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
+        foreach (GameObject enemy in enemies)
+        {
+            Destroy(enemy);
 
-        //GameObject[] objects = GameObject.FindGameObjectsWithTag("Objects");
-        //foreach (GameObject obj in objects)
-        //{
-        //    Destroy(obj);
+        }
 
-        //}
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("Objects");
+        foreach (GameObject obj in objects)
+        {
+            Destroy(obj);
+
+        }
 
         GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject proj in projectiles)
@@ -472,21 +487,14 @@ public class GameManager : MonoBehaviour
 
         }
 
-        //GameObject[] collectibles = GameObject.FindGameObjectsWithTag("Collectibles");
-        //foreach (GameObject coll in collectibles)
-        //{
-        //    Destroy(coll);
+        GameObject[] collectibles = GameObject.FindGameObjectsWithTag("Collectibles");
+        foreach (GameObject coll in collectibles)
+        {
+            Destroy(coll);
 
-        //}
+        }
 
-        //if (player != null)
-        //{ 
-        //    SoftBodyPhyiscs softbody = player.GetComponent<SoftBodyPhyiscs>();
-        //    if (softbody != null)
-        //    {
-        //      //  softbody.Reset();
-        //    }
-        //}
+      */
 
 
 
@@ -494,6 +502,7 @@ public class GameManager : MonoBehaviour
 
     public void QuitGame()
     {
+        //need this to be are u sure u wanna quit
         Application.Quit();
     }
 
