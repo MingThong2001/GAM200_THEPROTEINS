@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour
     private Vector3 moveDirection; //Normalized direction of travel.
 
     //References
-    private Rigidbody2D[] bodyParts;
+    public Rigidbody2D[] bodyParts;
     private SpringJoint2D[] joints;
     private Collider2D[] colliders; 
     private Transform projectileTransform;

@@ -356,7 +356,8 @@ public class GameManager : MonoBehaviour
 
         if (playerStats != null)
         {
-            playerStats.InitializePlayer();
+            //playerStats.InitializePlayer();
+            //disabled for now, InitializePlayer() does not exist
         }
 
        
