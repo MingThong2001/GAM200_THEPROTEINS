@@ -1,9 +1,10 @@
 using NUnit.Framework;
-using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Unity.VisualScripting;
 
 //Define game states.
 public enum GameState
@@ -40,7 +41,7 @@ public class GameManager : MonoBehaviour
 
     public PlayerStats playerStats;
     public GameObject player;
-    [SerializeField] private  Transform playerspawnPos;
+    [SerializeField] private Transform playerspawnPos;
 
 
     //Game State Flag
@@ -57,7 +58,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Drone drone;
     [SerializeField] EnemyPatrolDrone enemyPatrolDrone;
 
-    [SerializeField] public HelperWelper helperWelper;
+    [SerializeField] private GameObject helperWelperPrefab; // prefab in inspector
+    [SerializeField] private EnemyPatrol helperWelperEnemyPatrol; // the EnemyPatrol script
+    [SerializeField] private Transform helperWelperSpawnPos; // Add this to inspector
+
+
 
     [SerializeField] private FailedSubjects failedSubjects;
     [SerializeField] ChargePatrol chargePatrol;
@@ -79,23 +84,21 @@ public class GameManager : MonoBehaviour
     public PlayerMovement playermovement;
     public SceneController sceneController;
     private Rigidbody2D playerRigid;
-      
-
 
     public void Awake()
     {
-        
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Debug.LogWarning("Duplicate GameManager found! Destroying: " + gameObject.name);
-            Destroy(gameObject);
-            return;
-        }
+
+        //if (instance == null)
+        //{
+        //    instance = this;
+        //    DontDestroyOnLoad(gameObject);
+        //}
+        //else
+        //{
+        //    Debug.LogWarning("Duplicate GameManager found! Destroying: " + gameObject.name);
+        //    Destroy(gameObject);
+        //    return;
+        //}
         Debug.Log("GameManager Awake on object: " + gameObject.name);
 
         //Initialize state and menus.
@@ -113,21 +116,21 @@ public class GameManager : MonoBehaviour
             text.SetActive(true);
         }
 
-    
+
     }
 
     //Get player controller.
     public void Start()
     {
         if (player != null)
-        { 
+        {
             playermovement = player.GetComponentInParent<PlayerMovement>();
             playershoot = player.GetComponentInParent<PlayerShoot>();
 
 
         }
-
     }
+
     public void Update()
     {
         //Toggle Pause on esc key.
@@ -141,7 +144,7 @@ public class GameManager : MonoBehaviour
         }
 
 
-       bool uiActive = (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf);
+        bool uiActive = (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf);
         if (playermovement != null)
             playermovement.enabled = !uiActive;
 
@@ -157,7 +160,7 @@ public class GameManager : MonoBehaviour
     #region Start
     public void StartGame()
     {
-       
+
         playMenu.SetActive(false);
         objectivePanel.SetActive(true);
         currentState = GameState.showobjective;
@@ -169,7 +172,7 @@ public class GameManager : MonoBehaviour
         SpawnPlayer();
 
     }
-   
+
 
     public void afterObjective()
     {
@@ -240,21 +243,25 @@ public class GameManager : MonoBehaviour
 
 
     #region Player/Enemies
-    private void SpawnPlayer()
+    public void SpawnPlayer()
     {
-        if (player != null && playerspawnPos != null) 
+        Debug.Log($"[GameManager] SpawnPlayer called. player={player}, spawnPos={playerspawnPos}");
+
+        if (player != null && playerspawnPos != null)
         {
             player.transform.position = playerspawnPos.position;
+            playerStats.healthBarUI = FindObjectOfType<HealthBarUI>();
+
+            Debug.Log("[GameManager] Player moved to spawn position.");
+
 
         }
     }
 
     public void spawnHelperWelper()
     {
-        if (helperWelper != null && helperWelper.enemyPatrol != null)
-        {
-            helperWelper.enemyPatrol.SpawnAtPointHelperWelper();
-        }
+        GameObject newEnemyPatrol = Instantiate(helperWelperPrefab);
+        newEnemyPatrol.name = "EnemyPatrol_HelperWelper";
     }
 
 
@@ -302,6 +309,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
     public void resetVictory()
     {
         gameOver = false;
@@ -314,115 +322,98 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("BackToStartMenu called");
 
-    // Reset time scale
-    Time.timeScale = 0f;
-
-    // Reset game state
-    gamePaused = true;
-    gameOver = false;
-    currentState = GameState.Play;
-
-    // Clean up any scene elements like enemies, projectiles, etc.
-    cleanupScene();
-
-    // Reset checkpoints
-    activecheckPoints = null;
-    checkpointPosition = Vector2.zero;
-    CheckPoints.allCheckPoints.Clear();
-
-    // Disable all gameplay UI
-    if (pauseMenu != null) pauseMenu.SetActive(false);
-    if (victoryMenu != null) victoryMenu.SetActive(false);
-    if (gameOverMenu != null) gameOverMenu.SetActive(false);
-    if (objectivePanel != null) objectivePanel.SetActive(false);
-    if (SettingsPanel != null) SettingsPanel.SetActive(false);
-
-    // Show main menu UI
-    if (playMenu != null) playMenu.SetActive(true);
-
-    //// Disable player controls
-    //if (playermovement != null) playermovement.enabled = false;
-    //if (playershoot != null) playershoot.enabled = false;
-
-    // Hide in-game text
-    foreach (GameObject text in inGameText)
-    {
-        text.SetActive(false);
-    }
-        Debug.Log("Returned to in-scene Main Menu.");
-        spawnHelperWelper();
-        spawnDrone();
-        spawnFailedSubjects();
-
-        if (playerStats != null)
-        {
-            //playerStats.InitializePlayer();
-            //disabled for now, InitializePlayer() does not exist
-        }
-
-       
-    }
-    
-    public void restartGame()
-    {
         // Reset time scale
-        gamePaused = false;
+        Time.timeScale = 0f;
+
+        // Reset game state
+        gamePaused = true;
         gameOver = false;
         currentState = GameState.Play;
 
-        // 2. Resume time
-        Time.timeScale = 1f;
+        // Clean up any scene elements like enemies, projectiles, etc.
 
-        // 3. Hide all menus
-        if (playMenu != null) playMenu.SetActive(false);
+        // Reset checkpoints
+        activecheckPoints = null;
+        checkpointPosition = Vector2.zero;
+        CheckPoints.allCheckPoints.Clear();
+
+        // Disable all gameplay UI
         if (pauseMenu != null) pauseMenu.SetActive(false);
         if (victoryMenu != null) victoryMenu.SetActive(false);
         if (gameOverMenu != null) gameOverMenu.SetActive(false);
         if (objectivePanel != null) objectivePanel.SetActive(false);
         if (SettingsPanel != null) SettingsPanel.SetActive(false);
 
-        // 4. Reset doors and buttons
-        ResetDoorandbutton();
+        // Show main menu UI
+        if (playMenu != null) playMenu.SetActive(true);
 
-        // 5. Clean up scene (destroy projectiles, reset checkpoints, etc.)
-        cleanupScene();
+        //// Disable player controls
+        //if (playermovement != null) playermovement.enabled = false;
+        //if (playershoot != null) playershoot.enabled = false;
 
-        // 6. Reset player
-        if (player != null)
+        // Hide in-game text
+        foreach (GameObject text in inGameText)
         {
-            // Move to spawn or last checkpoint
-            if (activecheckPoints != null)
-            {
-                player.transform.position = checkpointPosition;
-                PlayerStats stats = player.GetComponent<PlayerStats>();
-                if (stats != null)
-                {
-                    stats.restorefromCheckpoint(activecheckPoints);
-                }
-            }
-            else if (playerspawnPos != null)
-            {
-                player.transform.position = playerspawnPos.position;
-                PlayerStats stats = player.GetComponent<PlayerStats>();
-                if (stats != null)
-                {
-                    stats.SetHealth(stats.GetMaxHealth(), 1f);
-                }
-            }
-
-            // Enable movement and shooting
-            if (playermovement != null) playermovement.enabled = true;
-            if (playershoot != null) playershoot.enabled = true;
+            text.SetActive(false);
         }
+        Debug.Log("Returned to in-scene Main Menu.");
 
-        spawnHelperWelper();
-        spawnDrone();
-        spawnFailedSubjects();
 
+
+
+        if (playerStats != null)
+        {
+            playerStats.InitializePlayer();
+
+        }
+    }
+
+    public void restartGame()
+    {
+        Time.timeScale = 1f;
+        gamePaused = false;
+        gameOver = false;
+        currentState = GameState.Play;
+
+        // Get current scene
+        Scene currentScene = SceneManager.GetActiveScene();
+
+        // Reload it cleanly
+        SceneManager.LoadScene(currentScene.name);
 
     }
 
+    #region Reset
 
+    //private void DestroyAllEnemies()
+    //{
+    //    Debug.Log("[GameManager] Destroying all enemies...");
+
+    //    // Find all HelperWelper scripts
+    //    HelperWelper[] helpers = FindObjectsOfType<HelperWelper>(true);
+    //    foreach (var helper in helpers)
+    //    {
+    //        // Destroy the ROOT parent (EnemyPatrol), not just the child
+    //        Transform root = helper.transform.root;
+    //        Debug.Log($"[GameManager] Destroying {root.name}");
+    //        Destroy(root.gameObject);
+    //    }
+    //}
+
+
+    //private void RespawnAllEnemies()
+    //{
+    //    Debug.Log("[GameManager] Respawning all enemies...");
+
+    //    // Spawn new HelperWelper
+    //    if (helperWelperPrefab != null)
+    //    {
+    //        spawnHelperWelper();
+    //    }
+
+
+
+    //}
     public void ResetDoorandbutton()
     {
         foreach (Door door in doors)
@@ -437,77 +428,45 @@ public class GameManager : MonoBehaviour
             button.ResetButton();
         }
     }
-    public void resetgameStats()
+
+
+    public void resetGameState()
     {
         gamePaused = false;
         gameOver = false;
 
-    }
-
-  
-    public void cleanupScene()
-    {
-        Debug.Log("Cleanup found");
-        GameObject[] checkpointObjects = GameObject.FindGameObjectsWithTag("Checkpoints");
-        foreach (GameObject obj in checkpointObjects)
-        {
-            CheckPoints cp = obj.GetComponent<CheckPoints>();
-            if (cp != null)
-            {
-                cp.ResetCheckpoint();
-            }
-        }
-        activecheckPoints = null;
-        checkpointPosition = Vector2.zero;
-
-
-        /*Destroy all enemies
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemies");
-        foreach (GameObject enemy in enemies)
-        {
-            Destroy(enemy);
-
-        }
-
-        GameObject[] objects = GameObject.FindGameObjectsWithTag("Objects");
-        foreach (GameObject obj in objects)
-        {
-            Destroy(obj);
-
-        }
-
-        GameObject[] projectiles = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject proj in projectiles)
-        {
-            if (proj.name.Contains("projectileV3(Clone)"))
-            {
-
-                Destroy(proj);
-            }
-          
-
-        }
-
-        GameObject[] collectibles = GameObject.FindGameObjectsWithTag("Collectibles");
-        foreach (GameObject coll in collectibles)
-        {
-            Destroy(coll);
-
-        }
-
-      */
-
+        playerStats.InitializePlayer();
+        spawnHelperWelper();
 
 
     }
+    #endregion
+    #endregion
 
+
+    //public void cleanupScene()
+    //{
+    //    DestroyAllEnemies();
+
+    //    Debug.Log("Cleanup found");
+    //    GameObject[] checkpointObjects = GameObject.FindGameObjectsWithTag("Checkpoints");
+    //    foreach (GameObject obj in checkpointObjects)
+    //    {
+    //        CheckPoints cp = obj.GetComponent<CheckPoints>();
+    //        if (cp != null)
+    //        {
+    //            cp.ResetCheckpoint();
+    //        }
+    //    }
+    //    activecheckPoints = null;
+
+    //} 
     public void QuitGame()
     {
-        //need this to be are u sure u wanna quit
+        ///Danielle said we need to have a confirmation panel for quiting.
         Application.Quit();
     }
 
-    #endregion
 
 
     #region Settings Menu
