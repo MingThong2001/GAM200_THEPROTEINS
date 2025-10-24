@@ -22,6 +22,8 @@ public class SceneController : MonoBehaviour
 
     public void LoadMenu()
     {
+        Debug.Log("Loading MainMenu...");
+
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
