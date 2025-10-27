@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -9,7 +10,7 @@ public class CameraController : MonoBehaviour
     public float cameraSmoothTime = 0.5f; // New: controls overall camera smoothness
     public float verticalSmoothTime = 0.3f;
     public float fallingSmoothTime = 0.15f;
-
+    public Transform player;
     private float lookOffset;
     private float verticalVelocity;
     private float horizontalVelocity;
@@ -22,17 +23,25 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Vertical smoothing
+
+        // Auto-find player if not assigned
+        if (player == null)
+        {
+               return; // no player yet
+        
+        }
+
         float currentVerticalSmoothTime = verticalSmoothTime;
-        if (!playermovement.isGrounded && playermovement.rb.linearVelocity.y < -1f)
+        Rigidbody2D rb = player.GetComponentInParent<Rigidbody2D>();
+        PlayerMovement pm = player.GetComponentInParent<PlayerMovement>();
+
+        if (pm != null && !pm.isGrounded && rb.linearVelocity.y < -1f)
         {
             currentVerticalSmoothTime = fallingSmoothTime;
         }
 
-        // Get movement direction from player's horizontalInput
-        float movementDirection = playermovement.horizontalInput;
+        float movementDirection = pm != null ? pm.horizontalInput : 0f;
 
-        // Update look offset based on input direction (SLOWER now)
         if (Mathf.Abs(movementDirection) > 0.01f)
         {
             float targetOffset = Mathf.Sign(movementDirection) * lookAheadDistance;
@@ -40,18 +49,20 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            // Return to center even slower when idle
             lookOffset = Mathf.MoveTowards(lookOffset, 0f, lookAheadSpeed * 0.3f * Time.deltaTime);
         }
 
-        // Calculate target position
-        float targetX = playermovement.transform.position.x + lookOffset;
-        float targetY = playermovement.transform.position.y;
+        float targetX = player.position.x + lookOffset;
+        float targetY = player.position.y;
 
-        // Smooth camera movement (MUCH SMOOTHER now)
         float newX = Mathf.SmoothDamp(transform.position.x, targetX, ref horizontalVelocity, cameraSmoothTime);
         float newY = Mathf.SmoothDamp(transform.position.y, targetY, ref verticalVelocity, currentVerticalSmoothTime);
 
         transform.position = new Vector3(newX, newY, transform.position.z);
+    }
+    // Called by GameManager when player is spawned
+    public void SetPlayer(Transform newPlayer)
+    {
+        player = newPlayer;
     }
 }
