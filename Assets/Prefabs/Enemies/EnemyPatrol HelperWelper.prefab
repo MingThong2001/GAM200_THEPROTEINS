@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1545727210129762487}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: PatrolPointA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7347916150736444971}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: grabbedPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 267169868090659073}
   - component: {fileID: 469004139418901817}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: EnemyPatrol HelperWelper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +112,6 @@ MonoBehaviour:
   pointA: {fileID: 1545727210129762487}
   pointB: {fileID: 3009441324300275311}
   enemy: {fileID: 127362547711783470}
-  HelperWelper: {fileID: 1511260599676372403}
   enemySpawnPos: {fileID: 1545727210129762487}
   speed: 2
   idleDuration: 1
@@ -137,7 +136,7 @@ GameObject:
   - component: {fileID: 5597530623099413232}
   - component: {fileID: 5927188402174991104}
   - component: {fileID: 182295849253877273}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,7 +211,7 @@ GameObject:
   - component: {fileID: 7617768545419524308}
   - component: {fileID: 1733322356003532546}
   - component: {fileID: 1852114354459134603}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +284,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3009441324300275311}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: PatrolPointB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -318,7 +317,7 @@ GameObject:
   - component: {fileID: 1184241864371366185}
   - component: {fileID: 7415536173820319274}
   - component: {fileID: 699752528240864265}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -391,7 +390,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8067380799560201087}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -428,7 +427,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5004486534789433765}
   - component: {fileID: 4845331686391627349}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: BOBJhp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -517,7 +516,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1415913499867207488}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Handle Slide Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -557,7 +556,7 @@ GameObject:
   - component: {fileID: 3848498768157191976}
   - component: {fileID: 1151869936238667685}
   - component: {fileID: 6450780789842039300}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: EnemyHPUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -676,7 +675,7 @@ GameObject:
   - component: {fileID: 5788239535117310011}
   - component: {fileID: 2466657285498531234}
   - component: {fileID: 4283324017600880874}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: HelperWelper
   m_TagString: Enemy
   m_Icon: {fileID: 0}

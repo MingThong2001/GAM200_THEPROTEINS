@@ -369,7 +369,7 @@ MonoBehaviour:
   boxcollider: {fileID: 5875722044801672064}
   defaultlayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   enemyPatrolDrone: {fileID: 2767282640636264436}
   maxHealth: 20
 --- !u!61 &7713552298578403361
