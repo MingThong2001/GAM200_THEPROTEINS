@@ -11,11 +11,15 @@ public class Drone : MonoBehaviour
 
     private float cooldownTimer = Mathf.Infinity;
     [SerializeField] private int Damage = 10;
+    [SerializeField] private float pushForce = 10f;
 
     [SerializeField] private BoxCollider2D boxcollider;
+
     [SerializeField] private LayerMask defaultlayer;
 
     private PlayerStats healthstats;
+    private Collider2D enemyCollider;
+    private Rigidbody2D rb;
     public EnemyPatrolDrone enemyPatrolDrone;
 
 
@@ -24,12 +28,16 @@ public class Drone : MonoBehaviour
     private float currentHealth;
     private EnemyHPUI enemyHP;
 
+    //spawn
+    private Vector3 startPos;
+    private Quaternion startRot;
+    private bool isDead = false;
     private void Awake()
    {
         enemyPatrolDrone = GetComponentInParent<EnemyPatrolDrone>();
     }
 
-
+   
     private void Start()
     {
         currentHealth = maxHealth;
@@ -54,15 +62,18 @@ public class Drone : MonoBehaviour
     {
         cooldownTimer += Time.deltaTime;
 
-        // Check if player is in sight and cache the healthstats
         bool playerDetected = playerinSight();
 
-        if (playerDetected && cooldownTimer >= attackCooldown)
+        if (playerDetected)
         {
-            DamagePlayer(); // uses cached healthstats
-            cooldownTimer = 0;
-        }
+            ApplyContinuousPush(); //
 
+            if (cooldownTimer >= attackCooldown)
+            {
+                DamagePlayer(); // periodic damage only
+                cooldownTimer = 0;
+            }
+        }
         if (enemyPatrolDrone != null)
         {
             enemyPatrolDrone.enabled = !playerDetected;
@@ -106,6 +117,21 @@ public class Drone : MonoBehaviour
             healthstats.TakeDamage(Damage);
             Debug.Log($"Drone dealt {Damage} damage to {healthstats.name} at time {Time.time}");
         }
+
+    }
+
+    private void ApplyContinuousPush()
+    {
+
+        Rigidbody2D[] allBodies = healthstats.GetComponentsInChildren<Rigidbody2D>();
+        foreach (Rigidbody2D body in allBodies)
+        {
+            if (body == null) continue;
+            Vector2 pushDirection = ((Vector2)body.position - (Vector2)transform.position).normalized;
+            float continousforce = pushForce * 0.5f;
+            body.AddForce(pushDirection * continousforce * Time.deltaTime * 50f, ForceMode2D.Force);
+        }
+
     }
 
     //This is to ignroe projectile if the projectile is collectible.
@@ -146,10 +172,71 @@ public class Drone : MonoBehaviour
         }
     }
 
-    private void Die()
+
+   private void Die()
     {
+        if (isDead) return;
+        isDead = true;
+
+        if (enemyPatrolDrone != null)
+            enemyPatrolDrone.enabled = false;
+
+        if (enemyCollider != null)
+            enemyCollider.enabled = false;
+
+        foreach (Renderer r in GetComponentsInChildren<Renderer>())
+            r.enabled = false;
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+
         if (enemyHP != null)
-            Destroy(enemyHP.gameObject);
-        Destroy(gameObject);
+            enemyHP.gameObject.SetActive(false);
+
+        gameObject.SetActive(false);
     }
+
+    //public void droneReset()
+    //{
+    //    isDead = false;
+
+    //    // Reset health
+    //    currentHealth = maxHealth;
+    //    if (enemyHP != null)
+    //    {
+    //        enemyHP.gameObject.SetActive(true);
+    //        enemyHP.SetHealth(currentHealth, maxHealth);
+    //    }
+
+    //    // Reset position and rotation
+    //    transform.position = startPos;
+    //    transform.rotation = startRot;
+
+    //    // Re-enable patrol and collider
+    //    if (enemyPatrolDrone != null)
+    //        enemyPatrolDrone.enabled = true;
+
+    //    if (enemyCollider != null)
+    //        enemyCollider.enabled = true;
+
+    //    // Re-enable renderers
+    //    foreach (Renderer r in GetComponentsInChildren<Renderer>())
+    //        r.enabled = true;
+
+    //    // Remove Rigidbody constraints and zero velocity
+    //    if (rb != null)
+    //    {
+    //        rb.constraints = RigidbodyConstraints2D.None;
+    //        rb.linearVelocity = Vector2.zero;
+    //        rb.angularVelocity = 0f;
+    //        rb.simulated = true;
+    //    }
+
+    //    // Reactivate the whole GameObject
+    //    gameObject.SetActive(true);
+    //}
 }

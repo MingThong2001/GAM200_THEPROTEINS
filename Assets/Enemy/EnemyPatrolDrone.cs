@@ -40,6 +40,13 @@ public class EnemyPatrolDrone : MonoBehaviour
 
     private void Update()
     {
+        if (Player == null && GameManager.PlayerTransform != null)
+            Player = GameManager.PlayerTransform;
+
+        if (Player == null)
+            return; // player not spawned yet
+
+
         if (enemy == null) return;
 
         switch (state)
