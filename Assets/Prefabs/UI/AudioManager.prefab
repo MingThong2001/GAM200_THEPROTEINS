@@ -176,16 +176,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08b4ecedd952b3f4aabc79827717f061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BGM: {fileID: 0}
+  BGM: {fileID: 775003918737969034}
   SFX: {fileID: 2262845564040664739}
   myMixer: {fileID: 0}
   musicSlider: {fileID: 0}
   sfxSlider: {fileID: 0}
-  background: {fileID: 0}
+  Ambience: {fileID: 0}
   pickup: {fileID: 8300000, guid: e6d82a1ef7ad0094393f3f47fad4a7f8, type: 3}
   shootOut: {fileID: 8300000, guid: 9a73440a359b04b4791b82492769cef4, type: 3}
   jump: {fileID: 8300000, guid: 90d138848872d3f4ba7b1f18c9e0e4d5, type: 3}
   grab: {fileID: 8300000, guid: 217ffbf97fc54a64197e77a219c3ace9, type: 3}
+  Dmovemement: {fileID: 0}
+  Dattack: {fileID: 0}
+  Hmovemement: {fileID: 0}
+  Hattack: {fileID: 0}
+  Fmovemement: {fileID: 0}
+  Fattack: {fileID: 0}
 --- !u!82 &775003918737969034
 AudioSource:
   m_ObjectHideFlags: 0
