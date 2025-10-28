@@ -1400,7 +1400,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6468505047065584616, guid: bcb30f490c2635441a35be08de8406af, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7196276390805983097, guid: bcb30f490c2635441a35be08de8406af, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3763,9 +3763,10 @@ MonoBehaviour:
   - {fileID: 499119434}
   doorsButton:
   - {fileID: 1664026761}
-  playershoot: {fileID: 0}
-  playermovement: {fileID: 0}
-  sceneController: {fileID: 0}
+  playershoot: {fileID: 8760995368596438734, guid: 812627cece75c2345a570245f47173c3, type: 3}
+  playermovement: {fileID: 7573252036189849636, guid: 812627cece75c2345a570245f47173c3, type: 3}
+  sceneController: {fileID: 394193248348727632, guid: 38ea2ec34644b3640b4e72920d133dd5, type: 3}
+  puddleController: {fileID: -7908511726550663749, guid: 812627cece75c2345a570245f47173c3, type: 3}
   playerPrefab: {fileID: 3482082883545240889, guid: 812627cece75c2345a570245f47173c3, type: 3}
 --- !u!1 &356943667
 GameObject:
@@ -4181,6 +4182,10 @@ PrefabInstance:
     - target: {fileID: 5341264650166882641, guid: 2300d5b782c3abc4fbf6e4e80764dec1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8289926659294395101, guid: 2300d5b782c3abc4fbf6e4e80764dec1, type: 3}
+      propertyPath: m_Mass
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17252,6 +17257,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.36477977
       objectReference: {fileID: 0}
+    - target: {fileID: 8289926659294395101, guid: 2300d5b782c3abc4fbf6e4e80764dec1, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19380,6 +19389,10 @@ PrefabInstance:
     - target: {fileID: 5341264650166882641, guid: 2300d5b782c3abc4fbf6e4e80764dec1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8289926659294395101, guid: 2300d5b782c3abc4fbf6e4e80764dec1, type: 3}
+      propertyPath: m_Mass
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

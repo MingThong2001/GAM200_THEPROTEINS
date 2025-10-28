@@ -21681,6 +21681,7 @@ MonoBehaviour:
   playershoot: {fileID: 8760995368596438734, guid: 812627cece75c2345a570245f47173c3, type: 3}
   playermovement: {fileID: 7573252036189849636, guid: 812627cece75c2345a570245f47173c3, type: 3}
   sceneController: {fileID: 1487747680}
+  puddleController: {fileID: -7908511726550663749, guid: 812627cece75c2345a570245f47173c3, type: 3}
   playerPrefab: {fileID: 3482082883545240889, guid: 812627cece75c2345a570245f47173c3, type: 3}
 --- !u!1001 &1982965595700643508
 PrefabInstance:
