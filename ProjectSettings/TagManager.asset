@@ -13,6 +13,7 @@ TagManager:
   - Enemy
   - Audio
   - Checkpoints
+  - CameraStop
   layers:
   - Default
   - TransparentFX

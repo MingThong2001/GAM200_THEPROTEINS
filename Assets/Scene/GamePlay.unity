@@ -878,13 +878,14 @@ GameObject:
   - component: {fileID: 57624420}
   - component: {fileID: 57624419}
   - component: {fileID: 57624418}
+  - component: {fileID: 57624421}
   m_Layer: 0
-  m_Name: Boundaries
-  m_TagString: Untagged
+  m_Name: left
+  m_TagString: CameraStop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &57624417
 Transform:
   m_ObjectHideFlags: 0
@@ -894,8 +895,8 @@ Transform:
   m_GameObject: {fileID: 57624416}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.7748, y: -4.884, z: 10}
-  m_LocalScale: {x: 1.6919595, y: 0.98483264, z: 1}
+  m_LocalPosition: {x: -15.3578, y: 1.1123, z: 10}
+  m_LocalScale: {x: 12.999704, y: 15.869396, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 484503293}
@@ -1018,7 +1019,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.18238991, g: 0.18238991, b: 0.18238991, a: 1}
+  m_Color: {r: 0.19215688, g: 0.48235297, b: 0.48235297, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1028,6 +1029,52 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &57624421
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57624416}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &97437534
 GameObject:
   m_ObjectHideFlags: 0
@@ -3346,8 +3393,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3750,11 +3797,11 @@ MonoBehaviour:
   playerspawnPos: {fileID: 216363391}
   gamePaused: 0
   gameOver: 0
-  checkPoints: {fileID: 0}
+  checkPoints: {fileID: 2275977457969744259}
   enemyPatrol: {fileID: 0}
   drone: {fileID: 0}
   enemyPatrolDrone: {fileID: 0}
-  helperWelperPrefab: {fileID: 0}
+  helperWelper: {fileID: 0}
   helperWelperEnemyPatrol: {fileID: 0}
   helperWelperSpawnPos: {fileID: 0}
   failedSubjects: {fileID: 0}
@@ -6455,8 +6502,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -8182,8 +8229,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -10220,6 +10267,26 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 9135458189337764944, guid: 85db85e004c7e3542b471ade72ee8a44, type: 3}
+      propertyPath: boundaryTag
+      value: CameraStop
+      objectReference: {fileID: 0}
+    - target: {fileID: 9135458189337764944, guid: 85db85e004c7e3542b471ade72ee8a44, type: 3}
+      propertyPath: useCamBounds
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9135458189337764944, guid: 85db85e004c7e3542b471ade72ee8a44, type: 3}
+      propertyPath: useCameraBounds
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9135458189337764944, guid: 85db85e004c7e3542b471ade72ee8a44, type: 3}
+      propertyPath: boundaryCollider
+      value: 
+      objectReference: {fileID: 57624419}
+    - target: {fileID: 9135458189337764944, guid: 85db85e004c7e3542b471ade72ee8a44, type: 3}
+      propertyPath: leftBoundaryObject
+      value: 
+      objectReference: {fileID: 57624416}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17332,8 +17399,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -17728,8 +17795,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -22965,6 +23032,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f72662f0ebec66c45825e766156adbd4, type: 3}
+--- !u!114 &2275977457969744259 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8546713784471927961, guid: f72662f0ebec66c45825e766156adbd4, type: 3}
+  m_PrefabInstance: {fileID: 2275977457969744258}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d832f0fec281334b8057adaa7c5fc35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &2280613278040651243
 CanvasRenderer:
   m_ObjectHideFlags: 0
