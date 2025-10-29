@@ -19,7 +19,10 @@ public enum GameState
 }
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     #region UI Elements
+    [Header("UI SETTINGS")]
     private GameState currentState;
     [SerializeField] private GameObject playMenu;
     [SerializeField] private GameObject pauseMenu;
@@ -28,37 +31,44 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject victoryMenu;
     [SerializeField] private GameObject objectivePanel;
     [SerializeField] private GameObject SettingsPanel;
-
-    [SerializeField] private GameObject[] inGameText;
-    #endregion
-
-    //Settings
+    //[SerializeField] private GameObject[] inGameText;
     private GameObject previousMenu;
 
-    //Players and checkpoints.
-    public static GameManager instance;
-    [SerializeField] private CheckPoints checkPoints;
+    #endregion
 
+
+    //Players
+    [Header("Player SETTINGS")]
     public PlayerStats playerStats;
     public GameObject player;
-    [SerializeField] private Transform playerspawnPos;
+    [SerializeField] public  Transform playerspawnPos;
+    public static Transform PlayerTransform { get; private set; }
 
 
     //Game State Flag
+    [Header("GameState SETTINGS")]
     public bool gamePaused = false;
     public bool gameOver = false;
+    private static bool isRestarting = false;
+
 
     //CheckPoint
+    [Header("CheckPoints SETTINGS")]
+    [SerializeField] private CheckPoints checkPoints;
     private Vector2 checkpointPosition;
     private CheckPoints activecheckPoints;
 
-    //Enemies
-    [SerializeField] EnemyPatrol enemyPatrol;
+    //CheckPoints
+    private CheckPoints checkpoint;
+    private int checkpointHealth;
+    private int checkpointSegmentcount;
 
+    [Header("Enemies SETTINGS")]
+    [SerializeField] EnemyPatrol enemyPatrol;
     [SerializeField] private Drone drone;
     [SerializeField] EnemyPatrolDrone enemyPatrolDrone;
 
-    [SerializeField] private GameObject helperWelperPrefab; // prefab in inspector
+    [SerializeField] private HelperWelper helperWelper; // prefab in inspector
     [SerializeField] private EnemyPatrol helperWelperEnemyPatrol; // the EnemyPatrol script
     [SerializeField] private Transform helperWelperSpawnPos; // Add this to inspector
 
@@ -68,66 +78,78 @@ public class GameManager : MonoBehaviour
     [SerializeField] ChargePatrol chargePatrol;
 
 
-
-
-    //CheckPoints
-    private CheckPoints checkpoint;
-    private int checkpointHealth;
-    private int checkpointSegmentcount;
-
+   [Header("Obstacles SETTINGS")]
     //Reset Door
     public Door[] doors;
     public DoorButton[] doorsButton;
+
+    [Header("References")]
 
     //References
     public PlayerShoot playershoot;
     public PlayerMovement playermovement;
     public SceneController sceneController;
-    private Rigidbody2D playerRigid;
+    public PuddleController puddleController;
+    [SerializeField] private GameObject playerPrefab; 
 
     public void Awake()
     {
 
-        //if (instance == null)
-        //{
-        //    instance = this;
-        //    DontDestroyOnLoad(gameObject);
-        //}
-        //else
-        //{
-        //    Debug.LogWarning("Duplicate GameManager found! Destroying: " + gameObject.name);
-        //    Destroy(gameObject);
-        //    return;
-        //}
-        Debug.Log("GameManager Awake on object: " + gameObject.name);
-
-        //Initialize state and menus.
-        currentState = GameState.Play;
-        playMenu.SetActive(true);
-        pauseMenu.SetActive(false);
-        victoryMenu.SetActive(false);
-
-        //gameOverMenu.SetActive(false);
-        //restartMenu.SetActive(false);
-        objectivePanel.SetActive(false);
-
-        foreach (GameObject text in inGameText)
+        if (instance == null)
         {
-            text.SetActive(true);
+            instance = this; // assign this instance
+            player = null;
         }
+        else
+        {
+            // optional: destroy duplicates in the same scene
+            Destroy(gameObject);
+        }
+        Debug.Log("GameManager Awake on object: " + gameObject.name);
+        if (playerPrefab == null) Debug.LogError("Player prefab NOT assigned!");
+        if (playerspawnPos == null) Debug.LogError("Player spawn position NOT assigned!");
+        currentState = GameState.Play;
 
+        if (!isRestarting)
+        {
+            // Normal start, show main menu
+            playMenu.SetActive(true);
+            pauseMenu.SetActive(false);
+            victoryMenu.SetActive(false);
+            objectivePanel.SetActive(false);
 
+            //foreach (GameObject text in inGameText)
+            //    text.SetActive(true);
+        }
+        else
+        {
+            // Restarting gameplay, hide main menu
+            playMenu.SetActive(false);
+            pauseMenu.SetActive(false);
+            victoryMenu.SetActive(false);
+            objectivePanel.SetActive(false);
+
+            //foreach (GameObject text in inGameText)
+            //    text.SetActive(false);
+
+            isRestarting = false; // reset flag
+        }
     }
 
     //Get player controller.
     public void Start()
     {
-        if (player != null)
+        if (player == null)
         {
-            playermovement = player.GetComponentInParent<PlayerMovement>();
-            playershoot = player.GetComponentInParent<PlayerShoot>();
-
-
+            SpawnPlayer();
+        }
+        else
+        {
+            // If the player already exists in the scene (from scene setup), assign references
+            playermovement = player.GetComponent<PlayerMovement>();
+            playershoot = player.GetComponent<PlayerShoot>();
+            playerStats = player.GetComponent<PlayerStats>();
+            puddleController = player.GetComponent<PuddleController>();
         }
     }
 
@@ -144,22 +166,28 @@ public class GameManager : MonoBehaviour
         }
 
 
-        bool uiActive = (playMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf);
+        bool uiActive = (playMenu.activeSelf || pauseMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf) || gamePaused;
         if (playermovement != null)
             playermovement.enabled = !uiActive;
 
         if (playershoot != null)
             playershoot.enabled = !uiActive;
 
-        foreach (GameObject text in inGameText)
-        {
-            text.SetActive(!uiActive);
+        if (puddleController != null)
+        { 
+            puddleController.enabled = !uiActive;   
         }
+
+        //foreach (GameObject text in inGameText)
+        //{
+        //    text.SetActive(!uiActive);
+        //}
     }
 
     #region Start
     public void StartGame()
     {
+        Debug.Log("[GameManager] StartGame() called");
 
         playMenu.SetActive(false);
         objectivePanel.SetActive(true);
@@ -203,6 +231,9 @@ public class GameManager : MonoBehaviour
 
             if (playershoot != null)
                 playershoot.enabled = false;
+
+            if (puddleController != null)
+                puddleController.enabled = false;
         }
         else
         {
@@ -216,6 +247,9 @@ public class GameManager : MonoBehaviour
 
             if (playershoot != null)
                 playershoot.enabled = true;
+
+            if (puddleController != null)
+                puddleController.enabled = true;
         }
     }
 
@@ -236,6 +270,11 @@ public class GameManager : MonoBehaviour
             {
                 playershoot.enabled = true;
             }
+            if (puddleController != null && !puddleController.enabled)
+            {
+                puddleController.enabled = true;
+            }
+
         }
     }
 
@@ -245,23 +284,65 @@ public class GameManager : MonoBehaviour
     #region Player/Enemies
     public void SpawnPlayer()
     {
-        Debug.Log($"[GameManager] SpawnPlayer called. player={player}, spawnPos={playerspawnPos}");
+        Debug.Log("[GameManager] SpawnPlayer() called");
 
-        if (player != null && playerspawnPos != null)
+
+        if (playerPrefab == null)
         {
-            player.transform.position = playerspawnPos.position;
+            Debug.LogError("[GameManager] playerPrefab is NULL!");
+            return;
+        }
+
+        if (playerspawnPos == null)
+        {
+            Debug.LogError("[GameManager] playerspawnPos is NULL!");
+            return;
+        }
+        // Reset stale reference
+        if (player != null && !player.gameObject.activeInHierarchy)
+        {
+            player = null;
+        }
+
+        if (player == null)
+        {
+
+            // Instantiate new player prefab at spawn position
+            player = Instantiate(playerPrefab, playerspawnPos.position, Quaternion.identity);
+            SetPlayer(player.transform);
+            player.name = "Player";
+            Debug.Log("[GameManager] Player spawned at: " + player.transform.position);
+
+            // Assign references
+            playermovement = player.GetComponentInParent<PlayerMovement>();
+            playershoot = player.GetComponentInParent<PlayerShoot>();
+            playerStats = player.GetComponentInParent<PlayerStats>();
             playerStats.healthBarUI = FindObjectOfType<HealthBarUI>();
+            puddleController = player.GetComponentInParent<PuddleController>();
 
-            Debug.Log("[GameManager] Player moved to spawn position.");
-
-
+            // Initialize the player
+            playerStats.InitializePlayer();
+            // Reassign camera reference
+            // Assign camera
+            CameraController cam = Camera.main.GetComponent<CameraController>();
+            if (cam != null)
+            {
+                cam.SetPlayer(player.transform);
+            }
+        }
+        else
+        { 
+            player.transform.position = playerspawnPos.position;
+            playerStats.InitializePlayer();
         }
     }
 
     public void spawnHelperWelper()
     {
-        GameObject newEnemyPatrol = Instantiate(helperWelperPrefab);
-        newEnemyPatrol.name = "EnemyPatrol_HelperWelper";
+        if (helperWelper != null && helperWelper.enemyPatrol != null)
+        {
+            helperWelper.enemyPatrol.SpawnAtPointDrone();
+        }
     }
 
 
@@ -322,54 +403,15 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("BackToStartMenu called");
 
-        // Reset time scale
-        Time.timeScale = 0f;
+        Time.timeScale = 1f;
 
-        // Reset game state
-        gamePaused = true;
-        gameOver = false;
-        currentState = GameState.Play;
-
-        // Clean up any scene elements like enemies, projectiles, etc.
-
-        // Reset checkpoints
-        activecheckPoints = null;
-        checkpointPosition = Vector2.zero;
-        CheckPoints.allCheckPoints.Clear();
-
-        // Disable all gameplay UI
-        if (pauseMenu != null) pauseMenu.SetActive(false);
-        if (victoryMenu != null) victoryMenu.SetActive(false);
-        if (gameOverMenu != null) gameOverMenu.SetActive(false);
-        if (objectivePanel != null) objectivePanel.SetActive(false);
-        if (SettingsPanel != null) SettingsPanel.SetActive(false);
-
-        // Show main menu UI
-        if (playMenu != null) playMenu.SetActive(true);
-
-        //// Disable player controls
-        //if (playermovement != null) playermovement.enabled = false;
-        //if (playershoot != null) playershoot.enabled = false;
-
-        // Hide in-game text
-        foreach (GameObject text in inGameText)
-        {
-            text.SetActive(false);
-        }
-        Debug.Log("Returned to in-scene Main Menu.");
-
-
-
-
-        if (playerStats != null)
-        {
-            playerStats.InitializePlayer();
-
-        }
+        // Reload current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void restartGame()
     {
+        isRestarting = true;       // Tell GameManager we are restarting gameplay
         Time.timeScale = 1f;
         gamePaused = false;
         gameOver = false;
@@ -562,9 +604,14 @@ public class GameManager : MonoBehaviour
             //  softbody.ResetSegments(checkpointSegmentcount);
         }
     }
-    #endregion  
 
-        #region Segmentation
+    public void SetPlayer(Transform player)
+    {
+        PlayerTransform = player;
+    }
+    #endregion
+
+    #region Segmentation
     public void collectSegment(Transform newSegment)
     {
         SoftBodyPhyiscs softbodyphysic = GetComponent<SoftBodyPhyiscs>();
