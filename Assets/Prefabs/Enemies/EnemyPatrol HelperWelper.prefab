@@ -117,7 +117,7 @@ MonoBehaviour:
   idleDuration: 1
   Player: {fileID: 0}
   chaseRange: 3
-  maxchaseRange: 4
+  maxchaseRange: 6
   obstacleTag: Object
   returnSpeed: 3
   detectionOffset: 0.6

@@ -468,13 +468,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCharging: 0
   chargeTimer: 0
-  chargeSpeed: 2
+  chargeSpeed: 5
   lastchargeTime: -Infinity
   chargeDuration: 0
   chargeCooldown: 0
   maxAngleOffset: 30
   contactDamage: 10
-  knockbackForce: 100
+  knockbackForce: 25
   cooldown: 1
   maxHealth: 20
   chargePatrol: {fileID: 5536877695685384951}
