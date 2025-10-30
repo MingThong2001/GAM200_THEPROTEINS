@@ -11,6 +11,7 @@ public class PlayerStats : MonoBehaviour
     //Health
     public float baseMaxHealth = 100f;
     public float currentHealth;
+    [SerializeField] private GameObject damageVFX;
 
     //Checkpoint
     public int currentSegments;
@@ -25,9 +26,9 @@ public class PlayerStats : MonoBehaviour
     private void Awake()
     {
         if (instance == null)
-        { 
             instance = this;
-        }
+        else
+            Destroy(gameObject);
         rb = GetComponent<Rigidbody2D>();   
         movement = GetComponent<PlayerMovement>();  
 
@@ -123,7 +124,6 @@ public class PlayerStats : MonoBehaviour
             }
         }
 
-        GameManager.instance.SpawnPlayer();
     }
     public void SetHealth(float maxHealth, float currentHealthPercent = -1f)
     {
@@ -146,10 +146,29 @@ public class PlayerStats : MonoBehaviour
         { 
             healthBarUI.SetHealth(currentHealth, baseMaxHealth);
         }
+        playdamagevfx();
+
         if (currentHealth <= 0)
         {
             currentHealth = 0;
             Die();
+            Debug.Log("[PlayerStats] Die() called! CurrentHealth: " + currentHealth);
+
+        }
+    }
+
+    private void playdamagevfx()
+    {
+        if (damageVFX != null)
+        {
+            GameObject vfx = Instantiate(damageVFX, transform.position, Quaternion.identity);
+            ParticleSystem ps = vfx.GetComponent<ParticleSystem>();
+            if (ps != null)
+                ps.Play();
+
+            Destroy(vfx, ps != null ? ps.main.duration + 0.1f : 1f);
+
+
         }
     }
     private void Die()

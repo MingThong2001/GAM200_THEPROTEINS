@@ -6971,6 +6971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseMaxHealth: 100
   currentHealth: 0
+  damageVFX: {fileID: 908571098331790359, guid: 1ed3afdb2ee777a4bafcc47df0908af3, type: 3}
   currentSegments: 0
   movement: {fileID: 7573252036189849636}
   spriteController: {fileID: 4534176234348098683}
@@ -7704,7 +7705,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3002336456049880157
 Transform:
   m_ObjectHideFlags: 0
@@ -9668,7 +9669,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8855518392896270911
 Transform:
   m_ObjectHideFlags: 0
@@ -10344,7 +10345,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &9047450897062341872
 Transform:
   m_ObjectHideFlags: 0
@@ -10378,7 +10379,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8723965402440324858
 Transform:
   m_ObjectHideFlags: 0
