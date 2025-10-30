@@ -14,6 +14,8 @@ public class Drone : MonoBehaviour
     [SerializeField] private float pushForce = 10f;
 
     [SerializeField] private BoxCollider2D boxcollider;
+    [SerializeField] private GameObject deathVFX;
+    [SerializeField] private GameObject damageVFX;
 
     [SerializeField] private LayerMask defaultlayer;
 
@@ -165,19 +167,40 @@ public class Drone : MonoBehaviour
 
         if (enemyHP != null)
             enemyHP.SetHealth(currentHealth, maxHealth);
-
+        playdamagevfx();
         if (currentHealth <= 0)
         {
             Die();
         }
     }
 
+    private void playdamagevfx()
+    {
+        if (damageVFX != null)
+        {
+            GameObject vfx = Instantiate(damageVFX, transform.position, Quaternion.identity);
+            ParticleSystem ps = vfx.GetComponent<ParticleSystem>();
+            if (ps != null)
+                ps.Play();
+            
+            Destroy(vfx, ps != null ? ps.main.duration + 0.1f : 1f);
 
+
+        }
+    }
    private void Die()
     {
         if (isDead) return;
         isDead = true;
 
+        // Spawn VFX prefab at drone's position
+        if (deathVFX != null)
+        {
+            GameObject vfx = Instantiate(deathVFX, transform.position, Quaternion.identity);
+            ParticleSystem ps = vfx.GetComponent<ParticleSystem>();
+            if (ps != null) ps.Play();
+            Destroy(vfx, ps.main.duration + 0.5f);
+        }
         if (enemyPatrolDrone != null)
             enemyPatrolDrone.enabled = false;
 
