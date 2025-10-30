@@ -615,8 +615,8 @@ public class GameManager : MonoBehaviour
         if (previousMenu != null)
         {
             previousMenu.SetActive(true);
-            previousMenu = null;
         }
+        previousMenu = null;
     }
 
     public void OpenSettingsFromPlayMenu()

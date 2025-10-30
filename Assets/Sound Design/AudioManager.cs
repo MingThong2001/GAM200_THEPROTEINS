@@ -12,6 +12,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioMixer myMixer;
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
+    //public static AudioManager instance;
 
     //References
 
@@ -67,6 +68,17 @@ public class AudioManager : MonoBehaviour
     public void Awake()
     {
         //audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+
+        //if (instance == null)
+        //{
+        //    instance = this;
+        //    DontDestroyOnLoad(gameObject);
+
+        //}
+        //else
+        //{ 
+        //    Destroy(gameObject);
+        //}
     }
 
     public void Start()
@@ -95,6 +107,7 @@ public class AudioManager : MonoBehaviour
         float volume = musicSlider.value;
         myMixer.SetFloat("Music", Mathf.Log10(volume)*20);
         PlayerPrefs.SetFloat("musicVolume", volume);
+        PlayerPrefs.Save();
 
     }
 
@@ -103,6 +116,7 @@ public class AudioManager : MonoBehaviour
         float volume = sfxSlider.value;
         myMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("SFXVolume", volume);
+        PlayerPrefs.Save();
 
     }
 
