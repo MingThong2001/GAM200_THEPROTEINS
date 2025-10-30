@@ -44,16 +44,20 @@ public class PlayerShoot : MonoBehaviour
         mouseWorldPos.z = 0; 
         Vector3 direction = (mouseWorldPos - firePoint.position).normalized;
 
+
         //Spawn a projectile
+
+        Debug.Log($"[PlayerShoot] projectilePrefab = {projectilePrefab}");
+        if (projectilePrefab == null)
+        {
+            Debug.LogError("[PlayerShoot] Projectile Prefab is NULL before instantiation!");
+            return;
+        }
+
         Projectile projrb = Instantiate(projectilePrefab);
         projrb.projectilemass = massSegment;
-        //projrb.GetComponent<Projectile>().enabled = false;
-        //if (projrb == null)
-        //{
-        //    Debug.LogError("Projectile was null! Make sure your pool is correctly initialized.");
 
-        //    projrb = Instantiate(projectilePrefab).GetComponent<Projectile>();
-        //}
+      
 
         projrb.transform.position = firePoint.position;
         projrb.SetDirection(direction);
