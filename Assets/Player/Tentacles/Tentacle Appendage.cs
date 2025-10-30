@@ -67,6 +67,10 @@ public class TentacleAppendage : MonoBehaviour
    
     private void HandleInput()
     {
+        if (Camera.main == null)
+        { 
+            return;
+        }
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         //Left click to extend toward target.
