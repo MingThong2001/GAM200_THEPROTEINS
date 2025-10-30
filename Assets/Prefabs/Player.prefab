@@ -6955,7 +6955,7 @@ MonoBehaviour:
   ProjectileSegments: []
   playermovement: {fileID: 7573252036189849636}
   playerstats: {fileID: 2447649323181287657}
-  HealthbarUI: {fileID: 0}
+  HealthbarUI: {fileID: 3357770845106946687, guid: afae95f46939e3d4e8b93bf900cb3801, type: 3}
   savedSegment: 0
 --- !u!114 &2447649323181287657
 MonoBehaviour:
@@ -6975,7 +6975,7 @@ MonoBehaviour:
   currentSegments: 0
   movement: {fileID: 7573252036189849636}
   spriteController: {fileID: 4534176234348098683}
-  healthBarUI: {fileID: 0}
+  healthBarUI: {fileID: 3357770845106946687, guid: afae95f46939e3d4e8b93bf900cb3801, type: 3}
 --- !u!114 &4681535509892757097
 MonoBehaviour:
   m_ObjectHideFlags: 0
