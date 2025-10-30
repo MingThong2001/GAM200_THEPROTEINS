@@ -281,7 +281,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055517
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &8440813588659847464
@@ -296,6 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!1 &232382953585771170
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,6 +316,7 @@ GameObject:
   - component: {fileID: 3807881515746688169}
   - component: {fileID: 5172542745779623136}
   - component: {fileID: -1818874735384054247}
+  - component: {fileID: 6628556049018391730}
   m_Layer: 0
   m_Name: projectileV3
   m_TagString: Player
@@ -527,6 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!114 &3807881515746688169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,6 +550,7 @@ MonoBehaviour:
   ignorePlayer: 0
   FirePoint: {fileID: 0}
   segmentPrefab: {fileID: 0}
+  bodyParts: []
   canBeCollected: 0
   pickupSound: {fileID: 0}
   segmentAmount: 1
@@ -604,6 +608,40 @@ MonoBehaviour:
   segmentAmount: 1
   pickupSound: {fileID: 0}
   isBeingProcessed: 0
+--- !u!114 &6628556049018391730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232382953585771170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fa245aecc5f4a5449b7d2cd3661473a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  segments:
+  - {fileID: 4175477147568149853}
+  - {fileID: 7587892929474217082}
+  - {fileID: 5303437079316782781}
+  - {fileID: 6678495224250838521}
+  - {fileID: 6650478401993011582}
+  - {fileID: 5586777152498567746}
+  - {fileID: 6672012443545624278}
+  - {fileID: 4939931438370153199}
+  - {fileID: 1852533616247459094}
+  - {fileID: 1872036491030810607}
+  - {fileID: 2186952906674694409}
+  - {fileID: 1822152290116541720}
+  shellThickness: 0.35
+  paddingFromSegments: 0.1
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  updateEveryFrame: 1
+  showShell: 1
+  shellColor: {r: 0, g: 0.5, b: 1, a: 0.5}
+  edgeCollider: {fileID: 0}
 --- !u!1 &1144968065149064399
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,7 +881,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.19039428
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &7011500755958376350
@@ -864,7 +902,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.17677674
+  m_Distance: 0.17677669
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &6120878021730056458
@@ -885,7 +923,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055517
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &7787294148105735461
@@ -900,6 +938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!1 &2673245192134871144
 GameObject:
   m_ObjectHideFlags: 0
@@ -1139,7 +1178,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.19039428
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &7653101547099631206
@@ -1160,7 +1199,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.19039428
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &8768430758662770833
@@ -1196,6 +1235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!1 &2912930377517136162
 GameObject:
   m_ObjectHideFlags: 0
@@ -1492,6 +1532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!1 &3036419561099576251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1710,7 +1751,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055517
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &6774188103307601883
@@ -1788,6 +1829,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!1 &4342595651765187659
 GameObject:
   m_ObjectHideFlags: 0
@@ -2027,7 +2069,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.17677674
+  m_Distance: 0.17677669
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &7299932893271735368
@@ -2084,6 +2126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!1 &5102489452519931488
 GameObject:
   m_ObjectHideFlags: 0
@@ -2380,6 +2423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!1 &5830971946280217574
 GameObject:
   m_ObjectHideFlags: 0
@@ -2676,6 +2720,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!1 &7483663537132344485
 GameObject:
   m_ObjectHideFlags: 0
@@ -2894,7 +2939,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055517
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &8486118242654367516
@@ -2915,7 +2960,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.17677674
+  m_Distance: 0.17677669
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &192181622206805927
@@ -2936,7 +2981,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.19039428
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &1951898480595197410
@@ -2972,6 +3017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!1 &8703225622710925909
 GameObject:
   m_ObjectHideFlags: 0
@@ -3268,6 +3314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!1 &8956127788275136735
 GameObject:
   m_ObjectHideFlags: 0
@@ -3528,7 +3575,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.17677674
+  m_Distance: 0.17677669
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &3906207203425048610
@@ -3564,6 +3611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
 --- !u!1 &9196159478769337446
 GameObject:
   m_ObjectHideFlags: 0
@@ -3860,3 +3908,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a30a5a59a5e39e4b98e851547c4ebfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentProjectile: {fileID: 0}
