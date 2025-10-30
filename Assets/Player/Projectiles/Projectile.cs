@@ -84,9 +84,12 @@ public class Projectile : MonoBehaviour
         pickup = GetComponentInChildren<ProjectillePickup>(true);
         Debug.Log(pickup != null ? "Pickup found!" : "Pickup NOT found!");
 
-        if (pickup == null)
-            Debug.LogError("Projectile: No ProjectillePickup found on this projectile or its parent/children!");
+        //if (pickup == null)
+        //{
+        //    return; 
+        //    Debug.LogError("Projectile: No ProjectillePickup found on this projectile or its parent/children!");
 
+        //}
         //Initialize all the body parts and joints.
         initializeProjectile();
         SwitchTag(gameObject, "Player");
@@ -172,17 +175,17 @@ public class Projectile : MonoBehaviour
     }
 
     //Collision with tagged objects.
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("groundLayer"))
         {
             //SticktoSurface(collision);
             Land();
         }
-        else if (collision.gameObject.CompareTag("Enemy"))
-        {
-            HandleEnemyHit(collision);
-        }
+        //else if (collision.gameObject.CompareTag("Enemy"))
+        //{
+        //    HandleEnemyHit(collision);
+        //}
         //else if (collision.gameObject.CompareTag("BreakableObjs"))
         //{ 
         //    HandleBreakableHit(collision);
@@ -302,15 +305,20 @@ public class Projectile : MonoBehaviour
         }
     }
 
-#endregion
+    #endregion
 
     //Enemy Collision.
-    public void HandleEnemyHit(Collision2D collision)
+    private HashSet<GameObject> hitEnemies = new HashSet<GameObject>();
+    public void HandleEnemyHit(Collider2D collision)
     {
-        if (Hashit) return;
-        Hashit = true;
+        Debug.Log($"[Projectile] HandleEnemyHit triggered by {collision.name}");
 
         GameObject targetPoint = collision.gameObject;
+
+        if (hitEnemies.Contains(targetPoint)) return; // Already hit by this projectile
+
+        hitEnemies.Add(targetPoint);
+
         FailedSubjects failedsubjects = targetPoint.GetComponentInChildren<FailedSubjects>();
         if (failedsubjects != null)
         {
@@ -323,7 +331,7 @@ public class Projectile : MonoBehaviour
             drone.TakeDamage(damage);
         }
 
-        HelperWelper helperwelper = targetPoint.GetComponentInChildren<HelperWelper>();
+        HelperWelper helperwelper = targetPoint.GetComponent<HelperWelper>();
         if (helperwelper != null)
         {
             helperwelper.TakeDamage(damage);
@@ -349,7 +357,8 @@ public class Projectile : MonoBehaviour
     {
         //Reset transform positions.
         transform.position = startPosition;
-        transform.rotation = Quaternion.identity;   
+        transform.rotation = Quaternion.identity;
+        hitEnemies.Clear();
 
         //Reset root RigidBody.
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
@@ -375,6 +384,7 @@ public class Projectile : MonoBehaviour
 
         SwitchTag(gameObject, "Player");
         canBeCollected = false;
+
     }
 
 
@@ -385,7 +395,7 @@ public class Projectile : MonoBehaviour
     {
         Debug.Log("landed");
         if (!isActive) return;
-        isActive = true;
+        isActive = false;
 
         foreach (Rigidbody2D rb in bodyParts)
         {
@@ -439,10 +449,11 @@ public class Projectile : MonoBehaviour
         Debug.Log($"Projectile: MakeCollectible called on {gameObject.name} at time {Time.time}");
 
         SwitchTag(gameObject, "Player");
-        Debug.Log($"Projectile: Calling EnableCollection on {pickup.gameObject.name}");
 
-        if (pickup != null) 
+        if (pickup != null)
         {
+            Debug.Log($"Projectile: Calling EnableCollection on {pickup.gameObject.name}");
+
             pickup.EnableCollection();
         }
     }

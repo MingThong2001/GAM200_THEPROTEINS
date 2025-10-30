@@ -6,13 +6,14 @@ public class ProjectileSegment : MonoBehaviour
 
 
     //Reference to the parent projectile since projectile has multiple children (points).
-    private Projectile parentProjectile;
+    public  Projectile parentProjectile;
 
     //Flag for collision.
     private bool hasCollided = false;
 
     //Rigidbody2D
     private Rigidbody2D segmentRigidbody;
+    private static int colliderHitCount = 0;
 
     public void Start()
     {
@@ -33,7 +34,22 @@ public class ProjectileSegment : MonoBehaviour
     }
 
     //Handle collision.
-    public void OnCollisionEnter2D(Collision2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") && !hasCollided) 
+        {
+
+            hasCollided = true;
+            parentProjectile.HandleEnemyHit(collision);
+            // Increment collider hit count for this projectile
+            colliderHitCount++;
+
+            Debug.Log($"[ProjectileSegment] Collider '{gameObject.name}' touched Enemy '{collision.gameObject.name}'. Total colliders touching enemy for this projectile: {colliderHitCount}");
+        }
+
+    }
+    
+    public void OnCollisionEnter2D (Collision2D collision)
     {
         if (hasCollided)
         {
@@ -47,13 +63,7 @@ public class ProjectileSegment : MonoBehaviour
             parentProjectile.SticktoSurface(collision);
         }
 
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-
-            hasCollided = true;
-            parentProjectile.HandleEnemyHit(collision);
-        }
-
+     
         if (collision.gameObject.CompareTag("BreakableObjs"))
         {
 
