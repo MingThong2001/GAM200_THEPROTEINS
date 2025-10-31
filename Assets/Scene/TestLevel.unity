@@ -8172,6 +8172,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 775003918737969034, guid: ed7f39a32ebc79546ba839e0a90e0bd5, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 2219952678514697462, guid: 446e82987c01a4e438ecdea82a154cb1, type: 2}
     - target: {fileID: 2262845564040664739, guid: ed7f39a32ebc79546ba839e0a90e0bd5, type: 3}
       propertyPath: OutputAudioMixerGroup
       value: 
@@ -25063,17 +25067,13 @@ MonoBehaviour:
   myMixer: {fileID: 0}
   musicSlider: {fileID: 0}
   sfxSlider: {fileID: 0}
-  Ambience: {fileID: 0}
+  BGMmusic: {fileID: 0}
+  Victory: {fileID: 0}
+  Endgame: {fileID: 0}
   pickup: {fileID: 8300000, guid: e6d82a1ef7ad0094393f3f47fad4a7f8, type: 3}
   shootOut: {fileID: 8300000, guid: 9a73440a359b04b4791b82492769cef4, type: 3}
   jump: {fileID: 8300000, guid: 90d138848872d3f4ba7b1f18c9e0e4d5, type: 3}
   grab: {fileID: 8300000, guid: 217ffbf97fc54a64197e77a219c3ace9, type: 3}
-  Dmovemement: {fileID: 0}
-  Dattack: {fileID: 0}
-  Hmovemement: {fileID: 0}
-  Hattack: {fileID: 0}
-  Fmovemement: {fileID: 0}
-  Fattack: {fileID: 0}
 --- !u!4 &2049618659
 Transform:
   m_ObjectHideFlags: 0
@@ -26141,6 +26141,10 @@ PrefabInstance:
       propertyPath: m_RenderMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4889356152270988674, guid: bcb30f490c2635441a35be08de8406af, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6468505047065584616, guid: bcb30f490c2635441a35be08de8406af, type: 3}
       propertyPath: m_Name
       value: EventSystem
@@ -26650,11 +26654,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1938328122053781077, guid: 0f9cff2845fdd9e40802b9be6493baa7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 54.8
+      value: -8.4
       objectReference: {fileID: 0}
     - target: {fileID: 1938328122053781077, guid: 0f9cff2845fdd9e40802b9be6493baa7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.1
+      value: 14.9
       objectReference: {fileID: 0}
     - target: {fileID: 1938328122053781077, guid: 0f9cff2845fdd9e40802b9be6493baa7, type: 3}
       propertyPath: m_LocalPosition.z

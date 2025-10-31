@@ -16,13 +16,13 @@ public class AudioManager : MonoBehaviour
 
     //References
 
-    public AudioClip Ambience;
+    public AudioClip BGMmusic;
 
     #region GameState
     //public AudioClip death;
     //public AudioClip checkpoint;
-    //public AudioClip Victory;
-    //public AudioClip Endgame;
+    public AudioClip Victory;
+    public AudioClip Endgame;
 
     #endregion
 
@@ -47,23 +47,23 @@ public class AudioManager : MonoBehaviour
 
     #endregion
 
-    #region Drone SFX
-    public AudioClip Dmovemement;
-    public AudioClip Dattack;
+    //#region Drone SFX
+    //public AudioClip Dmovemement;
+    //public AudioClip Dattack;
 
-    #endregion
+    //#endregion
 
-    #region HelperWelper SFX
-    public AudioClip Hmovemement;
-    public AudioClip Hattack;
+    //#region HelperWelper SFX
+    //public AudioClip Hmovemement;
+    //public AudioClip Hattack;
 
-    #endregion
+    //#endregion
 
-    #region FailedSubject SFX
-    public AudioClip Fmovemement;
-    public AudioClip Fattack;
+    //#region FailedSubject SFX
+    //public AudioClip Fmovemement;
+    //public AudioClip Fattack;
 
-    #endregion
+    //#endregion
 
     public void Awake()
     {
@@ -93,7 +93,7 @@ public class AudioManager : MonoBehaviour
             SetSFXVolume();
         }
 
-            BGM.clip = Ambience;
+            BGM.clip = BGMmusic;
         BGM.Play();
     }
 
@@ -104,6 +104,9 @@ public class AudioManager : MonoBehaviour
 
     public void SetMusicVolume()
     {
+        if (myMixer == null || musicSlider == null)
+            return;
+
         float volume = musicSlider.value;
         myMixer.SetFloat("Music", Mathf.Log10(volume)*20);
         PlayerPrefs.SetFloat("musicVolume", volume);
@@ -113,6 +116,8 @@ public class AudioManager : MonoBehaviour
 
     public void SetSFXVolume()
     {
+        if (myMixer == null || sfxSlider == null)
+            return;
         float volume = sfxSlider.value;
         myMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("SFXVolume", volume);
@@ -122,13 +127,22 @@ public class AudioManager : MonoBehaviour
 
 
     //Store Music Setting.
-    public void LoadVolume()
+    private void LoadVolume()
     {
         musicSlider.value = PlayerPrefs.GetFloat("musicVolume");
         sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume");
 
-        SetMusicVolume();
-        SetSFXVolume();
+        if (musicSlider != null)
+        {
+            musicSlider.value = PlayerPrefs.GetFloat("musicVolume", 1f);
+            SetMusicVolume();
+        }
+
+        if (sfxSlider != null)
+        {
+            sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f);
+            SetSFXVolume();
+        }
     }
 }
 
