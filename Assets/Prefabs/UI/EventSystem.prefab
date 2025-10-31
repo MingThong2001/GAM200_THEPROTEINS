@@ -1009,17 +1009,14 @@ MonoBehaviour:
   myMixer: {fileID: 0}
   musicSlider: {fileID: 0}
   sfxSlider: {fileID: 0}
-  Ambience: {fileID: 0}
+  BGMmusic: {fileID: 0}
+  Victory: {fileID: 0}
+  Endgame: {fileID: 0}
   pickup: {fileID: 0}
   shootOut: {fileID: 0}
   jump: {fileID: 0}
   grab: {fileID: 0}
-  Dmovemement: {fileID: 0}
-  Dattack: {fileID: 0}
-  Hmovemement: {fileID: 0}
-  Hattack: {fileID: 0}
-  Fmovemement: {fileID: 0}
-  Fattack: {fileID: 0}
+  uiclick: {fileID: 0}
 --- !u!1 &1231857135697031118
 GameObject:
   m_ObjectHideFlags: 0
@@ -2879,17 +2876,14 @@ MonoBehaviour:
   myMixer: {fileID: 24100000, guid: 446e82987c01a4e438ecdea82a154cb1, type: 2}
   musicSlider: {fileID: 2323362746846847345}
   sfxSlider: {fileID: 5507354687715605817}
-  Ambience: {fileID: 0}
+  BGMmusic: {fileID: 0}
+  Victory: {fileID: 0}
+  Endgame: {fileID: 0}
   pickup: {fileID: 0}
   shootOut: {fileID: 0}
   jump: {fileID: 0}
   grab: {fileID: 0}
-  Dmovemement: {fileID: 0}
-  Dattack: {fileID: 0}
-  Hmovemement: {fileID: 0}
-  Hattack: {fileID: 0}
-  Fmovemement: {fileID: 0}
-  Fattack: {fileID: 0}
+  uiclick: {fileID: 0}
 --- !u!1 &3630791284641871564
 GameObject:
   m_ObjectHideFlags: 0
@@ -4203,17 +4197,14 @@ MonoBehaviour:
   myMixer: {fileID: 0}
   musicSlider: {fileID: 0}
   sfxSlider: {fileID: 0}
-  Ambience: {fileID: 0}
+  BGMmusic: {fileID: 0}
+  Victory: {fileID: 0}
+  Endgame: {fileID: 0}
   pickup: {fileID: 0}
   shootOut: {fileID: 0}
   jump: {fileID: 0}
   grab: {fileID: 0}
-  Dmovemement: {fileID: 0}
-  Dattack: {fileID: 0}
-  Hmovemement: {fileID: 0}
-  Hattack: {fileID: 0}
-  Fmovemement: {fileID: 0}
-  Fattack: {fileID: 0}
+  uiclick: {fileID: 0}
 --- !u!1 &4709429015959562632
 GameObject:
   m_ObjectHideFlags: 0
