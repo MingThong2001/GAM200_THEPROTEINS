@@ -175,7 +175,9 @@ public class GameManager : MonoBehaviour
         }
 
         //Disable player controls when any UI is active.
-        bool uiActive = (playMenu.activeSelf || pauseMenu.activeSelf || victoryMenu.activeSelf || objectivePanel.activeSelf) || gamePaused;
+        bool uiActive = (playMenu.activeSelf || pauseMenu.activeSelf || victoryMenu.activeSelf
+                         || objectivePanel.activeSelf || SettingsPanel.activeSelf) || gamePaused;
+
         if (playermovement != null)
             playermovement.enabled = !uiActive;
 
@@ -268,7 +270,7 @@ public class GameManager : MonoBehaviour
 
         currentState = GameState.showobjective;
         gamePaused = true;
-        Time.timeScale = 0f;
+
     }
 
 
@@ -606,21 +608,36 @@ public class GameManager : MonoBehaviour
 
         // Show settings panel
         SettingsPanel.SetActive(true);
+        gamePaused = true;
+
+        currentState = GameState.Paused;
+     
     }
 
     public void CloseSettings()
     {
-        // Hide settings
         SettingsPanel.SetActive(false);
 
-        // Return to previous menu if available
         if (previousMenu != null)
         {
+            // Reactivate previous menu
             previousMenu.SetActive(true);
+
+            // Restore state based on which menu opened settings
+            if (previousMenu == playMenu)
+            {
+                gamePaused = false;
+                currentState = GameState.Play;
+            }
+            else if (previousMenu == pauseMenu)
+            {
+                gamePaused = true;
+                currentState = GameState.Paused;
+            }
         }
+
         previousMenu = null;
     }
-
     public void OpenSettingsFromPlayMenu()
     {
         OpenSettings(playMenu);
