@@ -14,18 +14,30 @@ public class BreakableObj : MonoBehaviour
     private Transform HptoObjecthp; //Target enemy transform so the healthbar will follow.
     private Vector3 hptoObjectoffset; //The position offset between the enemy and the HP bar (To show it above the enemy head and for visual appeal).
  //   private Text HPtext;
+
+
     //References.
     public GameObject healthbarPrefab;
     private GameObject healthbarinstance;
 
+    //HP Sprites
+    public Sprite fullhp;
+    public Sprite midhp;
+    public Sprite lowhp;
+    private SpriteRenderer sprite;
+
     public void Start()
     {
+        sprite = GetComponent<SpriteRenderer>();
+        Updatehealthsprite();
         Createhealthbar();
         Updatehealthbar();
 
         Collider2D playercollider = GameObject.FindWithTag("Player").GetComponent<Collider2D>();
         Collider2D breakableobjcollider = GetComponent<Collider2D>();
         Physics2D.IgnoreCollision(playercollider, breakableobjcollider);    
+
+       
 
     }
    
@@ -86,6 +98,7 @@ public class BreakableObj : MonoBehaviour
         Debug.Log($"TakeDamage called with damage: {damage}, current HP: {Objhealth}");
 
         Updatehealthbar();
+        Updatehealthsprite();
         //Check if obj is destroyed.
         if (Objhealth <= 0)
         {
@@ -101,9 +114,27 @@ public class BreakableObj : MonoBehaviour
 
         Destroy(gameObject);
     }
-    
 
-   
+
+    public void Updatehealthsprite()
+    { 
+        float hpPercentage = Objhealth /Objmaxhealth;
+
+        if (hpPercentage > 0.66f)
+        {
+            sprite.sprite = fullhp;
+        }
+        else if (hpPercentage > 0.33f)
+        {
+            sprite.sprite = midhp;
+        }
+        else
+        {
+          sprite.sprite = lowhp;
+
+        }
+    }
+
     void LateUpdate() //Called after all update functions have been called. This is for the HPUI to follow.
     {
         if (HptoObjecthp != null && healthbarinstance != null) 
