@@ -476,6 +476,8 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         // Reload current scene
+        GameFlags.hasPlayedCutscene = false;
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
