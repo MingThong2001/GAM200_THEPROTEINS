@@ -1,8 +1,7 @@
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
 
 public class AudioManager : MonoBehaviour
 {
@@ -47,6 +46,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip jump;
     public AudioClip grab;
     public static AudioClip movement;
+    public AudioClip restorePuddle;
+    public AudioClip applyPuddle;
 
     private bool sfxSliderInteracting = false;
     private bool sfxsliderFirstloaded = false;
@@ -85,14 +86,26 @@ public class AudioManager : MonoBehaviour
 
         //}
         //else
-        //{ 
+        //{
         //    Destroy(gameObject);
+        //    return;
         //}
+        if (musicSlider == null)
+            musicSlider = GameObject.Find("musicSlider")?.GetComponent<Slider>();
 
+        if (sfxSlider == null)
+            sfxSlider = GameObject.Find("sfxSlider")?.GetComponent<Slider>();
     }
 
     public void Start()
     {
+
+        if (BGM != null && BGMmusic != null)
+        {
+            BGM.clip = BGMmusic;
+            BGM.Play();
+        }
+
         if (PlayerPrefs.HasKey("musicVolume"))
         {
             LoadVolume();
@@ -103,8 +116,7 @@ public class AudioManager : MonoBehaviour
             SetSFXVolume();
         }
 
-        BGM.clip = BGMmusic;
-        BGM.Play();
+      
 
         // Add listener to SFX slider
         if (sfxSlider != null)
@@ -121,7 +133,9 @@ public class AudioManager : MonoBehaviour
             }
         }
     }
+  
 
+ 
     public  void OnSFXSliderValueChanged(float value)
     {
 
@@ -162,7 +176,7 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.Save();
 
     }
-
+   
     public void SetSFXVolume()
     {
         if (myMixer == null || sfxSlider == null)

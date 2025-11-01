@@ -7,6 +7,7 @@ public class PuddleController : MonoBehaviour
     public Playerline playerline;        // Reference to your Playerline script
     public Rigidbody2D playerRb;         // Player's main Rigidbody2D
     public LayerMask groundLayerMask;    // Terrain layer
+    public AudioManager audioManager;
 
     [Header("Puddle Settings")]
     [Range(0.1f, 1f)] public float heightFactor = 0.5f;
@@ -17,6 +18,8 @@ public class PuddleController : MonoBehaviour
 
     private void Start()
     {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+
         if (playerline == null)
             playerline = GetComponent<Playerline>();
         if (playerRb == null)
@@ -33,9 +36,26 @@ public class PuddleController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (!isPuddled)
+            {
                 ApplyPuddle();
+                if (audioManager != null)
+                {
+                    audioManager.PlaySFX(audioManager.applyPuddle);
+
+                }
+            }
+
+
             else
+            {
                 RestoreShape();
+
+                if (audioManager != null)
+                {
+                    audioManager.PlaySFX(audioManager.restorePuddle);
+
+                }
+            }    
         }
     }
 

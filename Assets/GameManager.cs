@@ -95,7 +95,12 @@ public class GameManager : MonoBehaviour
     public PlayerMovement playermovement;
     public SceneController sceneController;
     public PuddleController puddleController;
-    [SerializeField] private GameObject playerPrefab; 
+    [SerializeField] private GameObject playerPrefab;
+
+    //Audio
+    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider sfxSlider;
+
 
     public void Awake()
     {
@@ -447,6 +452,9 @@ public class GameManager : MonoBehaviour
            //Win condition.
             victoryMenu.SetActive(true);
             gameOverMenu.SetActive(false);
+           // AbilityUnlockManager.instance.OnLevelCompleted(SceneManager.GetActiveScene().name;
+
+
         }
         else
         {
@@ -498,7 +506,7 @@ public class GameManager : MonoBehaviour
 
         //Reload it cleanly
         SceneManager.LoadScene(currentScene.name);
-
+       
     }
 
     #region Reset
@@ -608,10 +616,11 @@ public class GameManager : MonoBehaviour
 
         // Show settings panel
         SettingsPanel.SetActive(true);
+      
         gamePaused = true;
 
         currentState = GameState.Paused;
-     
+       
     }
 
     public void CloseSettings()
@@ -620,24 +629,24 @@ public class GameManager : MonoBehaviour
 
         if (previousMenu != null)
         {
-            // Reactivate previous menu
             previousMenu.SetActive(true);
+        }
 
-            // Restore state based on which menu opened settings
-            if (previousMenu == playMenu)
-            {
-                gamePaused = false;
-                currentState = GameState.Play;
-            }
-            else if (previousMenu == pauseMenu)
-            {
-                gamePaused = true;
-                currentState = GameState.Paused;
-            }
+        // If we were in Play before, unpause when closing Settings
+        if (previousMenu == playMenu)
+        {
+            currentState = GameState.Play;
+            gamePaused = false;
+        }
+        else if (previousMenu == pauseMenu)
+        {
+            currentState = GameState.Paused;
+            gamePaused = true;
         }
 
         previousMenu = null;
     }
+
     public void OpenSettingsFromPlayMenu()
     {
         OpenSettings(playMenu);
