@@ -314,12 +314,10 @@ MonoBehaviour:
   BGMmusic: {fileID: 8300000, guid: b97f684227b9db44ba967f3512a423e1, type: 3}
   Victory: {fileID: 8300000, guid: 380ddc9db70015041867cc23755e3ac3, type: 3}
   Endgame: {fileID: 8300000, guid: d4f04463c546e854cad1e1c6fae9ed44, type: 3}
-  pickup: {fileID: 8300000, guid: 6871e4ad215aaeb4684cc575ff91c225, type: 3}
+  pickup: {fileID: 8300000, guid: e6d82a1ef7ad0094393f3f47fad4a7f8, type: 3}
   shootOut: {fileID: 8300000, guid: 9a73440a359b04b4791b82492769cef4, type: 3}
-  jump: {fileID: 8300000, guid: 271b64801ff147b4280e7766f8b73116, type: 3}
+  jump: {fileID: 8300000, guid: 90d138848872d3f4ba7b1f18c9e0e4d5, type: 3}
   grab: {fileID: 8300000, guid: 217ffbf97fc54a64197e77a219c3ace9, type: 3}
-  restorePuddle: {fileID: 8300000, guid: f0ecb86ef49aa354e89430513d3de509, type: 3}
-  applyPuddle: {fileID: 8300000, guid: f2c1ec145cf7599428839c0da227a0c8, type: 3}
   uiclick: {fileID: 8300000, guid: 363570e41b738df418c02174e5b6b176, type: 3}
 --- !u!82 &775003918737969034
 AudioSource:
