@@ -174,7 +174,7 @@ public class FailedSubjects : MonoBehaviour
         // Flying projectiles still hit normally
         if (proj != null && !proj.canBeCollected)
         {
-            proj.HandleEnemyHit(collision); //from GetComponent to collision, hope it works
+            //proj.HandleEnemyHit(collision); //from GetComponent to collision, hope it works
         }
     }
     //Health Settings
