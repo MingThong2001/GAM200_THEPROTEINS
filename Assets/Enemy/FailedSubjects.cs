@@ -171,15 +171,15 @@ public class FailedSubjects : MonoBehaviour
             return; // Stop further interaction
         }
 
-        // Flying projectiles still hit normally
-        if (proj != null && !proj.canBeCollected)
-        {
-<<<<<<< Updated upstream
-            //proj.HandleEnemyHit(collision); //from GetComponent to collision, hope it works
-=======
-            proj.HandleEnemyHit(collision.collider); 
->>>>>>> Stashed changes
-        }
+//        // Flying projectiles still hit normally
+//        if (proj != null && !proj.canBeCollected)
+//        {
+//<<<<<<< Updated upstream
+//            //proj.HandleEnemyHit(collision); //from GetComponent to collision, hope it works
+//=======
+//            proj.HandleEnemyHit(collision.collider); 
+//>>>>>>> Stashed changes
+//        }
     }
     //Health Settings
     public void TakeDamage(float damage)
