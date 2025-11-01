@@ -83,14 +83,14 @@ public class FailedSubjects : MonoBehaviour
             float wobble = Random.Range(-5f, 5f);
             chargeDirection = Quaternion.Euler(0,0,wobble) * chargeDirection;
             transform.position += chargeDirection * chargeSpeed * Time.deltaTime;
-            Debug.Log($"[HelperWelper] Charging towards player. Position: {transform.position}");
+            Debug.Log($"[FailedSubjects] Charging towards player. Position: {transform.position}");
 
             chargeTimer += Time.deltaTime;
             if (chargeTimer >= chargeDuration)
             {
                 isCharging = false;
                 chargeTimer = 0f;
-                Debug.Log("[HelperWelper] Charge ended.");
+                Debug.Log("[FailedSubjects] Charge ended.");
                 if (chargePatrol != null)
                 {
                     chargePatrol.chargeVelocity = Vector3.zero;
@@ -124,9 +124,9 @@ public class FailedSubjects : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D col)
     {
-        //if (!col.CompareTag("Player")) return;
+        if (!col.CompareTag("Player")) return;
 
-        if (!col.name.Contains("Player")) return;
+        //if (!col.name.Contains("Player")) return;
 
         if (Time.time - lastHitTime < cooldown) return;
         lastHitTime = Time.time;
@@ -137,7 +137,7 @@ public class FailedSubjects : MonoBehaviour
             stats.TakeDamage(contactDamage);
 
         // Knockback
-        Rigidbody2D rb = col.GetComponent<Rigidbody2D>();
+        Rigidbody2D rb = col.GetComponentInParent   <Rigidbody2D>();
         if (rb != null)
         {
             Vector2 knockDir = (col.transform.position - transform.position).normalized;
@@ -174,7 +174,11 @@ public class FailedSubjects : MonoBehaviour
         // Flying projectiles still hit normally
         if (proj != null && !proj.canBeCollected)
         {
+<<<<<<< Updated upstream
             //proj.HandleEnemyHit(collision); //from GetComponent to collision, hope it works
+=======
+            proj.HandleEnemyHit(collision.collider); 
+>>>>>>> Stashed changes
         }
     }
     //Health Settings
