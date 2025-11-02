@@ -1,8 +1,9 @@
 using NUnit.Framework;
-using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.U2D;
 using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.U2D;
 public enum slimeState
 { 
     Normal,
@@ -88,8 +89,12 @@ public class PlayerMovement : MonoBehaviour
 
     public void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        rb.freezeRotation = true; //Prevent rotation of the player (WIP).
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+
+        rb.freezeRotation = true; 
         rb.gravityScale = 5f;
 
         if (massSegment == null)
@@ -189,21 +194,7 @@ public class PlayerMovement : MonoBehaviour
             squeezeTimer = 0f;
             isCharging = false;
         }
-        //State Input
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            switchState(slimeState.Normal);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            switchState(slimeState.Puddle);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            switchState(slimeState.Segmented);
-        }
-
-
+     
     }
 
     //Handle movement based on current state.
@@ -252,7 +243,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (horizontalInput != 0f && movementSFXTimer <= 0f)
         {
-            audioManager.PlaySFX(AudioManager.movement);
+            //audioManager.PlaySFX(AudioManager.movement);
             movementSFXTimer = movementSFXCD;
         }
     }
@@ -394,127 +385,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     #endregion
-    #region Puddle State
-    private bool isPuddled = false;
-    private List<Transform> puddleSegments = new List<Transform>();
-    private List<Vector3> originalLocalPositions = new List<Vector3>();
-    private float maxPuddleFraction = 0.75f; // how much the top drops
-    public void StartPuddle()
-    {
-        if (isPuddled) return;
-        isPuddled = true;
 
-        puddleSegments.Clear();
-        originalLocalPositions.Clear();
-
-        foreach (SpringJoint2D joint in GetComponentsInChildren<SpringJoint2D>())
-        {
-            if (joint == null) continue;
-            puddleSegments.Add(joint.transform);
-            originalLocalPositions.Add(joint.transform.localPosition);
-        }
-
-        ApplyPuddle(); // apply instantly
-    }
-
-    public void EndPuddle()
-    {
-        if (!isPuddled) return;
-        isPuddled = false;
-
-        // Restore all segment positions
-        for (int i = 0; i < puddleSegments.Count; i++)
-        {
-            if (puddleSegments[i] != null)
-            {
-                puddleSegments[i].localPosition = originalLocalPositions[i];
-            }
-        }
-
-        puddleSegments.Clear();
-        originalLocalPositions.Clear();
-    }
-
-    private void ApplyPuddle()
-    {
-        // Find lowest and highest segments in world space
-        float lowestY = float.MaxValue;
-        float highestY = float.MinValue;
-
-        for (int i = 0; i < segmentTransforms.Count; i++)
-        {
-            Transform seg = segmentTransforms[i];
-            if (seg == null) continue;
-            lowestY = Mathf.Min(lowestY, seg.position.y);
-            highestY = Mathf.Max(highestY, seg.position.y);
-        }
-
-        float totalHeight = Mathf.Max(highestY - lowestY, 0.01f); // avoid divide by zero
-        float maxFraction = 0.75f; // max top-to-bottom squeeze
-
-        for (int i = 0; i < segmentTransforms.Count; i++)
-        {
-            Transform seg = segmentTransforms[i];
-            if (seg == null) continue;
-
-            Rigidbody2D rbSeg = seg.GetComponent<Rigidbody2D>();
-            if (rbSeg == null) continue;
-
-            // Calculate relative height: bottom=0, top=1
-            float relativeHeight = (seg.position.y - lowestY) / totalHeight;
-            relativeHeight = Mathf.Clamp01(relativeHeight);
-
-            // Compute target Y based on squeezeCharge
-            float dropAmount = totalHeight * maxFraction * relativeHeight;
-            Vector3 targetPos = seg.position;
-            targetPos.y -= dropAmount;
-
-            // Move smoothly
-            float moveSpeed = 20f; // tweak for consistency
-            rbSeg.MovePosition(Vector3.Lerp(rbSeg.position, targetPos, moveSpeed * Time.fixedDeltaTime));
-        }
-    }
-
-    #endregion
-
-
-
-    #region Segmented State
-
-
-    //Transform the player into segmented state and separate the segment. (WIP)
-    /*  public void transformSegmented()
-      {
-          currentstate = slimeState.Segmented;
-
-          //Get all the circle segments.
-          Transform[] circlesegments = GetComponentsInChildren<Transform>();
-
-          foreach (Transform circlesegment in circlesegments)
-          {
-              //Make each segment independent by removing its SpringJoint2D.
-              if (circlesegment != this.transform)
-              {
-                  GameObject segmentObj = circlesegment.gameObject;
-
-                  //Remove springjoint to break them apart.
-                  SpringJoint2D circlejoint = segmentObj.GetComponent<SpringJoint2D>();
-                  if (circlejoint != null)
-                  {
-                      Destroy(circlejoint); //Break the spring connection.
-                  }
-
-                  //Add projectle behaviour
-                  segmentObj.AddComponent<SegmentProjectile>();
-
-                  //Launch the segment toward the mouse target.
-                  //  LaunchSegment(segmentObj);
-              }
-          }
-      }*/
-
-    #endregion
-
+    #region Collision/Jump Mechanics
     public void CheckGrounded()
     {
         //Find the lowest point of the player.
@@ -580,39 +452,63 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //Switch between different slime states.
-    public void switchState(slimeState slimeState)  
+    #endregion
+    //WIP for Boss
+    #region Boss's Effects
+    private bool isSlowed = false;
+    private float slowTimer = 0f;
+    private float slowMultiplier = 0.3f;
+
+    public void ApplyEmpParalysis(float duration)
     {
-        currentstate = slimeState;
-
-        if (currentstate == slimeState.Segmented)
-        {
-            // transformSegmented();
-        }
-        else
-        {
-            resettonormalstate();
-        }
-
-        if (currentstate == slimeState.Puddle)
-        {
-            StartPuddle();
-        }
-        else
-        { 
-            EndPuddle();
-            resettonormalstate();
-        }
+       StartCoroutine(Paralyze(duration));
     }
 
-    public void resettonormalstate()
-    { 
-        transform.localScale = Vector3.one; //Reset scale
+    public IEnumerator Paralyze(float duration)
+    {
+        float originalSpeed = normalmovementSpeed;
+        normalmovementSpeed = 0f;
+
+        yield return new WaitForSeconds(duration);
+        normalmovementSpeed = originalSpeed;
     }
+    #endregion
 
 
-    
+    //Not In used
+    #region Segmented State
 
 
-   
+    //Transform the player into segmented state and separate the segment. (WIP)
+    /*  public void transformSegmented()
+      {
+          currentstate = slimeState.Segmented;
+
+          //Get all the circle segments.
+          Transform[] circlesegments = GetComponentsInChildren<Transform>();
+
+          foreach (Transform circlesegment in circlesegments)
+          {
+              //Make each segment independent by removing its SpringJoint2D.
+              if (circlesegment != this.transform)
+              {
+                  GameObject segmentObj = circlesegment.gameObject;
+
+                  //Remove springjoint to break them apart.
+                  SpringJoint2D circlejoint = segmentObj.GetComponent<SpringJoint2D>();
+                  if (circlejoint != null)
+                  {
+                      Destroy(circlejoint); //Break the spring connection.
+                  }
+
+                  //Add projectle behaviour
+                  segmentObj.AddComponent<SegmentProjectile>();
+
+                  //Launch the segment toward the mouse target.
+                  //  LaunchSegment(segmentObj);
+              }
+          }
+      }*/
+
+    #endregion
 }
