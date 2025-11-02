@@ -1,200 +1,178 @@
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
 
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField] AudioSource BGM;
-    // [SerializeField] AudioSource BossBGM;
+    public static AudioManager instance;
 
+    [Header("Audio Sources")]
+    [SerializeField] AudioSource BGM;
     [SerializeField] AudioSource SFX;
 
+    [Header("Mixer")]
     [SerializeField] private AudioMixer myMixer;
+
+    [Header("UI Sliders (optional, auto-bind by tag)")]
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
-    //public static AudioManager instance;
 
-    //References
-
+    [Header("Clips")]
     public AudioClip BGMmusic;
-
-    #region GameState
-    //public AudioClip death;
-    //public AudioClip checkpoint;
+    public AudioClip uiclick;
     public AudioClip Victory;
     public AudioClip Endgame;
-
-    #endregion
-  
-
-    #region Obstacles
-    //public AudioClip walltouch;
-    //public AudioClip doorIn;
-    //public AudioClip doorOut;
-    //public AudioClip leverTriggered;
-    //public AudioClip levelUntriggered;
-    //public AudioClip spikesTriggered;
-    //public AudioClip spikesUnTriggered;
-
-    #endregion
-
-    #region Player 
     public AudioClip pickup;
     public AudioClip shootOut;
-
     public AudioClip jump;
     public AudioClip grab;
     public static AudioClip movement;
+    public AudioClip restorePuddle;
+    public AudioClip applyPuddle;
 
     private bool sfxSliderInteracting = false;
-    private bool sfxsliderFirstloaded = false;
+    private bool sfxSliderFirstLoaded = false;
 
-    #endregion
-
-    #region UI
-    public AudioClip uiclick;
-    #endregion
-    //#region Drone SFX
-    //public AudioClip Dmovemement;
-    //public AudioClip Dattack;
-
-    //#endregion
-
-    //#region HelperWelper SFX
-    //public AudioClip Hmovemement;
-    //public AudioClip Hattack;
-
-    //#endregion
-
-    //#region FailedSubject SFX
-    //public AudioClip Fmovemement;
-    //public AudioClip Fattack;
-
-    //#endregion
-
-    public void Awake()
+    //Singleton.
+    private void Awake()
     {
-        //audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
-
-        //if (instance == null)
-        //{
-        //    instance = this;
-        //    DontDestroyOnLoad(gameObject);
-
-        //}
-        //else
-        //{ 
-        //    Destroy(gameObject);
-        //}
-
-    }
-
-    public void Start()
-    {
-        if (PlayerPrefs.HasKey("musicVolume"))
+        if (instance != null && instance != this)
         {
-            LoadVolume();
-        }
-        else
-        {
-            SetMusicVolume();
-            SetSFXVolume();
-        }
-
-        BGM.clip = BGMmusic;
-        BGM.Play();
-
-        // Add listener to SFX slider
-        if (sfxSlider != null)
-            sfxSlider.onValueChanged.AddListener(OnSFXSliderValueChanged);
-    }
-    private void Update()
-    {
-        if (sfxSlider != null)
-        {
-            // Check if user released the slider
-            if (!Input.GetMouseButton(0) && sfxSliderInteracting)
-            {
-                sfxSliderInteracting = false; // Reset flag
-            }
-        }
-    }
-
-    public  void OnSFXSliderValueChanged(float value)
-    {
-
-        //ignroe the first value changed caused by loading.
-        if (!sfxsliderFirstloaded)
-        {
-            sfxsliderFirstloaded = true;
+            Destroy(gameObject);
             return;
         }
-        // Only play the UI sound if this is the first change while dragging
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+    }
+
+    //To load scene.
+    private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
+    private void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        //Autobind.
+        if (musicSlider == null) musicSlider = GameObject.FindWithTag("MusicSlider")?.GetComponent<Slider>();
+        if (sfxSlider == null) sfxSlider = GameObject.FindWithTag("SFXSlider")?.GetComponent<Slider>();
+
+     
+        ApplySavedVolume();
+    }
+
+    //
+    private void Start()
+    {
+        if (BGM != null && BGMmusic != null)
+        {
+            BGM.clip = BGMmusic;
+            BGM.Play();
+        }
+
+        // Apply saved volume at start if sliders exist
+        ApplySavedVolume();
+    }
+
+    //To bind the sliders.
+    public void BindSliders(Slider music, Slider sfx)
+    {
+        musicSlider = music;
+        sfxSlider = sfx;
+
+
+        if (musicSlider != null)
+        {
+            musicSlider.onValueChanged.RemoveAllListeners();
+            musicSlider.value = PlayerPrefs.GetFloat("musicVolume", 1f); // set before binding
+            musicSlider.onValueChanged.AddListener(value => SetMusicVolume());
+        }
+
+        if (sfxSlider != null)
+        {
+            sfxSlider.onValueChanged.RemoveAllListeners();
+            sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f); // set before binding
+            sfxSlider.onValueChanged.AddListener(OnSFXSliderValueChanged);
+            sfxSliderFirstLoaded = false;
+        }
+    }
+
+    //Update.
+    private void Update()
+    {
+        if (sfxSlider != null && !Input.GetMouseButton(0) && sfxSliderInteracting)
+            sfxSliderInteracting = false;
+    }
+
+    //SFX Only.
+    public void OnSFXSliderValueChanged(float value)
+    {
+        if (!sfxSliderFirstLoaded)
+        {
+            sfxSliderFirstLoaded = true;
+            return; // ignore first trigger on load
+        }
+
         if (!sfxSliderInteracting)
         {
             PlayUI();
             sfxSliderInteracting = true;
         }
 
-        // Actually set the volume
         SetSFXVolume();
     }
 
+    //Play music and sfx here.
     public void PlaySFX(AudioClip clip)
     {
-        SFX.PlayOneShot(clip);
+        if (SFX != null && clip != null)
+            SFX.PlayOneShot(clip);
     }
 
     public void PlayUI()
     {
-        SFX.PlayOneShot(uiclick);
+        if (SFX != null && uiclick != null)
+            SFX.PlayOneShot(uiclick);
     }
+
+    //Set music and sfx here.
     public void SetMusicVolume()
     {
-        if (myMixer == null || musicSlider == null)
-            return;
+        if (myMixer == null || musicSlider == null) return;
 
         float volume = musicSlider.value;
         myMixer.SetFloat("Music", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("musicVolume", volume);
-        PlayerPrefs.Save();
-
     }
 
     public void SetSFXVolume()
     {
-        if (myMixer == null || sfxSlider == null)
-            return;
+        if (myMixer == null || sfxSlider == null) return;
 
         float volume = sfxSlider.value;
         myMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("SFXVolume", volume);
-        PlayerPrefs.Save();
-
     }
 
-
-    //Store Music Setting.
-    private void LoadVolume()
+    //Apply Saved Volume (Music Volume doenst reflect the value when the game loaded - Gameplay.scene).
+    private void ApplySavedVolume()
     {
-        musicSlider.value = PlayerPrefs.GetFloat("musicVolume");
-        sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume");
+        float musicVol = PlayerPrefs.GetFloat("musicVolume", 1f);
+        float sfxVol = PlayerPrefs.GetFloat("SFXVolume", 1f);
 
         if (musicSlider != null)
         {
-            musicSlider.value = PlayerPrefs.GetFloat("musicVolume", 1f);
+            musicSlider.value = musicVol;
             SetMusicVolume();
         }
 
         if (sfxSlider != null)
         {
-            sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f);
+            sfxSlider.value = sfxVol;
             SetSFXVolume();
-            sfxsliderFirstloaded = false; // reset flag before first interaction
-
+            sfxSliderFirstLoaded = false;
         }
     }
 }
-
