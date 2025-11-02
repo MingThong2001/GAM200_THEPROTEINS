@@ -466,6 +466,7 @@ public class GameManager : MonoBehaviour
         previousMenu = fromMenu;
         if (previousMenu != null) previousMenu.SetActive(false);
         if (SettingsPanel != null) SettingsPanel.SetActive(true);
+       
 
         // Rebind sliders when opening settings
         if (AudioManager.instance != null)
@@ -474,6 +475,7 @@ public class GameManager : MonoBehaviour
             {
                 GameObject obj = GameObject.FindWithTag("MusicSlider");
                 if (obj != null) musicSlider = obj.GetComponent<Slider>();
+
             }
 
             if (sfxSlider == null)
@@ -521,6 +523,8 @@ public class GameManager : MonoBehaviour
     {
         OpenSettings(pauseMenu);
     }
+
+   
     #endregion
 
     #region CHECKPOINTS

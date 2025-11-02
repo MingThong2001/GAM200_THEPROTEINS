@@ -14,9 +14,11 @@ public class AudioManager : MonoBehaviour
     [Header("Mixer")]
     [SerializeField] private AudioMixer myMixer;
 
-    [Header("UI Sliders (optional, auto-bind by tag)")]
+    [Header("UI Sliders")]
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
+  
+
 
     [Header("Clips")]
     public AudioClip BGMmusic;
@@ -84,6 +86,16 @@ public class AudioManager : MonoBehaviour
         musicSlider = music;
         sfxSlider = sfx;
 
+        if (musicSlider != music && music != null)
+        {
+            musicSlider = music;
+        }
+
+        if (sfxSlider != sfx && sfx != null)
+        {
+            sfxSlider = sfx;
+        }
+
 
         if (musicSlider != null)
         {
@@ -98,6 +110,7 @@ public class AudioManager : MonoBehaviour
             sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f); // set before binding
             sfxSlider.onValueChanged.AddListener(OnSFXSliderValueChanged);
             sfxSliderFirstLoaded = false;
+
         }
         SetMusicVolume();
         SetSFXVolume();
@@ -193,4 +206,6 @@ public class AudioManager : MonoBehaviour
             sfxSliderFirstLoaded = false;
         }
     }
+
+   
 }

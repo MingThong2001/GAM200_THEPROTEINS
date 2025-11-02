@@ -1128,7 +1128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6468505047065584616, guid: bcb30f490c2635441a35be08de8406af, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7196276390805983097, guid: bcb30f490c2635441a35be08de8406af, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -11311,7 +11311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &749565786
 Transform:
   m_ObjectHideFlags: 0
@@ -12598,6 +12598,14 @@ PrefabInstance:
       propertyPath: playerspawnPos
       value: 
       objectReference: {fileID: 478952649}
+    - target: {fileID: 989062402204754861, guid: ce6f340d5ab617d47ac452f44608ce29, type: 3}
+      propertyPath: 'doors.Array.data[0]'
+      value: 
+      objectReference: {fileID: 594131727}
+    - target: {fileID: 989062402204754861, guid: ce6f340d5ab617d47ac452f44608ce29, type: 3}
+      propertyPath: 'doorsButton.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1193723772}
     - target: {fileID: 2932851747154461814, guid: ce6f340d5ab617d47ac452f44608ce29, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
