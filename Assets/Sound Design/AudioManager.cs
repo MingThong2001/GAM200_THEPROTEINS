@@ -66,6 +66,8 @@ public class AudioManager : MonoBehaviour
     //
     private void Start()
     {
+        ApplyMixerVolume();
+
         if (BGM != null && BGMmusic != null)
         {
             BGM.clip = BGMmusic;
@@ -97,6 +99,8 @@ public class AudioManager : MonoBehaviour
             sfxSlider.onValueChanged.AddListener(OnSFXSliderValueChanged);
             sfxSliderFirstLoaded = false;
         }
+        SetMusicVolume();
+        SetSFXVolume();
     }
 
     //Update.
@@ -155,6 +159,20 @@ public class AudioManager : MonoBehaviour
         myMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("SFXVolume", volume);
     }
+
+    private void ApplyMixerVolume()
+    {
+        if (myMixer == null) return;
+
+        float musicVol = PlayerPrefs.GetFloat("musicVolume", 1f);
+        float sfxVol = PlayerPrefs.GetFloat("SFXVolume", 1f);
+
+        myMixer.SetFloat("Music", Mathf.Log10(musicVol) * 20);
+        myMixer.SetFloat("SFX", Mathf.Log10(sfxVol) * 20);
+
+        Debug.Log($"[AudioManager] Mixer volumes applied - Music: {musicVol}, SFX: {sfxVol}");
+    }
+
 
     //Apply Saved Volume (Music Volume doenst reflect the value when the game loaded - Gameplay.scene).
     private void ApplySavedVolume()
