@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using NUnit.Framework.Internal.Commands;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public class Projectile : MonoBehaviour
     public float delayTime = 0.5f;
     public float fireTime;
     public bool ignorePlayer = false;
+    public float recoilForce = 5f;
 
     //Just in case.
     public Transform FirePoint;
@@ -25,7 +27,7 @@ public class Projectile : MonoBehaviour
     private SpringJoint2D[] joints;
     private Collider2D[] colliders; 
     private Transform projectileTransform;
-
+    public ParticleSystem projectilvfx;
 
     //Pickup Settings.
     public bool canBeCollected = false;
@@ -37,6 +39,7 @@ public class Projectile : MonoBehaviour
     private Collider2D pickupCollider;
     public Projectile projectilePrefab;
 
+    //VFX
 
     //Projectile States.
     private bool isActive = false;
@@ -170,6 +173,10 @@ public class Projectile : MonoBehaviour
         }
         fireTime = Time.time;
 
+        if (projectilvfx != null)
+        {
+            projectilvfx.Play();
+        }
         //SwitchTag(gameObject, "Player");
         //pickup?.EnableCollection();
     }
@@ -336,8 +343,23 @@ public class Projectile : MonoBehaviour
         {
             helperwelper.TakeDamage(damage);
         }
-    }
 
+        ApplyRecoil();
+    }
+    private void ApplyRecoil()
+    {
+
+        // Apply a force opposite to the projectile's current move direction
+        if (bodyParts != null && bodyParts.Length > 0)
+        {
+            Rigidbody2D rootRb = bodyParts[0];
+            Vector2 recoilDir = -moveDirection; // opposite of travel
+            rootRb.AddForce(recoilDir * recoilForce, ForceMode2D.Impulse);
+
+            // Optional: add slight spin for realism
+            rootRb.AddTorque(Random.Range(-1f, 1f), ForceMode2D.Impulse);
+        }
+    }
     //Breakable Object Collision.
     public void HandleBreakableHit(Collision2D collision)
     {
@@ -350,7 +372,6 @@ public class Projectile : MonoBehaviour
             breakable.TakeDamage(damage);
         }
     }
-
 
     //Reset project states.
     public void ResetProjectile()
