@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5934315017336948391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2932851747154461814}
+  - component: {fileID: 989062402204754861}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2932851747154461814
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5934315017336948391}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &989062402204754861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5934315017336948391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa1eec5af62b4df4abcf85d050deb170, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playMenu: {fileID: 0}
+  pauseMenu: {fileID: 0}
+  gameOverMenu: {fileID: 0}
+  victoryMenu: {fileID: 0}
+  objectivePanel: {fileID: 0}
+  SettingsPanel: {fileID: 0}
+  cutscenePanel: {fileID: 0}
+  playerStats: {fileID: 2447649323181287657, guid: 812627cece75c2345a570245f47173c3, type: 3}
+  player: {fileID: 3482082883545240889, guid: 812627cece75c2345a570245f47173c3, type: 3}
+  playerspawnPos: {fileID: 0}
+  gamePaused: 0
+  gameOver: 0
+  checkPoints: {fileID: 0}
+  enemyPatrol: {fileID: 0}
+  drone: {fileID: 0}
+  enemyPatrolDrone: {fileID: 0}
+  helperWelper: {fileID: 0}
+  helperWelperEnemyPatrol: {fileID: 0}
+  helperWelperSpawnPos: {fileID: 0}
+  failedSubjects: {fileID: 0}
+  chargePatrol: {fileID: 0}
+  doors:
+  - {fileID: 0}
+  doorsButton:
+  - {fileID: 0}
+  playershoot: {fileID: 8760995368596438734, guid: 812627cece75c2345a570245f47173c3, type: 3}
+  playermovement: {fileID: 7573252036189849636, guid: 812627cece75c2345a570245f47173c3, type: 3}
+  sceneController: {fileID: 394193248348727632, guid: 38ea2ec34644b3640b4e72920d133dd5, type: 3}
+  puddleController: {fileID: -7908511726550663749, guid: 812627cece75c2345a570245f47173c3, type: 3}
+  spriteShapeController: {fileID: 0}
+  playerline: {fileID: 0}
+  playerPrefab: {fileID: 3482082883545240889, guid: 812627cece75c2345a570245f47173c3, type: 3}
+  musicSlider: {fileID: 0}
+  sfxSlider: {fileID: 0}

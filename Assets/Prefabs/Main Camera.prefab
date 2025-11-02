@@ -150,10 +150,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e7a9cad0e449b74d90408da00c1a1c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 7648647954491245079, guid: 812627cece75c2345a570245f47173c3, type: 3}
   playermovement: {fileID: 0}
   lookAheadDistance: 5
   lookAheadSpeed: 5
   cameraSmoothTime: 1
   verticalSmoothTime: 0.3
   fallingSmoothTime: 0.15
-  player: {fileID: 7648647954491245079, guid: 812627cece75c2345a570245f47173c3, type: 3}
+  verticalDeadZone: 2
+  boundaryTag: CameraStop

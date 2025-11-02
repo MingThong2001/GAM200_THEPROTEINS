@@ -14,6 +14,8 @@ TagManager:
   - Audio
   - Checkpoints
   - CameraStop
+  - MusicSlider
+  - SFXSlider
   layers:
   - Default
   - TransparentFX
