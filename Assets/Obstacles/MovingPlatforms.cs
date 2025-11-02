@@ -59,24 +59,23 @@ public class MovingPlatforms : MonoBehaviour
 
         if (Vector2.Distance(rb.position, nextPosition) <= 0.01f)
         {
-            if (Vector2.Distance(rb.position, nextPosition) <= 0.01f)
-            {
+           
                 if (ismoving)
                 {
-                    // Finished moving to B ? start returning
+                    // Finished moving to B  start returning
                     ismoving = false;
                     isReturning = true;
                     nextPosition = pointA.position;
                 }
                 else if (isReturning)
                 {
-                    // Finished returning to A ? stop
+                    // Finished returning to A  stop
                     isReturning = false;
                     ismoving = false;
                 }
             }
         }
-    }
+    
     public void Startmoving()
     { 
         ismoving = true;

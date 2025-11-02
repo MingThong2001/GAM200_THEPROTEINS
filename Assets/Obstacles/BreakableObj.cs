@@ -30,8 +30,8 @@ public class BreakableObj : MonoBehaviour
     {
         sprite = GetComponent<SpriteRenderer>();
         Updatehealthsprite();
-        Createhealthbar();
-        Updatehealthbar();
+        //Createhealthbar();
+        //Updatehealthbar();
 
         Collider2D playercollider = GameObject.FindWithTag("Player").GetComponent<Collider2D>();
         Collider2D breakableobjcollider = GetComponent<Collider2D>();
@@ -42,62 +42,63 @@ public class BreakableObj : MonoBehaviour
     }
    
 
-    private void Createhealthbar()
-    { 
+    //private void Createhealthbar()
+    //{ 
     
-        Vector3 spawnPos = transform.position + new Vector3(0, 0.5f, 0);
+    //    Vector3 spawnPos = transform.position + new Vector3(0, 0.5f, 0);
 
-        healthbarinstance = Instantiate(healthbarPrefab, spawnPos, Quaternion.identity);
+    //    healthbarinstance = Instantiate(healthbarPrefab, spawnPos, Quaternion.identity);
 
-        Transform fillTransform = healthbarinstance.transform.Find("Fill");
-        if (fillTransform != null)
-        {
-            Fill = fillTransform.GetComponent<Image>();
-        }
+    //    Transform fillTransform = healthbarinstance.transform.Find("Fill");
+    //    if (fillTransform != null)
+    //    {
+    //        Fill = fillTransform.GetComponent<Image>();
+    //    }
 
-        //foreach (Image img in healthbarinstance.GetComponentsInChildren<Image>(true))
-        //{
-        //    if (img.name == "Fill")
-        //    {
-        //        Fill = img;
-        //        Debug.Log("Correct Fill assigned!");
-        //        break;
-        //    }
-        //}
+    //    //foreach (Image img in healthbarinstance.GetComponentsInChildren<Image>(true))
+    //    //{
+    //    //    if (img.name == "Fill")
+    //    //    {
+    //    //        Fill = img;
+    //    //        Debug.Log("Correct Fill assigned!");
+    //    //        break;
+    //    //    }
+    //    //}
 
-        //if (Fill == null)
-        //{
-        //    Debug.LogError("No child named 'Fill' found in prefab!");
-        //}
+    //    //if (Fill == null)
+    //    //{
+    //    //    Debug.LogError("No child named 'Fill' found in prefab!");
+    //    //}
 
-        //HPtext = healthbarinstance.GetComponentInChildren<Text>();
-        HptoObjecthp = transform;
-        hptoObjectoffset = new Vector3(0,1f,0);
-    }
+    //    //HPtext = healthbarinstance.GetComponentInChildren<Text>();
+    //    HptoObjecthp = transform;
+    //    hptoObjectoffset = new Vector3(0,1f,0);
+    //}
 
-    private void Updatehealthbar()
-    {
-        if (Fill != null)
-        { 
-            Fill.fillAmount = Objhealth /Objmaxhealth;
-            Debug.Log($"fillAmount set to: {Fill.fillAmount}");
+    //private void Updatehealthbar()
+    //{
+    //    if (Fill != null)
+    //    { 
+    //        Fill.fillAmount = Objhealth /Objmaxhealth;
+    //        Debug.Log($"fillAmount set to: {Fill.fillAmount}");
 
-            //if (HPtext != null )
-            //{
-            //    HPtext.text = $"{Objhealth}/{Objmaxhealth}";
-            //}
+    //        //if (HPtext != null )
+    //        //{
+    //        //    HPtext.text = $"{Objhealth}/{Objmaxhealth}";
+    //        //}
 
 
-        }
-    }
+    //    }
+    //}
     public void TakeDamage(float damage)
     {
 
         Objhealth -= damage;
-        Objhealth = Mathf.Max(0, Objhealth); //Clamp health so it wont go below 0.
-        Debug.Log($"TakeDamage called with damage: {damage}, current HP: {Objhealth}");
+        Objhealth = Mathf.Max(0, Objhealth);
+        
+        //Clamp health so it wont go below 0.
+        //Debug.Log($"TakeDamage called with damage: {damage}, current HP: {Objhealth}");
 
-        Updatehealthbar();
         Updatehealthsprite();
         //Check if obj is destroyed.
         if (Objhealth <= 0)
@@ -107,18 +108,28 @@ public class BreakableObj : MonoBehaviour
     }
     private void Break()
     {
+        // Disable all SpriteRenderers (self + children)
+        SpriteRenderer[] allSprites = GetComponentsInChildren<SpriteRenderer>(true);
+        foreach (SpriteRenderer spr in allSprites)
+        {
+            spr.enabled = false;
+        }
+
+        // Disable any UI (healthbars)
         if (healthbarinstance != null)
         {
             Destroy(healthbarinstance);
         }
 
+        // Destroy the GameObject at the end
         Destroy(gameObject);
+
     }
 
 
     public void Updatehealthsprite()
     { 
-        float hpPercentage = Objhealth /Objmaxhealth;
+        float hpPercentage = Objhealth / Objmaxhealth;
 
         if (hpPercentage > 0.66f)
         {
@@ -135,12 +146,12 @@ public class BreakableObj : MonoBehaviour
         }
     }
 
-    void LateUpdate() //Called after all update functions have been called. This is for the HPUI to follow.
-    {
-        if (HptoObjecthp != null && healthbarinstance != null) 
-        {
-            healthbarinstance.transform.position = HptoObjecthp.position + hptoObjectoffset;
-            healthbarinstance.transform.rotation = Quaternion.identity;
-        }
-    }
+    //void LateUpdate() //Called after all update functions have been called. This is for the HPUI to follow.
+    //{
+    //    if (HptoObjecthp != null && healthbarinstance != null) 
+    //    {
+    //        healthbarinstance.transform.position = HptoObjecthp.position + hptoObjectoffset;
+    //        healthbarinstance.transform.rotation = Quaternion.identity;
+    //    }
+    //}
 }
