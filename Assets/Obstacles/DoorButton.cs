@@ -8,7 +8,7 @@ public class DoorButton : MonoBehaviour
 {
     //Reference.
     public Door connectedDoor;
-
+    public MovingPlatforms platforms;
     public float requiredMass = 0.2f;
 
     public float holdDuration = 5f;
@@ -147,7 +147,14 @@ public class DoorButton : MonoBehaviour
         {
             connectedDoor.UnlockedDoor();
         }
+
+        if (platforms != null)
+        {
+            platforms.Startmoving();
+        }
         if (messageText != null) messageText.text = messageToShow;
+
+
 
     }
 
@@ -241,7 +248,10 @@ public class DoorButton : MonoBehaviour
         }
         if (messageText != null) buttonText.text = buttonmessageToShow;
 
-
+        if (platforms != null)
+        { 
+            platforms.Stopmiving();
+        }
     }
 
 }

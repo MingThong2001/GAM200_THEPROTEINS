@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MovingPlatforms : MonoBehaviour
@@ -12,6 +13,8 @@ public class MovingPlatforms : MonoBehaviour
     private Vector2 nextPosition;
     private Rigidbody2D rb;
     private Vector2 platformVelocity;
+    public bool ismoving = false;
+    public bool isReturning = false;
 
     //Track which segments on the platform.
     private HashSet<Rigidbody2D> objectsOnPlatform = new HashSet<Rigidbody2D>();
@@ -26,10 +29,11 @@ public class MovingPlatforms : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (!ismoving && !isReturning) return;
         Vector2 oldPos = rb.position; //Save current platform posiition.
 
-        //Calculate the platform movement (move to target position).
-        Vector2 newPos = Vector2.MoveTowards(rb.position, nextPosition, moveSpeed * Time.fixedDeltaTime);
+            //Calculate the platform movement (move to target position).
+            Vector2 newPos = Vector2.MoveTowards(rb.position, nextPosition, moveSpeed * Time.fixedDeltaTime);
         rb.MovePosition(newPos);
 
         //calculate the movmeent.
@@ -45,15 +49,48 @@ public class MovingPlatforms : MonoBehaviour
             }
         }
 
-        //Swapped target when reached the destination.
+        ////Swapped target when reached the destination.
+        //if (Vector2.Distance(rb.position, nextPosition) <= 0.01f)
+        //{
+        //    nextPosition = (nextPosition == (Vector2)pointA.position)
+        //      ? pointB.position
+        //      : pointA.position;
+        //}
+
         if (Vector2.Distance(rb.position, nextPosition) <= 0.01f)
         {
-            nextPosition = (nextPosition == (Vector2)pointA.position)
-              ? pointB.position
-              : pointA.position;
+            if (Vector2.Distance(rb.position, nextPosition) <= 0.01f)
+            {
+                if (ismoving)
+                {
+                    // Finished moving to B ? start returning
+                    ismoving = false;
+                    isReturning = true;
+                    nextPosition = pointA.position;
+                }
+                else if (isReturning)
+                {
+                    // Finished returning to A ? stop
+                    isReturning = false;
+                    ismoving = false;
+                }
+            }
         }
     }
+    public void Startmoving()
+    { 
+        ismoving = true;
+        isReturning = false;
+        nextPosition = pointB.position;
 
+    }
+    public void Stopmiving()
+    {
+        isReturning = true;
+        ismoving = false;
+        nextPosition = pointA.position;
+
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //Detect if there is anything ontop of the object.
