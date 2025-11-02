@@ -106,6 +106,8 @@ public class AudioManager : MonoBehaviour
 
         if (sfxSlider != null)
         {
+            sfxSliderFirstLoaded = false;
+
             sfxSlider.onValueChanged.RemoveAllListeners();
             sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1f); // set before binding
             sfxSlider.onValueChanged.AddListener(OnSFXSliderValueChanged);
@@ -201,6 +203,7 @@ public class AudioManager : MonoBehaviour
 
         if (sfxSlider != null)
         {
+            sfxSliderFirstLoaded = false;
             sfxSlider.value = sfxVol;
             SetSFXVolume();
             sfxSliderFirstLoaded = false;
