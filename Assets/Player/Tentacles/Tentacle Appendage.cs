@@ -71,8 +71,22 @@ public class TentacleAppendage : MonoBehaviour
         { 
             return;
         }
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        // Get raw mouse position
+        Vector3 mousePos = Input.mousePosition;
 
+        // Clamp mouse inside the screen
+        mousePos.x = Mathf.Clamp(mousePos.x, 0f, Screen.width);
+        mousePos.y = Mathf.Clamp(mousePos.y, 0f, Screen.height);
+
+        // Validate
+        if (float.IsInfinity(mousePos.x) || float.IsInfinity(mousePos.y) ||
+            float.IsNaN(mousePos.x) || float.IsNaN(mousePos.y))
+            return;
+
+        // Convert to world space (2D plane, ignore z)
+        mousePos.z = 0f - Camera.main.transform.position.z; // distance from camera to 0-plane
+        Vector3 worldPos3D = Camera.main.ScreenToWorldPoint(mousePos);
+        Vector2 mousePosition = new Vector2(worldPos3D.x, worldPos3D.y);
         //Left click to extend toward target.
         if (Input.GetMouseButtonDown(1) && grabbedObject == null)
         {
