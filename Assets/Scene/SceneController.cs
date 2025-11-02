@@ -20,21 +20,7 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    public void LoadMenu()
-    {
-        Debug.Log("Loading MainMenu...");
-
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
-    }
-
-    public void LoadLevel(string levelName)
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(levelName);  
-    }
-
-    //Load next level
+ 
     public static void LoadnextLevel()
     {
         int currentIndex = SceneManager.GetActiveScene().buildIndex;

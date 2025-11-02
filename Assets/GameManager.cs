@@ -215,7 +215,7 @@ public class GameManager : MonoBehaviour
         }
 
         gameOver = false;
-        SpawnPlayer();
+        //SpawnPlayer();
     }
 
     public void afterObjective()
@@ -364,8 +364,12 @@ public class GameManager : MonoBehaviour
 
         if (isVictory)
         {
-            if (victoryMenu != null) victoryMenu.SetActive(true);
+            if (playMenu != null) playMenu.SetActive(false);
+            if (pauseMenu != null) pauseMenu.SetActive(false);
             if (gameOverMenu != null) gameOverMenu.SetActive(false);
+            if (victoryMenu != null) victoryMenu.SetActive(false);
+            if (objectivePanel != null) objectivePanel.SetActive(false);
+            LoadNextScene();
         }
         else
         {
@@ -399,8 +403,9 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log("BackToStartMenu called");
         Time.timeScale = 1f;
+        isRestarting = false;
         GameFlags.hasPlayedCutscene = false;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(0);
     }
 
     public void restartGame()
@@ -527,8 +532,41 @@ public class GameManager : MonoBehaviour
    
     #endregion
 
-    #region CHECKPOINTS
-    public void RegisterPlayer(GameManager playerObj)
+    #region CHECKPOINTS/Scene
+    public void LoadNextScene()
+    {
+        Time.timeScale = 1f;
+        gamePaused = false;
+        gameOver = false;
+        isRestarting = true;
+        GameFlags.hasPlayedCutscene = false;
+        if (player != null)
+        { 
+            Destroy(player);
+            player = null;
+        }
+
+        //HealthBarUI oldHealthBar = FindObjectOfType<HealthBarUI>();
+        //if (oldHealthBar != null)
+        //{
+        //    Destroy(oldHealthBar.gameObject);
+        //}
+        int currentIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextIndex = currentIndex + 1;
+
+        if (nextIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            
+            SceneManager.LoadScene(nextIndex);
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+        }
+    }
+
+
+public void RegisterPlayer(GameManager playerObj)
     {
     }
 

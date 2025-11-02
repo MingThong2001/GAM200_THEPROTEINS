@@ -154,7 +154,7 @@ public class Door : MonoBehaviour
     {
         if (GameManager.instance != null)
         {
-            gameManager.endGame(true);
+            GameManager.instance.endGame(true);
         }
     }
 
