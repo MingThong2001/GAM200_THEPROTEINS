@@ -7,6 +7,7 @@ public class PuddleController : MonoBehaviour
     public Playerline playerline;        // Reference to your Playerline script
     public Rigidbody2D playerRb;         // Player's main Rigidbody2D
     public LayerMask groundLayerMask;    // Terrain layer
+    public AudioManager audioManager;
 
     [Header("Puddle Settings")]
     [Range(0.1f, 1f)] public float heightFactor = 0.5f;
@@ -17,6 +18,8 @@ public class PuddleController : MonoBehaviour
 
     private void Start()
     {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+
         if (playerline == null)
             playerline = GetComponent<Playerline>();
         if (playerRb == null)
@@ -33,9 +36,26 @@ public class PuddleController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (!isPuddled)
+            {
                 ApplyPuddle();
+                if (audioManager != null)
+                {
+                    audioManager.PlaySFX(audioManager.applyPuddle);
+
+                }
+            }
+
+
             else
+            {
                 RestoreShape();
+
+                if (audioManager != null)
+                {
+                    audioManager.PlaySFX(audioManager.restorePuddle);
+
+                }
+            }    
         }
     }
 
@@ -61,9 +81,21 @@ public class PuddleController : MonoBehaviour
         LiftPlayerToPreventPhasing(); // lift before expanding
 
     }
+    private void EnsureOriginalPositions()
+    {
+        if (playerline == null || playerline.segments == null) return;
 
+        // Refresh original positions if count mismatches
+        if (originalLocalPositions.Count != playerline.segments.Length)
+        {
+            originalLocalPositions.Clear();
+            foreach (Transform seg in playerline.segments)
+                originalLocalPositions.Add(seg.localPosition);
+        }
+    }
     private void SquashSegments()
     {
+        EnsureOriginalPositions();
         Vector3 center = GetSegmentsCenter();
 
         for (int i = 0; i < playerline.segments.Length; i++)
@@ -78,6 +110,8 @@ public class PuddleController : MonoBehaviour
 
     private void RestoreSegments()
     {
+        EnsureOriginalPositions();
+
         for (int i = 0; i < playerline.segments.Length; i++)
         {
             playerline.segments[i].localPosition = originalLocalPositions[i];
