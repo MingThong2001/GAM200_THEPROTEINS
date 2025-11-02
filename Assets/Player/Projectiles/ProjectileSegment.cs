@@ -15,7 +15,7 @@ public class ProjectileSegment : MonoBehaviour
     private Rigidbody2D segmentRigidbody;
     private static int colliderHitCount = 0;
 
-    public void Start()
+    public void Awake()
     {
         //Find the parent projectile this segment belongs to.
         parentProjectile = GetComponentInParent<Projectile>();
@@ -40,10 +40,17 @@ public class ProjectileSegment : MonoBehaviour
         {
 
             hasCollided = true;
-            parentProjectile.HandleEnemyHit(collision);
-            // Increment collider hit count for this projectile
-            colliderHitCount++;
-
+            if (parentProjectile != null)
+            {
+                parentProjectile.HandleEnemyHit(collision);
+                // Increment collider hit count for this projectile
+                colliderHitCount++;
+                Debug.Log($"[ProjectileSegment] Collider '{gameObject.name}' touched Enemy '{collision.gameObject.name}'. Total colliders touching enemy for this projectile: {colliderHitCount}");
+            }
+            else
+            {
+                Debug.LogError($"[ProjectileSegment] parentProjectile is NULL on '{gameObject.name}'!");
+            }
             Debug.Log($"[ProjectileSegment] Collider '{gameObject.name}' touched Enemy '{collision.gameObject.name}'. Total colliders touching enemy for this projectile: {colliderHitCount}");
         }
 
@@ -56,12 +63,12 @@ public class ProjectileSegment : MonoBehaviour
             return;
         }
 
-        if (collision.gameObject.CompareTag("Surface"))
-        {
+        //if (collision.gameObject.CompareTag("Surface"))
+        //{
 
-            hasCollided = true;
-            parentProjectile.SticktoSurface(collision);
-        }
+        //    hasCollided = true;
+        //    parentProjectile.SticktoSurface(collision);
+        //}
 
      
         if (collision.gameObject.CompareTag("BreakableObjs"))
