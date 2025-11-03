@@ -394,7 +394,7 @@ public class MassSegment : MonoBehaviour
     }
     public void CheckdoorMass() 
     {
-        if (masstoDoor != null && !masstoDoor.isUnlocked)
+        if (masstoDoor != null && !masstoDoor.isOpening) //door fix
         {
             float totalMass = GetTotalMass();
             if (totalMass >= masstoDoor.minMassThreshold && totalMass <= masstoDoor.maxMassThreshold)

@@ -436,8 +436,8 @@ public class GameManager : MonoBehaviour
             {
                 if (door != null)
                 {
-                    door.ResetDoor();
-                    door.Playerinreange = false;
+                    //door.ResetDoor(); //door fix
+                    door.playerInRange = false;
                 }
             }
         }
