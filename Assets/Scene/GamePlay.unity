@@ -3086,9 +3086,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be92577765bd5e5429deeeb2f1790f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthSlider: {fileID: 256992636}
-  healthFill: {fileID: 422182516}
-  healthText: {fileID: 0}
+  barLow: {fileID: 0}
+  barMid: {fileID: 0}
+  barFull: {fileID: 0}
+  mask: {fileID: 0}
+  subtractAmt: 0
 --- !u!114 &256992636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13008,7 +13010,7 @@ GameObject:
   - component: {fileID: 499119434}
   - component: {fileID: 499119437}
   m_Layer: 11
-  m_Name: Door
+  m_Name: Doorto next scene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15293,9 +15295,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be92577765bd5e5429deeeb2f1790f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthSlider: {fileID: 642899786}
-  healthFill: {fileID: 1016271685}
-  healthText: {fileID: 0}
+  barLow: {fileID: 0}
+  barMid: {fileID: 0}
+  barFull: {fileID: 0}
+  mask: {fileID: 0}
+  subtractAmt: 0
 --- !u!1 &645382842
 GameObject:
   m_ObjectHideFlags: 0
@@ -26653,7 +26657,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1938328122053781077, guid: 0f9cff2845fdd9e40802b9be6493baa7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.7
+      value: -2.76
       objectReference: {fileID: 0}
     - target: {fileID: 1938328122053781077, guid: 0f9cff2845fdd9e40802b9be6493baa7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -28724,12 +28728,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedDoor: {fileID: 499119434}
+  platforms: {fileID: 0}
   requiredMass: 0.2
   holdDuration: 2
   holdTimer: 0
   lockbacktime: 1
   locktimer: 0
   hasbeenPressed: 0
+  triggerDoor: 0
+  triggerPlatform: 0
   messageText: {fileID: 1053581451}
   buttonText: {fileID: 1174310640}
   messageToShow: Press W to leave the level
@@ -32968,8 +32975,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Objhealth: 10
   Objmaxhealth: 10
-  Fill: {fileID: 5737898388591742756}
-  healthbarPrefab: {fileID: 655661760350515001}
   fullhp: {fileID: 0}
   midhp: {fileID: 0}
   lowhp: {fileID: 0}

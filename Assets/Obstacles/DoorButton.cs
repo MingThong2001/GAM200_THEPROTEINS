@@ -20,7 +20,8 @@ public class DoorButton : MonoBehaviour
 
     //Track whether the button has been pressed.
     public bool hasbeenPressed = false;
-
+    public bool triggerDoor = false;
+    public bool triggerPlatform = false;
     //Color Setting for visual feedback.
     private Color pressedColor = Color.green * 2f;
     private Color unpressedColor;
@@ -162,15 +163,18 @@ public class DoorButton : MonoBehaviour
             buttonRender.color = Color.white;
             buttonRender.color = pressedColor;
         }
-        if (connectedDoor != null)
+        // Door button
+        if (triggerDoor && connectedDoor != null)
         {
             connectedDoor.UnlockedDoor();
         }
 
-        if (platforms != null)
+        // Platform button
+        if (triggerPlatform && platforms != null)
         {
             platforms.Startmoving();
         }
+
         if (messageText != null) messageText.text = messageToShow;
 
 
@@ -258,19 +262,16 @@ public class DoorButton : MonoBehaviour
         hasbeenPressed = false;
 
         if (buttonRender != null)
-        {
             buttonRender.color = unpressedColor;
-        }
-        if (connectedDoor != null)
-        {
-            connectedDoor.LockDoor();
-        }
-        if (messageText != null) buttonText.text = buttonmessageToShow;
 
-        if (platforms != null)
-        { 
+        if (triggerDoor && connectedDoor != null)
+            connectedDoor.LockDoor();
+
+        if (triggerPlatform && platforms != null)
             platforms.Stopmiving();
-        }
+
+        if (messageText != null)
+            buttonText.text = buttonmessageToShow;
     }
 
 }
