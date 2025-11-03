@@ -9,16 +9,9 @@ public class BreakableObj : MonoBehaviour
     public float Objhealth = 10f;
     public float Objmaxhealth = 10f;
 
-    //Healthbar Settings.
-    public Image Fill; //Image component that shows visually to represent the enemy's HP.
-    private Transform HptoObjecthp; //Target enemy transform so the healthbar will follow.
-    private Vector3 hptoObjectoffset; //The position offset between the enemy and the HP bar (To show it above the enemy head and for visual appeal).
- //   private Text HPtext;
 
 
-    //References.
-    public GameObject healthbarPrefab;
-    private GameObject healthbarinstance;
+   
 
     //HP Sprites
     public Sprite fullhp;
@@ -29,22 +22,22 @@ public class BreakableObj : MonoBehaviour
     public void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
-        Updatehealthsprite();
         //Createhealthbar();
         //Updatehealthbar();
 
         Collider2D playercollider = GameObject.FindWithTag("Player").GetComponent<Collider2D>();
         Collider2D breakableobjcollider = GetComponent<Collider2D>();
-        Physics2D.IgnoreCollision(playercollider, breakableobjcollider);    
+        Physics2D.IgnoreCollision(playercollider, breakableobjcollider);
 
-       
+        Updatehealthsprite();
+
 
     }
-   
+
 
     //private void Createhealthbar()
     //{ 
-    
+
     //    Vector3 spawnPos = transform.position + new Vector3(0, 0.5f, 0);
 
     //    healthbarinstance = Instantiate(healthbarPrefab, spawnPos, Quaternion.identity);
@@ -99,36 +92,34 @@ public class BreakableObj : MonoBehaviour
         //Clamp health so it wont go below 0.
         //Debug.Log($"TakeDamage called with damage: {damage}, current HP: {Objhealth}");
 
-        Updatehealthsprite();
         //Check if obj is destroyed.
         if (Objhealth <= 0)
         {
             Break();
+            return;
         }
+        Updatehealthsprite();
+
     }
     private void Break()
     {
-        // Disable all SpriteRenderers (self + children)
-        SpriteRenderer[] allSprites = GetComponentsInChildren<SpriteRenderer>(true);
-        foreach (SpriteRenderer spr in allSprites)
-        {
-            spr.enabled = false;
-        }
+        // Disable self to immediately stop rendering and interaction
+        gameObject.SetActive(false);
 
-        // Disable any UI (healthbars)
-        if (healthbarinstance != null)
-        {
-            Destroy(healthbarinstance);
-        }
-
-        // Destroy the GameObject at the end
+        // Destroy the GameObject after a very short delay
         Destroy(gameObject);
 
+
+
     }
-
-
     public void Updatehealthsprite()
-    { 
+    {
+        if (Objhealth <= 0)
+        { 
+            sprite.enabled = false;
+            return;
+        }
+
         float hpPercentage = Objhealth / Objmaxhealth;
 
         if (hpPercentage > 0.66f)
