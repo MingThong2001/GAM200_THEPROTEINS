@@ -370,7 +370,10 @@ public class Projectile : MonoBehaviour
         if (breakable != null)
         {
             breakable.TakeDamage(damage);
+
         }
+        ApplyRecoil();
+
     }
 
     //Reset project states.
