@@ -1,5 +1,232 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &149154016066646503
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1216089890159100136}
+  - component: {fileID: 5821485480954394436}
+  - component: {fileID: 2182222394808527701}
+  m_Layer: 0
+  m_Name: Fill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1216089890159100136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149154016066646503}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6014747541030803690}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1971053207 &5821485480954394436
+SpriteShapeRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149154016066646503}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -2081267847
+  m_SortingLayer: 2
+  m_SortingOrder: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_MaskInteraction: 0
+  m_ShapeTexture: {fileID: 2800000, guid: aa9fac7b57b45a54789f08c810fa4c80, type: 3}
+  m_Sprites:
+  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
+  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
+  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
+  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
+  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
+  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
+  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
+  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
+  m_LocalAABB:
+    m_Center: {x: -0.024034977, y: 0.16651821, z: 0}
+    m_Extent: {x: 7.5724783, y: 7.691004, z: 0}
+  m_SpriteSortPoint: 0
+--- !u!114 &2182222394808527701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149154016066646503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90539df1cd5704abcb25fec9f3f5f84b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Spline:
+    m_IsOpenEnded: 0
+    m_ControlPoints:
+    - position: {x: -5.940241, y: -3.9121437, z: 0}
+      leftTangent: {x: 0.23648024, y: -0.00021457672, z: 0}
+      rightTangent: {x: -0.23295641, y: 0.00020980835, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: -7.5965133, y: 0.043456554, z: 0}
+      leftTangent: {x: -0.027346611, y: -2.1984076, z: 0}
+      rightTangent: {x: -0.052490234, y: 1.1765933, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: -6.158046, y: 3.7423801, z: 0}
+      leftTangent: {x: -0.34080982, y: -1.0807204, z: 0}
+      rightTangent: {x: 0.49274206, y: 1.5624976, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: -3.3870926, y: 6.497009, z: 0}
+      leftTangent: {x: -1.001339, y: -0.74305534, z: 0}
+      rightTangent: {x: 1.0143495, y: 0.7527113, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: -0.09592199, y: 7.852292, z: 0}
+      leftTangent: {x: -1.7074323, y: 0.07536411, z: 0}
+      rightTangent: {x: 1.4065003, y: -0.062081814, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 3.9626155, y: 6.413822, z: 0}
+      leftTangent: {x: -1.3379192, y: 0.7293582, z: 0}
+      rightTangent: {x: 1.0890722, y: -0.56182384, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 6.223067, y: 3.7423801, z: 0}
+      leftTangent: {x: -0.7515526, y: 0.8540654, z: 0}
+      rightTangent: {x: 1.3474011, y: -1.5311861, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 7.548383, y: 0.023891926, z: 0}
+      leftTangent: {x: -0.012645721, y: 0.72849274, z: 0}
+      rightTangent: {x: 0.013492107, y: -0.7772374, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 6.1716948, y: -3.706839, z: 0}
+      leftTangent: {x: 1.225388, y: 1.2379909, z: 0}
+      rightTangent: {x: -0.75865984, y: -0.8624673, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 3.6543713, y: -6.22416, z: 0}
+      leftTangent: {x: 0.95673084, y: 0.5930948, z: 0}
+      rightTangent: {x: -1.4342022, y: -0.97518206, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 0.4862604, y: -7.5244856, z: 0}
+      leftTangent: {x: 0.20528316, y: 0.00015974045, z: 0}
+      rightTangent: {x: -0.30392885, y: -0.0002360344, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: -3.7948456, y: -6.2755346, z: 0}
+      leftTangent: {x: 1.5923285, y: -0.97026825, z: 0}
+      rightTangent: {x: -1.3172698, y: 0.8109784, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+  m_SpriteShape: {fileID: 11400000, guid: 58a0b22ffba04584ab19d5ba5709794f, type: 2}
+  m_FillPixelPerUnit: 256
+  m_StretchTiling: 1
+  m_SplineDetail: 16
+  m_AdaptiveUV: 1
+  m_StretchUV: 1
+  m_WorldSpaceUV: 0
+  m_CornerAngleThreshold: 30
+  m_ColliderDetail: 16
+  m_ColliderOffset: 0.5
+  m_UpdateCollider: 1
+  m_EnableTangents: 0
+  m_GeometryCached: 0
+  m_UTess2D: 1
+  m_UpdateShadow: 0
+  m_ShadowDetail: 16
+  m_ShadowOffset: 0.5
+  m_BoundsScale: 2
+  m_Creator: {fileID: 0}
+  m_Modifiers: []
+  m_ColliderSegment: []
+  m_ShadowSegment: []
 --- !u!1 &219694005680587885
 GameObject:
   m_ObjectHideFlags: 0
@@ -48,7 +275,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 219694005680587885}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -218,7 +445,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055562
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &8690129677576819114
@@ -239,7 +466,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903946
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &5230587383806471177
@@ -260,7 +487,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903947
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &8509217351429442033
@@ -281,7 +508,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055562
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &8440813588659847464
@@ -317,7 +544,7 @@ GameObject:
   - component: {fileID: 5172542745779623136}
   - component: {fileID: -1818874735384054247}
   - component: {fileID: 6628556049018391730}
-  - component: {fileID: 5410416718337330694}
+  - component: {fileID: 3673204040910465066}
   m_Layer: 0
   m_Name: projectileV3
   m_TagString: Player
@@ -351,8 +578,8 @@ Transform:
   - {fileID: 2186952906674694409}
   - {fileID: 1822152290116541720}
   - {fileID: 6143649704207937766}
-  - {fileID: 1513168442831218381}
-  - {fileID: 1780789479929187562}
+  - {fileID: 1216089890159100136}
+  - {fileID: 2095677792707010212}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3135915415790569140
@@ -476,7 +703,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.37499988
+  m_Distance: 0.375
   m_DampingRatio: 1
   m_Frequency: 10
 --- !u!231 &1641059088352819935
@@ -648,7 +875,7 @@ MonoBehaviour:
   showShell: 1
   shellColor: {r: 0, g: 0.5, b: 1, a: 0.5}
   edgeCollider: {fileID: 0}
---- !u!114 &5410416718337330694
+--- !u!114 &3673204040910465066
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -657,12 +884,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 232382953585771170}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8ba473da65ab2a4bb388060d0a2467b, type: 3}
+  m_Script: {fileID: 11500000, guid: f5d361cad7faa40408ba89e32f8d5978, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fillSpriteShape: {fileID: 5745651847705918248}
-  edgeSpriteShape: {fileID: 2816367038898084743}
-  tentaTransform: {fileID: 0}
+  fillSpriteShape: {fileID: 2182222394808527701}
+  edgeSpriteShape: {fileID: 8790700799926811304}
 --- !u!1 &1144968065149064399
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,7 +937,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144968065149064399}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -860,7 +1086,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.69462156
+  m_Distance: 0.6946221
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &9133565745250818070
@@ -881,7 +1107,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.34999847
+  m_Distance: 0.3499999
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &902042105796976040
@@ -902,7 +1128,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.19039355
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &7011500755958376350
@@ -944,7 +1170,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055562
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &7787294148105735461
@@ -1008,7 +1234,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2673245192134871144}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -1157,7 +1383,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.7499999
+  m_Distance: 0.75
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &2151839413118387745
@@ -1178,7 +1404,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055437
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &1147249248965159790
@@ -1199,7 +1425,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.19039355
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &7653101547099631206
@@ -1220,7 +1446,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.19039355
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &8768430758662770833
@@ -1241,7 +1467,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055437
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &6805316318187680997
@@ -1305,7 +1531,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2912930377517136162}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -1454,7 +1680,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.6946209
+  m_Distance: 0.6946221
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &1171166063984231532
@@ -1475,7 +1701,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055452
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &1821778890887249465
@@ -1496,7 +1722,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.17677678
+  m_Distance: 0.17677669
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &6124646217528333599
@@ -1517,7 +1743,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903946
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &2429034269792311733
@@ -1538,7 +1764,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.35000002
+  m_Distance: 0.3499999
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &2173363794391499162
@@ -1602,7 +1828,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3036419561099576251}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -1772,7 +1998,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055562
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &6774188103307601883
@@ -1793,7 +2019,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903947
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &4143682053239612544
@@ -1814,7 +2040,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903946
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &4992651681514286157
@@ -1835,7 +2061,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055562
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &3031430879844058969
@@ -1899,7 +2125,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4342595651765187659}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -2048,7 +2274,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.6946209
+  m_Distance: 0.6946221
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &7373315803716254767
@@ -2069,7 +2295,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055437
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &7973336415119141086
@@ -2111,7 +2337,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903947
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &8250864129827699104
@@ -2132,7 +2358,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.35000002
+  m_Distance: 0.3499999
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &8552249554008371108
@@ -2196,7 +2422,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5102489452519931488}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -2345,7 +2571,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.6946209
+  m_Distance: 0.6946221
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &6058046616806186866
@@ -2366,7 +2592,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.35000002
+  m_Distance: 0.3499999
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &7365110467725147769
@@ -2387,7 +2613,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903946
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &584437526381661803
@@ -2408,7 +2634,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.17677678
+  m_Distance: 0.17677669
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &2775766605091525850
@@ -2429,7 +2655,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055452
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &4783216654708998950
@@ -2445,153 +2671,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentProjectile: {fileID: 0}
---- !u!1 &5171267472667420315
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1780789479929187562}
-  - component: {fileID: 3823529770020465493}
-  - component: {fileID: 5745651847705918248}
-  m_Layer: 0
-  m_Name: Gloo SSProfile
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1780789479929187562
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5171267472667420315}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20, y: 20, z: 20}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6014747541030803690}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1971053207 &3823529770020465493
-SpriteShapeRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5171267472667420315}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 0
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_MaskInteraction: 0
-  m_ShapeTexture: {fileID: 2800000, guid: aa9fac7b57b45a54789f08c810fa4c80, type: 3}
-  m_Sprites:
-  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
-  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
-  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
-  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
-  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
-  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
-  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
-  - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  m_SpriteSortPoint: 0
---- !u!114 &5745651847705918248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5171267472667420315}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90539df1cd5704abcb25fec9f3f5f84b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Spline:
-    m_IsOpenEnded: 1
-    m_ControlPoints:
-    - position: {x: -2, y: 0, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
-      height: 1
-      spriteIndex: 0
-      corner: 0
-      m_CornerMode: 1
-    - position: {x: 2, y: 0, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
-      height: 1
-      spriteIndex: 0
-      corner: 0
-      m_CornerMode: 1
-  m_SpriteShape: {fileID: 11400000, guid: 58a0b22ffba04584ab19d5ba5709794f, type: 2}
-  m_FillPixelPerUnit: 100
-  m_StretchTiling: 1
-  m_SplineDetail: 16
-  m_AdaptiveUV: 1
-  m_StretchUV: 0
-  m_WorldSpaceUV: 0
-  m_CornerAngleThreshold: 30
-  m_ColliderDetail: 16
-  m_ColliderOffset: 0
-  m_UpdateCollider: 1
-  m_EnableTangents: 0
-  m_GeometryCached: 0
-  m_UTess2D: 1
-  m_UpdateShadow: 0
-  m_ShadowDetail: 16
-  m_ShadowOffset: 0.5
-  m_BoundsScale: 2
-  m_Creator: {fileID: 0}
-  m_Modifiers: []
-  m_ColliderSegment: []
-  m_ShadowSegment: []
 --- !u!1 &5830971946280217574
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,7 +2719,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5830971946280217574}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -2789,7 +2868,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.69462156
+  m_Distance: 0.6946221
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &485306071455265367
@@ -2810,7 +2889,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055562
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &6850422963133668678
@@ -2831,7 +2910,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.17677678
+  m_Distance: 0.17677669
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &3000247917065811516
@@ -2852,7 +2931,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903936
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &8442286716783025156
@@ -2873,7 +2952,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.34999847
+  m_Distance: 0.3499999
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &472049858519751665
@@ -2937,7 +3016,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7483663537132344485}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -3086,7 +3165,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.69462156
+  m_Distance: 0.6946221
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &5613743425404292774
@@ -3107,7 +3186,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055562
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &8486118242654367516
@@ -3149,7 +3228,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.19039355
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &1951898480595197410
@@ -3170,7 +3249,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.34999847
+  m_Distance: 0.3499999
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &5787642606371073772
@@ -3186,7 +3265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentProjectile: {fileID: 0}
---- !u!1 &8314693861060046592
+--- !u!1 &7872473227946532211
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3194,38 +3273,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1513168442831218381}
-  - component: {fileID: 7932008161896376136}
-  - component: {fileID: 2816367038898084743}
+  - component: {fileID: 2095677792707010212}
+  - component: {fileID: 3887895723691407943}
+  - component: {fileID: 8790700799926811304}
   m_Layer: 0
-  m_Name: Gloo Edge
+  m_Name: Edge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1513168442831218381
+--- !u!4 &2095677792707010212
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8314693861060046592}
+  m_GameObject: {fileID: 7872473227946532211}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20, y: 20, z: 20}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6014747541030803690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1971053207 &7932008161896376136
+--- !u!1971053207 &3887895723691407943
 SpriteShapeRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8314693861060046592}
+  m_GameObject: {fileID: 7872473227946532211}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -3261,14 +3340,14 @@ SpriteShapeRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -2081267847
+  m_SortingLayer: 2
+  m_SortingOrder: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_MaskInteraction: 0
   m_ShapeTexture: {fileID: 0}
   m_Sprites:
-  - {fileID: -6317290063006388656, guid: e18ab0a45b0dc46448b88fc8ded8ce1b, type: 3}
+  - {fileID: 21300000, guid: 61a6f3c32f14690439845a2ee2c2595c, type: 3}
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
@@ -3278,50 +3357,130 @@ SpriteShapeRenderer:
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   m_LocalAABB:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 2, y: 0.06, z: 0}
+    m_Center: {x: -0.024044037, y: 0.16653156, z: 0}
+    m_Extent: {x: 8.572456, y: 8.690881, z: 0}
   m_SpriteSortPoint: 0
---- !u!114 &2816367038898084743
+--- !u!114 &8790700799926811304
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8314693861060046592}
+  m_GameObject: {fileID: 7872473227946532211}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90539df1cd5704abcb25fec9f3f5f84b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Spline:
-    m_IsOpenEnded: 1
+    m_IsOpenEnded: 0
     m_ControlPoints:
-    - position: {x: -2, y: 0, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: -5.940241, y: -3.9121437, z: 0}
+      leftTangent: {x: 0.23648024, y: -0.00021457672, z: 0}
+      rightTangent: {x: -0.23295641, y: 0.00020980835, z: 0}
+      mode: 1
       height: 1
       spriteIndex: 0
-      corner: 0
+      corner: 1
       m_CornerMode: 1
-    - position: {x: 2, y: 0, z: 0}
-      leftTangent: {x: 0, y: 0, z: 0}
-      rightTangent: {x: 0, y: 0, z: 0}
-      mode: 0
+    - position: {x: -7.5965133, y: 0.043456554, z: 0}
+      leftTangent: {x: -0.027346611, y: -2.1984076, z: 0}
+      rightTangent: {x: -0.052490234, y: 1.1765933, z: 0}
+      mode: 1
       height: 1
       spriteIndex: 0
-      corner: 0
+      corner: 1
       m_CornerMode: 1
-  m_SpriteShape: {fileID: 11400000, guid: 8b7eafc8e4b24024e8e0c479e6f24bf0, type: 2}
-  m_FillPixelPerUnit: 100
+    - position: {x: -6.158046, y: 3.7423801, z: 0}
+      leftTangent: {x: -0.34080982, y: -1.0807204, z: 0}
+      rightTangent: {x: 0.49274206, y: 1.5624976, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: -3.3870926, y: 6.497009, z: 0}
+      leftTangent: {x: -1.001339, y: -0.74305534, z: 0}
+      rightTangent: {x: 1.0143495, y: 0.7527113, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: -0.09592199, y: 7.852292, z: 0}
+      leftTangent: {x: -1.7074323, y: 0.07536411, z: 0}
+      rightTangent: {x: 1.4065003, y: -0.062081814, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 3.9626155, y: 6.413822, z: 0}
+      leftTangent: {x: -1.3379192, y: 0.7293582, z: 0}
+      rightTangent: {x: 1.0890722, y: -0.56182384, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 6.223067, y: 3.7423801, z: 0}
+      leftTangent: {x: -0.7515526, y: 0.8540654, z: 0}
+      rightTangent: {x: 1.3474011, y: -1.5311861, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 7.548383, y: 0.023891926, z: 0}
+      leftTangent: {x: -0.012645721, y: 0.72849274, z: 0}
+      rightTangent: {x: 0.013492107, y: -0.7772374, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 6.1716948, y: -3.706839, z: 0}
+      leftTangent: {x: 1.225388, y: 1.2379909, z: 0}
+      rightTangent: {x: -0.75865984, y: -0.8624673, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 3.6543713, y: -6.22416, z: 0}
+      leftTangent: {x: 0.95673084, y: 0.5930948, z: 0}
+      rightTangent: {x: -1.4342022, y: -0.97518206, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: 0.4862604, y: -7.5244856, z: 0}
+      leftTangent: {x: 0.20528316, y: 0.00015974045, z: 0}
+      rightTangent: {x: -0.30392885, y: -0.0002360344, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+    - position: {x: -3.7948456, y: -6.2755346, z: 0}
+      leftTangent: {x: 1.5923285, y: -0.97026825, z: 0}
+      rightTangent: {x: -1.3172698, y: 0.8109784, z: 0}
+      mode: 1
+      height: 1
+      spriteIndex: 0
+      corner: 1
+      m_CornerMode: 1
+  m_SpriteShape: {fileID: 11400000, guid: 07dff348cb37d5140ae91b66b15abdff, type: 2}
+  m_FillPixelPerUnit: 256
   m_StretchTiling: 1
   m_SplineDetail: 16
   m_AdaptiveUV: 1
-  m_StretchUV: 0
+  m_StretchUV: 1
   m_WorldSpaceUV: 0
   m_CornerAngleThreshold: 30
   m_ColliderDetail: 16
-  m_ColliderOffset: 0
+  m_ColliderOffset: 0.5
   m_UpdateCollider: 1
   m_EnableTangents: 0
   m_GeometryCached: 0
@@ -3382,7 +3541,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8703225622710925909}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -3531,7 +3690,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.69462156
+  m_Distance: 0.6946221
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &8085122420889168299
@@ -3552,7 +3711,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.34999847
+  m_Distance: 0.3499999
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &5601642132785370359
@@ -3573,7 +3732,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903936
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &1904320810192603960
@@ -3594,7 +3753,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.17677678
+  m_Distance: 0.17677669
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &5786045722896642111
@@ -3615,7 +3774,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055562
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &4422143929828097573
@@ -3679,7 +3838,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8956127788275136735}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -3828,7 +3987,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.6946209
+  m_Distance: 0.6946221
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &8033578265508577489
@@ -3849,7 +4008,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.35000002
+  m_Distance: 0.3499999
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &2325313882109797385
@@ -3870,7 +4029,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903947
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &6416772851719508369
@@ -3912,7 +4071,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055437
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &1575936176023075531
@@ -3976,7 +4135,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9196159478769337446}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -4125,7 +4284,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.7499999
+  m_Distance: 0.75
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &1772822858595936080
@@ -4146,7 +4305,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055452
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!231 &2739771195561354502
@@ -4167,7 +4326,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903936
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &2864194788010622332
@@ -4188,7 +4347,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.1903936
+  m_Distance: 0.19039431
   m_DampingRatio: 0.5
   m_Frequency: 10
 --- !u!231 &40969783975209164
@@ -4209,7 +4368,7 @@ SpringJoint2D:
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 1
-  m_Distance: 0.36055452
+  m_Distance: 0.3605551
   m_DampingRatio: 0
   m_Frequency: 1
 --- !u!114 &6894827540389024175
