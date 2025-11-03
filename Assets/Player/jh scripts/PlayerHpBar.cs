@@ -2,17 +2,21 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBarUI : MonoBehaviour
+public class PlayerHpBar : MonoBehaviour
 {
+    /// <summary>
+    /// DEPRECATED, MOVED TO HealthBarUI
+    /// </summary>
     public Image barLow;
     public Image barMid;
     public Image barFull;
-    public RectMask2D mask;
+    private RectMask2D mask;
     public float subtractAmt;
 
     private void Awake()
     {
-        mask.padding = new Vector4(0, 0, 0, subtractAmt);
+        mask = GetComponent<RectMask2D>();
+        mask.padding = new Vector4(0,0,0,subtractAmt);
     }
 
     public void SetHealth(float currentHealth, float maxHealth)
@@ -38,3 +42,4 @@ public class HealthBarUI : MonoBehaviour
     }
 
 }
+
