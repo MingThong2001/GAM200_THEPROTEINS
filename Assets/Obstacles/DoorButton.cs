@@ -22,9 +22,11 @@ public class DoorButton : MonoBehaviour
     public bool hasbeenPressed = false;
 
     //Color Setting for visual feedback.
-    private Color pressedColor = Color.green;
-    private Color unpressedColor = new Color(186f / 255f, 79f / 255f, 97f / 255f);
-  
+    private Color pressedColor = Color.green * 2f;
+    private Color unpressedColor;
+    private SpriteRenderer spriteRenderer;
+
+
     //Track Objects and Mass
     private List<MassSegment> segmentsonButton = new List<MassSegment>();
     private List <Projectile> projectilesOnButton = new List<Projectile>();   
@@ -53,6 +55,22 @@ public class DoorButton : MonoBehaviour
             buttonText.text = "";
         }
 
+    }
+    private void Awake()
+    {
+        buttonRender = GetComponent<SpriteRenderer>();
+
+        if (buttonRender != null)
+        {
+            // Try to read the color from the SpriteRenderer
+            unpressedColor = buttonRender.color;
+
+            // If it's black or transparent (which can happen), use the material tint instead
+            if (unpressedColor == Color.black || unpressedColor.a == 0f)
+            {
+                unpressedColor = buttonRender.sharedMaterial.color;
+            }
+        }
     }
 
     //Initialize component.
@@ -140,7 +158,8 @@ public class DoorButton : MonoBehaviour
         hasbeenPressed = true;
 
         if (buttonRender != null)
-        { 
+        {
+            buttonRender.color = Color.white;
             buttonRender.color = pressedColor;
         }
         if (connectedDoor != null)

@@ -106,6 +106,8 @@ public class BreakableObj : MonoBehaviour
         // Disable self to immediately stop rendering and interaction
         gameObject.SetActive(false);
 
+
+
         // Destroy the GameObject after a very short delay
         Destroy(gameObject);
 
