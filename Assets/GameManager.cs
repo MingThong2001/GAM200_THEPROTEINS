@@ -27,7 +27,7 @@ public static class GameFlags
 
 public class GameManager : MonoBehaviour
 {
-    // SIMPLE FUCKING SINGLETON
+    
     public static GameManager instance;
 
     #region UI Elements
@@ -94,7 +94,6 @@ public class GameManager : MonoBehaviour
 
     public void Awake()
     {
-        // Singleton setup
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
@@ -111,7 +110,7 @@ public class GameManager : MonoBehaviour
 
         currentState = GameState.Play;
 
-        // UI setup
+        //If not restarting, toggle these panels.
         if (!isRestarting)
         {
             if (playMenu != null) playMenu.SetActive(true);
@@ -133,7 +132,7 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
-        // Find and bind audio sliders to AudioManager
+        //To find and autobind the audio sliders.
         if (AudioManager.instance != null)
         {
             if (musicSlider == null)
@@ -152,6 +151,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("[GameManager] Audio sliders bound to AudioManager");
         }
 
+        //Player initialization logic.
         if (player == null)
         {
             SpawnPlayer();
@@ -164,11 +164,18 @@ public class GameManager : MonoBehaviour
             puddleController = player.GetComponentInParent<PuddleController>();
             playerline = player.GetComponentInParent<Playerline>();
             spriteShapeController = player.GetComponentInParent<SpriteShapeController>();
+            CameraController cam = Camera.main?.GetComponent<CameraController>();
+            if (cam != null && player != null)
+            {
+                cam.SetPlayer(player.transform);
+                Debug.Log("[GameManager] Camera reconnected to player");
+            }
         }
     }
 
     public void Update()
     {
+        //Pause logic (Toggle E for pause panel).
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (currentState == GameState.Play || currentState == GameState.Paused)
@@ -177,6 +184,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        //If these UI panels are active, movmeent, shoot or puddle are disabled.
         bool uiActive =
             (playMenu != null && playMenu.activeSelf) ||
             (pauseMenu != null && pauseMenu.activeSelf) ||
@@ -300,6 +308,7 @@ public class GameManager : MonoBehaviour
             player = null;
         }
 
+        //If player is null, we create player and put its relevant component in.
         if (player == null)
         {
             player = Instantiate(playerPrefab, playerspawnPos.position, Quaternion.identity);
@@ -316,16 +325,26 @@ public class GameManager : MonoBehaviour
             spriteShapeController = player.GetComponentInParent<SpriteShapeController>();
 
             if (playerStats != null) playerStats.InitializePlayer();
-
             CameraController cam = Camera.main?.GetComponent<CameraController>();
-            if (cam != null) cam.SetPlayer(player.transform);
-
-
+           
+            //If camera is null, we set camera to the player.
+            if (cam != null)
+            {
+                cam.SetPlayer(player.transform);
+                Debug.Log("[GameManager] Camera set to follow player at: " + player.transform.position);
+            }
+            else
+            {
+                Debug.LogError("[GameManager] CameraController NOT FOUND on Main Camera!");
+            }
         }
         else
-        {
-            player.transform.position = playerspawnPos.position;
-            if (playerStats != null) playerStats.InitializePlayer();
+        {   
+            player.transform.position = playerspawnPos.position; //Reset position if exsit.
+            if (playerStats != null) playerStats.InitializePlayer(); //Reinitialize.
+
+            CameraController cam = Camera.main?.GetComponent<CameraController>();
+            if (cam != null) cam.SetPlayer(player.transform); //Reconnect the camera.
         }
     }
 
