@@ -16,17 +16,19 @@ public class MovingPlatforms : MonoBehaviour
     public bool ismoving = false;
     public bool isReturning = false;
 
-    //Track which segments on the platform.
+    //Track which segments on the platform. This is important so to prevent two collision events happen for the same object (Because we have mmultiple rigidbody in the player)
     private HashSet<Rigidbody2D> objectsOnPlatform = new HashSet<Rigidbody2D>();
 
     public void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Kinematic; //Platform is moved manually not physics so it does not interfere with our softbody physics
+        rb.bodyType = RigidbodyType2D.Kinematic; //Platform is moved manually not physics so it does not interfere with our softbody physics.
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         nextPosition = pointB.position; //Point A move to point b.
     }
 
+
+    //Update runs at a fixed interval for physics to update.
     public void FixedUpdate()
     {
         if (!ismoving && !isReturning) return;
@@ -39,12 +41,12 @@ public class MovingPlatforms : MonoBehaviour
         //calculate the movmeent.
         Vector2 platformMovement = newPos - oldPos;
 
-        //Move all the game object rb
+        //Move all the game object ontop along with the platforms.
         foreach (Rigidbody2D objRb in objectsOnPlatform)
         {
             if (objRb != null && objRb.bodyType != RigidbodyType2D.Kinematic)
             {
-                //Move it by  movement.
+                //Apply with the same displacement.
                 objRb.MovePosition(objRb.position + platformMovement);
             }
         }
@@ -57,19 +59,20 @@ public class MovingPlatforms : MonoBehaviour
         //      : pointA.position;
         //}
 
+        //Check if the platform reaches the next point.
         if (Vector2.Distance(rb.position, nextPosition) <= 0.01f)
         {
            
                 if (ismoving)
                 {
-                    // Finished moving to B  start returning
+                    // Finished moving to B, it start returning.
                     ismoving = false;
                     isReturning = true;
                     nextPosition = pointA.position;
                 }
                 else if (isReturning)
                 {
-                    // Finished returning to A  stop
+                    // Finished returning to A, it stop.
                     isReturning = false;
                     ismoving = false;
                 }
@@ -90,6 +93,8 @@ public class MovingPlatforms : MonoBehaviour
         nextPosition = pointA.position;
 
     }
+
+    //To detect when the obejcts are on the platforms.
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //Detect if there is anything ontop of the object.
@@ -103,11 +108,12 @@ public class MovingPlatforms : MonoBehaviour
                 {
                     objectsOnPlatform.Add(objRb); //Add the obect to the hash set.
                 }
-                break;
+                break; //Only need to detect one top contact.
             }
         }
     }
 
+    //Remove object when they leave the platform.
     private void OnCollisionExit2D(Collision2D collision)
     {
         //Remove when object leave the platform.
@@ -118,6 +124,7 @@ public class MovingPlatforms : MonoBehaviour
         }
     }
 
+    //Handle object staying on the platform.
     private void OnCollisionStay2D(Collision2D collision)
     {
         //Change to false when nth is on top.

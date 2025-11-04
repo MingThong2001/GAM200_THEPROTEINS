@@ -1,7 +1,8 @@
 using UnityEngine;
 
 public class SBSegmentCollider : MonoBehaviour
-{
+{/*This script is not in use. It was for experimental purposes*/
+
     public SquishEnergy squishEnergy;
     private Rigidbody2D rb;
 

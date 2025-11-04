@@ -22,16 +22,18 @@ public class DoorButton : MonoBehaviour
     public bool hasbeenPressed = false;
     public bool triggerDoor = false;
     public bool triggerPlatform = false;
+
     //Color Setting for visual feedback.
     private Color pressedColor = Color.green * 2f;
     private Color unpressedColor;
     private SpriteRenderer spriteRenderer;
 
 
-    //Track Objects and Mass
+    //Track Objects and Mass.
     private List<MassSegment> segmentsonButton = new List<MassSegment>();
     private List <Projectile> projectilesOnButton = new List<Projectile>();   
-    //Visuals
+
+    //For visualization.
     private SpriteRenderer buttonRender;
     public TextMeshProUGUI messageText;
     public TextMeshProUGUI buttonText;
@@ -63,10 +65,10 @@ public class DoorButton : MonoBehaviour
 
         if (buttonRender != null)
         {
-            // Try to read the color from the SpriteRenderer
+            //To read the origional coloir from the sprite renderer.
             unpressedColor = buttonRender.color;
 
-            // If it's black or transparent (which can happen), use the material tint instead
+            // If it used black or transparent, we use the material color.
             if (unpressedColor == Color.black || unpressedColor.a == 0f)
             {
                 unpressedColor = buttonRender.sharedMaterial.color;
@@ -95,8 +97,9 @@ public class DoorButton : MonoBehaviour
 
     private void Update()
     {   
-        float totalMass = 0f;
+        float totalMass = 0f; //Reset totalmass counter.
 
+        //Find the sum mass of all objects on the button.
         for (int i = 0; i < segmentsonButton.Count; i++)
         {
             if (segmentsonButton[i] != null)
@@ -104,6 +107,8 @@ public class DoorButton : MonoBehaviour
                 totalMass += segmentsonButton[i].GetTotalMass();
             }
         }
+
+        //Find the sum mass of projectiles on the buttons.
         for (int i = 0; i < projectilesOnButton.Count; i++)
         {
             Projectile proj = projectilesOnButton[i];
@@ -117,6 +122,8 @@ public class DoorButton : MonoBehaviour
                 }
             }
         }
+
+        //Unlocking sequence. If sum mass is more than what is required, unlocked.
         if (totalMass >= requiredMass)
         {
             holdTimer += Time.deltaTime;
@@ -153,7 +160,7 @@ public class DoorButton : MonoBehaviour
         }
     }
 
-
+    //Activation Logic.
     public void ActivateButton()
     { 
         hasbeenPressed = true;
@@ -163,6 +170,7 @@ public class DoorButton : MonoBehaviour
             buttonRender.color = Color.white;
             buttonRender.color = pressedColor;
         }
+
         // Door button
         if (triggerDoor && connectedDoor != null)
         {
@@ -222,6 +230,9 @@ public class DoorButton : MonoBehaviour
         //        }
         //    }
         //}
+
+        //Check if the relevant compoenent and add it into the list if is not present.
+
             MassSegment mass = other.GetComponentInParent<MassSegment>();
         if (mass != null && !segmentsonButton.Contains(mass))
         {
@@ -240,10 +251,10 @@ public class DoorButton : MonoBehaviour
         MassSegment mass = other.GetComponentInParent<MassSegment>();
         if (mass != null && segmentsonButton.Contains(mass))
         {
-            segmentsonButton.Remove(mass);
+            segmentsonButton.Remove(mass); //Remove object after the object is not on the button.
             if (segmentsonButton.Count == 0 && projectilesOnButton.Count == 0)
             {
-                holdTimer = 0;
+                holdTimer = 0; //Reset timer.
             }
         }
 
@@ -257,6 +268,8 @@ public class DoorButton : MonoBehaviour
             }
         }
     }
+
+    //Deactivate the button, reset state and the visual.
     public void DeactivateButton()
     {
         hasbeenPressed = false;

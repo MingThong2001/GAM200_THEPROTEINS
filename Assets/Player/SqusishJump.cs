@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 
+/*This script is not in use. It was for experimental purposes*/
 public class SqusishJump : MonoBehaviour
 {
     //Squeeze Charge Settings.
