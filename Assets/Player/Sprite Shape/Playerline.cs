@@ -3,12 +3,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class Playerline : MonoBehaviour
-{//Collect child transform points.
+{
+    
+    //Collect child transform points.
     public Transform[] segments;
 
     [Header("Collider Settings")]
     public float shellThickness = 0.35f; //How thick the collider should be.
-    public float paddingFromSegments = 0.1f; //Extra padding around each segment
+    public float paddingFromSegments = 0.1f; //Extra padding around each segment.
     public LayerMask groundLayerMask; //Set this layer to ground so it wont phase into the ground.
 
     [Header("UpdateFrame")]
@@ -52,7 +54,7 @@ public class Playerline : MonoBehaviour
         shellRb.interpolation = RigidbodyInterpolation2D.Interpolate; //Make it smooth between frames (Need it cuz we are a slime).
        
 
-        //Ignore each other.
+        //Ignore each other to prevent any unintended or weird behavior.
         foreach (Transform seg in segments)
         {
             Collider2D segCol = seg.GetComponent<Collider2D>();
@@ -100,18 +102,17 @@ public class Playerline : MonoBehaviour
         }
     }
 
-    //Outline shape update - NOW FOLLOWS SEGMENT ORDER
     public void UpdateShell()
     {
         if (segments.Length == 0) return;
 
-        //Get shell points that follow the segment positions
+        //Get shell points that follow the segment positions.
         List<Vector2> shellPoints = GetSegmentOutline();
 
-        //Close the loop by adding first point at the end
+        //Close the loop by adding first point at the end.
         shellPoints.Add(shellPoints[0]);
 
-        //Convert to local space for EdgeCollider
+        //Convert to local space for EdgeCollider.
         Vector2[] localPoints = new Vector2[shellPoints.Count];
         for (int i = 0; i < shellPoints.Count; i++)
         {
@@ -119,7 +120,7 @@ public class Playerline : MonoBehaviour
         }
         edgeCollider.points = localPoints;
 
-        //Update the line visualization
+        //Update the line visualization.
         if (showShell && lineRenderer != null)
         {
             lineRenderer.positionCount = shellPoints.Count;
@@ -130,20 +131,19 @@ public class Playerline : MonoBehaviour
         }
     }
 
-    //NEW: Follow the segments in order
     List<Vector2> GetSegmentOutline()
     {
         List<Vector2> points = new List<Vector2>();
 
-        // Simply go through each segment in order
+        //G through the segmenet in oreer.
         foreach (Transform seg in segments)
         {
             if (seg == null) continue;
 
-            // Get segment position
+            // Get segment position.
             Vector2 segPos = seg.position;
 
-            // Optional: Add padding outward from center
+            //Add some paddin.g
             if (paddingFromSegments > 0)
             {
                 Vector2 center = GetCenter();
@@ -162,7 +162,7 @@ public class Playerline : MonoBehaviour
         Vector2 sum = Vector2.zero;
         int count = 0;
 
-        //Add all segment position together then we divide by the number so to give average center.
+        //Get the centre formula by averaging it out.
         foreach (Transform seg in segments)
         {
             if (seg != null)
@@ -171,7 +171,7 @@ public class Playerline : MonoBehaviour
                 count++;
             }
         }
-
+        //If there is segment, return their centre if not return 0.
         return count > 0 ? sum / count : Vector2.zero;
     }
 

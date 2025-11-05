@@ -4,9 +4,9 @@ using UnityEngine;
 public class PuddleController : MonoBehaviour
 {
     [Header("References")]
-    public Playerline playerline;        // Reference to your Playerline script
-    public Rigidbody2D playerRb;         // Player's main Rigidbody2D
-    public LayerMask groundLayerMask;    // Terrain layer
+    public Playerline playerline;        
+    public Rigidbody2D playerRb;         
+    public LayerMask groundLayerMask;    
     public AudioManager audioManager;
 
     [Header("Puddle Settings")]
@@ -14,10 +14,11 @@ public class PuddleController : MonoBehaviour
     [Range(1f, 2f)] public float widthFactor = 1.3f;
 
     private bool isPuddled = false;
-    private List<Vector3> originalLocalPositions = new List<Vector3>();
+    private List<Vector3> originalLocalPositions = new List<Vector3>(); //To store the original local positions of the player segments.
 
     private void Start()
     {
+        //Get respective components.
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
 
         if (playerline == null)
@@ -25,12 +26,13 @@ public class PuddleController : MonoBehaviour
         if (playerRb == null)
             playerRb = GetComponent<Rigidbody2D>();
 
-        // Store original segment local positions
+        //Store original local position
         originalLocalPositions.Clear();
         foreach (Transform seg in playerline.segments)
             originalLocalPositions.Add(seg.localPosition);
     }
 
+    //Toggle E to activate/deactivate the puddle.
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -61,31 +63,34 @@ public class PuddleController : MonoBehaviour
 
     private void ApplyPuddle()
     {
-        if (isPuddled) return;
+        if (isPuddled) return; //Do nothing if its puddle.
         isPuddled = true;
 
-        SquashSegments();
-        playerline.UpdateShell();
+        SquashSegments(); //Squeeze the segment according to designated factors.
 
-        LiftPlayerToPreventPhasing(); // lift before squashing
+        playerline.UpdateShell(); //Update the shape of the shell collider.
+
+        LiftPlayerToPreventPhasing(); //Life players so to prevent player phasing into the terrarin (safety net).
 
     }
 
     private void RestoreShape()
     {
-        if (!isPuddled) return;
+        if (!isPuddled) return; //Do nothing if is not puddled.
         isPuddled = false;
 
         RestoreSegments();
         playerline.UpdateShell();
-        LiftPlayerToPreventPhasing(); // lift before expanding
+        LiftPlayerToPreventPhasing();
 
     }
+
+    //Safety net so taht the player will go back to whatever position it is.
     private void EnsureOriginalPositions()
     {
         if (playerline == null || playerline.segments == null) return;
 
-        // Refresh original positions if count mismatches
+        //If stored original positions count does not match the segment count, refresh them by clearing and adding them again.
         if (originalLocalPositions.Count != playerline.segments.Length)
         {
             originalLocalPositions.Clear();
@@ -93,33 +98,39 @@ public class PuddleController : MonoBehaviour
                 originalLocalPositions.Add(seg.localPosition);
         }
     }
+
+    //This is what make thaem a puddle.
     private void SquashSegments()
     {
         EnsureOriginalPositions();
-        Vector3 center = GetSegmentsCenter();
+        Vector3 center = GetSegmentsCenter(); //Find the center point.
 
+        //Loop through all the points and apply squash on them.
         for (int i = 0; i < playerline.segments.Length; i++)
         {
             Transform seg = playerline.segments[i];
-            Vector3 offset = originalLocalPositions[i] - center;
-            offset.x *= widthFactor;
-            offset.y *= heightFactor;
-            seg.localPosition = center + offset;
+            Vector3 offset = originalLocalPositions[i] - center; //We first find the vector from the center to the point.
+            offset.x *= widthFactor; //We apply the horizontal stretch.
+            offset.y *= heightFactor; //Veticle stretech. 
+            seg.localPosition = center + offset; //Update the segment position.
         }
     }
 
     private void RestoreSegments()
     {
-        EnsureOriginalPositions();
+        EnsureOriginalPositions(); //Make sure the position are correct.
 
+        //reset each segment to its original local position.
         for (int i = 0; i < playerline.segments.Length; i++)
         {
             playerline.segments[i].localPosition = originalLocalPositions[i];
         }
     }
 
+    //WE get the segment centre here.
     private Vector3 GetSegmentsCenter()
     {
+        //Sum up all the local points then we divide by the numbers of child so to get an average.
         Vector3 center = Vector3.zero;
         foreach (Transform seg in playerline.segments)
             center += seg.localPosition;
@@ -128,7 +139,7 @@ public class PuddleController : MonoBehaviour
 
     private void LiftPlayerToPreventPhasing()
     {
-        // Find the actual lowest segment point NOW (not predicted)
+        //Find the lowest Y postion .
         float lowestY = float.MaxValue;
         foreach (Transform seg in playerline.segments)
         {
@@ -136,17 +147,17 @@ public class PuddleController : MonoBehaviour
             if (worldY < lowestY) lowestY = worldY;
         }
 
-        // Raycast downward from player center
+        //We raycast downward to detect ground.
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 20f, groundLayerMask);
 
         if (hit.collider != null)
         {
             float groundY = hit.point.y;
-            float penetration = groundY - lowestY;
+            float penetration = groundY - lowestY; //How much the player is below the ground.
 
-            if (penetration > 0.01f) // if any segment is below ground
+            if (penetration > 0.01f) //So if any player is below the ground, we lift them up.
             {
-                playerRb.position += new Vector2(0, penetration + 0.05f); // add small buffer
+                playerRb.position += new Vector2(0, penetration + 0.05f); 
             }
         }
     }

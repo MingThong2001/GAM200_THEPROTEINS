@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.U2D;
 using UnityEngine.UI;
+using UnityEngine.WSA;
 
 //Define game states.
 public enum GameState
@@ -55,6 +56,7 @@ public class GameManager : MonoBehaviour
     public bool gamePaused = false;
     public bool gameOver = false;
     private static bool isRestarting = false;
+    public float delay = 2f;
 
     //CheckPoint
     [Header("CheckPoints SETTINGS")]
@@ -394,10 +396,47 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("[GameManager] gameOverMenu active: " + (gameOverMenu != null ? gameOverMenu.activeSelf.ToString() : "NULL"));
             if (victoryMenu != null) victoryMenu.SetActive(false);
-            if (gameOverMenu != null) gameOverMenu.SetActive(true);
+
+            if (playershoot != null)
+            { 
+                playershoot.enabled = false;
+            }
+
+            if (playermovement != null)
+            {
+                playermovement.enabled = false;
+            }
+
+            if (puddleController != null)
+            {
+                puddleController.enabled = false;
+            }
+
+
+            if (spriteShapeController != null)
+            {
+                spriteShapeController.enabled = false;
+            }
+
+            if (playerline != null)
+            {
+                playerline.enabled = false;
+            }
+
+            //StartCoroutine(Afterdelay(delay));
+            if (gameOverMenu != null) gameOverMenu.SetActive(true); //Delay set active time 
+
+
         }
     }
 
+    //IEnumerator Afterdelay(float delay)
+    //{
+    //    yield return new WaitForSeconds(delay);
+
+    //    if (gameOverMenu != null) gameOverMenu.SetActive(true); //Delay set active time 
+
+    //}
     public void resetVictory()
     {
         gameOver = false;
@@ -481,7 +520,7 @@ public class GameManager : MonoBehaviour
 
     public void QuitGame()
     {
-        Application.Quit();
+        UnityEngine.Application.Quit();
     }
 
     #region Settings Menu
