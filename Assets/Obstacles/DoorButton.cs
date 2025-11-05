@@ -36,6 +36,8 @@ public class DoorButton : MonoBehaviour
     //Track Objects and Mass.
     private List<MassSegment> segmentsonButton = new List<MassSegment>();
     private List<Projectile> projectilesOnButton = new List<Projectile>();
+    private List<Rigidbody2D> objbutton = new List<Rigidbody2D>(); 
+
     private PlayerMovement playermovement;
 
     //For visualization.
@@ -128,6 +130,14 @@ public class DoorButton : MonoBehaviour
             }
         }
 
+        for (int i = 0; i < objbutton.Count; i++)
+        {
+
+            if ((objbutton[i] != null))
+            {
+                totalMass += objbutton[i].mass;
+            }
+        }
         //Unlocking sequence. If sum mass is more than what is required, unlocked.
         if (totalMass >= requiredMass)
         {
@@ -181,13 +191,7 @@ public class DoorButton : MonoBehaviour
         {
             connectedDoor.UnlockedDoor();
         }
-        //Grabble Box
-        if (grabblebox.CompareTag("Object"))
-        {
-            connectedDoor.UnlockedDoor();
-
-        }
-        //Player
+       
 
         // Platform button
         if (triggerPlatform && platforms != null)
@@ -255,7 +259,14 @@ public class DoorButton : MonoBehaviour
         {
             projectilesOnButton.Add(proj);
         }
-
+        Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
+        if (rb != null && !objbutton.Contains(rb))
+        {
+            if (other.GetComponentInParent<MassSegment>() == null && other.GetComponentInParent<Projectile>() == null)
+            { 
+                objbutton.Add(rb);  
+            }
+        }
 
 
 
@@ -281,6 +292,12 @@ public class DoorButton : MonoBehaviour
             {
                 holdTimer = 0;
             }
+        }
+        Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
+        if (rb != null && objbutton.Contains(rb))
+        {
+            objbutton.Remove(rb);
+           
         }
     }
 
