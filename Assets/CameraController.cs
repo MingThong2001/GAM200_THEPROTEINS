@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-
-   //References.
+    //References.
     public Transform player;
     public PlayerMovement playermovement;
 
@@ -16,7 +15,7 @@ public class CameraController : MonoBehaviour
     public float fallingSmoothTime = 0.15f;
 
    
-    //Y-Axis Deadzone.
+    //Y-Axis Deadzone. This is a need so to prevent disorienting or any jitteriness.
     public float verticalDeadZone = 2f;
 
     //Boundaries Settings.
@@ -94,14 +93,14 @@ public class CameraController : MonoBehaviour
         //Caclulate the smooth X,Y.
         Vector3 targetPos = new Vector3(smoothX, smoothY, transform.position.z);
 
-        //Clamp the camera position.
+        //Clamp the camera position within the clamped boudnaries.
         Vector3 clampedPos = ClampToTaggedBoundaries(targetPos);
 
-        //Apply the clamped camera position.
+        //Aplying the clamped boundaries.
         transform.position = clampedPos;
     }
 
-    //Boundaries Setting.
+    //This is to calculate the boundaries.
     private Vector3 ClampToTaggedBoundaries(Vector3 targetPos)
     {
         //Initialize the extreme min/max values for clamping.
@@ -131,14 +130,15 @@ public class CameraController : MonoBehaviour
         //If level is smaller than camera height, center camera vertically.
         if (maxY < minY) { float centerY = (minY + maxY) / 2f; minY = maxY = centerY; }
 
-        //Clamp target of x-axis and y-axis to the min and max bounds.
+        //Clamp taget of x-axis and y-axis to the min and max bounds.
         float clampedX = Mathf.Clamp(targetPos.x, minX, maxX);
         float clampedY = Mathf.Clamp(targetPos.y, minY, maxY);
 
-        //Return the clamped position.
+        //Return back to tthe clamped position.
         return new Vector3(clampedX, clampedY, targetPos.z);
     }
 
+    //Place the camera on the new player.
     public void SetPlayer(Transform newPlayer)
     {
         player = newPlayer;
