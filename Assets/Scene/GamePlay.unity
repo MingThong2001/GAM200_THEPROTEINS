@@ -14520,7 +14520,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5821485480954394436, guid: 444df3db26b46b140864d65cb921dddf, type: 3}
       propertyPath: m_DynamicOccludee
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5871388920305830318, guid: 444df3db26b46b140864d65cb921dddf, type: 3}
       propertyPath: m_Distance
@@ -16831,7 +16831,7 @@ Transform:
   m_GameObject: {fileID: 741317689}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.039999485, y: 1, z: 0}
+  m_LocalPosition: {x: 0.24, y: 0.53, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -21103,13 +21103,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5875722044801672064, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
+      propertyPath: m_Size.x
+      value: 1.2868004
+      objectReference: {fileID: 0}
+    - target: {fileID: 5875722044801672064, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
+      propertyPath: m_Size.y
+      value: 2.0975752
+      objectReference: {fileID: 0}
+    - target: {fileID: 5875722044801672064, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.03999138
+      objectReference: {fileID: 0}
+    - target: {fileID: 5875722044801672064, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.54878783
+      objectReference: {fileID: 0}
     - target: {fileID: 6366537027275705049, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
       propertyPath: animator
       value: 
       objectReference: {fileID: 741317692}
     - target: {fileID: 6366537027275705049, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
       propertyPath: maxHealth
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6870073386223039280, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21118,6 +21134,30 @@ PrefabInstance:
     - target: {fileID: 6870073386223039280, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
       propertyPath: m_LocalPosition.y
       value: -10.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713552298578403361, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
+      propertyPath: m_Size.x
+      value: 1.1371098
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713552298578403361, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
+      propertyPath: m_Size.y
+      value: 2.1003578
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713552298578403361, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713552298578403361, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.06855488
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713552298578403361, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.5501791
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713552298578403361, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8402835886397890552, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
       propertyPath: m_AnchorMax.x
@@ -21142,6 +21182,10 @@ PrefabInstance:
     - target: {fileID: 8694698572791863478, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8876307611909626418, guid: ffd2cb0365fb4ca4a9fc4907751b1a9a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -28719,6 +28763,7 @@ MonoBehaviour:
   connectedDoor: {fileID: 499119434}
   platforms: {fileID: 0}
   requiredMass: 0.2
+  grabblebox: {fileID: 0}
   holdDuration: 2
   holdTimer: 0
   lockbacktime: 1
