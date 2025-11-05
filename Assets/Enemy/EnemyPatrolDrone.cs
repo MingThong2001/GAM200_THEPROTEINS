@@ -25,6 +25,7 @@ public class EnemyPatrolDrone : MonoBehaviour
     [SerializeField] private float detectionOffset = 0.6f;
     [SerializeField] private Vector2 detectionSize = new Vector2(0.6f, 0.8f);
     [SerializeField] private LayerMask detectionMask = ~0; // set to specific layers if needed
+    [SerializeField] private Animator animator;
 
     private Vector3 initialScale;
     private enum State { Patrol, Returning, Chasing, Idle }
@@ -53,6 +54,7 @@ public class EnemyPatrolDrone : MonoBehaviour
         {
             case State.Patrol: PatrolUpdate(); break;
             case State.Chasing: ChaseUpdate(); break;
+            case State.Idle: PlayIdle(); break;
                 // Returning handled by coroutine; Idle handled by coroutine
         }
     }
@@ -64,7 +66,8 @@ public class EnemyPatrolDrone : MonoBehaviour
             state = State.Chasing;
             return;
         }
-
+        animator.SetBool("isChasing", false);
+        animator.SetBool("isPatrolling", true);
         int dir = movingLeft ? -1 : 1;
 
         // Detection box in front (ignore self)
@@ -159,7 +162,8 @@ public class EnemyPatrolDrone : MonoBehaviour
             state = State.Patrol;
             return;
         }
-
+        animator.SetBool("isPatrolling", false);
+        animator.SetBool("isChasing", true);
         int dir = (Player.position.x > enemy.position.x) ? 1 : -1;
         enemy.position += new Vector3(dir * speed * Time.deltaTime, 0f, 0f);
         enemy.localScale = new Vector3(Mathf.Abs(initialScale.x) * dir, initialScale.y, initialScale.z);
@@ -201,5 +205,10 @@ public class EnemyPatrolDrone : MonoBehaviour
         int dir = movingLeft ? -1 : 1;
         Vector2 boxCenter = (Vector2)enemy.position + new Vector2(dir * detectionOffset, 0f);
         Gizmos.DrawWireCube(boxCenter, detectionSize);
+    }
+
+    public void PlayIdle()
+    {
+        animator.SetBool("isPatrolling", false);
     }
 }

@@ -16,6 +16,7 @@ public class Drone : MonoBehaviour
     [SerializeField] private BoxCollider2D boxcollider;
     [SerializeField] private GameObject deathVFX;
     [SerializeField] private GameObject damageVFX;
+    [SerializeField] private Animator animator;
 
     [SerializeField] private LayerMask defaultlayer;
 
@@ -170,7 +171,7 @@ public class Drone : MonoBehaviour
         playdamagevfx();
         if (currentHealth <= 0)
         {
-            Die();
+            StartCoroutine(Die());
         }
     }
 
@@ -188,11 +189,12 @@ public class Drone : MonoBehaviour
 
         }
     }
-   private void Die()
+   private IEnumerator Die()
     {
-        if (isDead) return;
+        if (isDead) yield return null;
         isDead = true;
-
+        animator.SetBool("isAlive", false);
+        yield return new WaitForSeconds(0.7f);
         // Spawn VFX prefab at drone's position
         if (deathVFX != null)
         {
