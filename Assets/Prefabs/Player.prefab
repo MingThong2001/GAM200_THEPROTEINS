@@ -7134,7 +7134,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3482082883545240889}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9fa245aecc5f4a5449b7d2cd3661473a, type: 3}
   m_Name: 
@@ -7152,13 +7152,13 @@ MonoBehaviour:
   - {fileID: 6148637060247194666}
   - {fileID: 826308855733159546}
   - {fileID: 5477785609567748654}
-  shellThickness: 0.4
+  shellThickness: 0.2
   paddingFromSegments: 0.15
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
   updateEveryFrame: 1
-  showShell: 0
+  showShell: 1
   shellColor: {r: 0, g: 0.5, b: 1, a: 0.5}
   edgeCollider: {fileID: 4096549368702936387}
 --- !u!120 &1555925158499858998
