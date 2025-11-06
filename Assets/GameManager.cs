@@ -381,53 +381,66 @@ public class GameManager : MonoBehaviour
         gameOver = true;
         currentState = GameState.GameOver;
         gamePaused = true;
-        Time.timeScale = 0f;
 
         if (isVictory)
         {
+            Debug.Log("[GameManager] Victory branch entered");
+
             if (playMenu != null) playMenu.SetActive(false);
             if (pauseMenu != null) pauseMenu.SetActive(false);
             if (gameOverMenu != null) gameOverMenu.SetActive(false);
             if (victoryMenu != null) victoryMenu.SetActive(false);
             if (objectivePanel != null) objectivePanel.SetActive(false);
-            LoadNextScene();
+
+            bool finallevel = isFinalLevel();
+            Debug.Log($"[GameManager] isFinalLevel returned: {finallevel}");
+
+            if (finallevel)
+            {
+                Debug.Log("[GameManager] Entering final level branch - activating victory menu");
+
+                if (victoryMenu != null)
+                {
+                    Debug.Log($"[GameManager] Victory menu is NOT null, calling SetActive(true)");
+                    victoryMenu.SetActive(true);
+                    Debug.Log($"[GameManager] Victory menu active state: {victoryMenu.activeSelf}");
+                }
+                else
+                {
+                    Debug.LogError("[GameManager] Victory menu IS NULL!");
+                }
+            }
+            else
+            {
+                Debug.Log("[GameManager] Not final level - loading next scene");
+                if (victoryMenu != null) victoryMenu.SetActive(false);
+                LoadNextScene();
+            }
         }
         else
         {
-            Debug.Log("[GameManager] gameOverMenu active: " + (gameOverMenu != null ? gameOverMenu.activeSelf.ToString() : "NULL"));
-            if (victoryMenu != null) victoryMenu.SetActive(false);
-
-            if (playershoot != null)
-            { 
-                playershoot.enabled = false;
-            }
-
-            if (playermovement != null)
-            {
-                playermovement.enabled = false;
-            }
-
-            if (puddleController != null)
-            {
-                puddleController.enabled = false;
-            }
-
-
-            if (spriteShapeController != null)
-            {
-                spriteShapeController.enabled = false;
-            }
-
-            if (playerline != null)
-            {
-                playerline.enabled = false;
-            }
-
-            //StartCoroutine(Afterdelay(delay));
-            if (gameOverMenu != null) gameOverMenu.SetActive(true); //Delay set active time 
-
-
+            StartCoroutine(AfterDelay(0f));
         }
+
+            Debug.Log("[GameManager] === ENDGAME END ===");
+    }
+
+    //To delay game over menu.
+    private IEnumerator AfterDelay(float delay)
+    {
+
+        yield return new WaitForSeconds(0f);
+
+        if (gameOverMenu !=null) gameOverMenu.SetActive(true);
+    }
+    private bool isFinalLevel()
+    {
+        int currentSceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+        int totalScenes = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
+        Debug.Log($"[GameManager] Current scene index: {currentSceneIndex}, Total scenes: {totalScenes}");
+
+        // Return true if this is the last level (scene before going back to menu)
+        return currentSceneIndex == totalScenes - 1;
     }
 
     //IEnumerator Afterdelay(float delay)

@@ -27,7 +27,7 @@ public class BreakableObj : MonoBehaviour
 
         Collider2D playercollider = GameObject.FindWithTag("Player").GetComponent<Collider2D>();
         Collider2D breakableobjcollider = GetComponent<Collider2D>();
-        Physics2D.IgnoreCollision(playercollider, breakableobjcollider);
+        //Physics2D.IgnoreCollision(playercollider, breakableobjcollider);
 
         Updatehealthsprite();
 

@@ -176,18 +176,18 @@ public class Playerline : MonoBehaviour
     }
 
     // Debug visualization
-    void OnDrawGizmos()
-    {
-        if (!Application.isPlaying || edgeCollider == null) return;
+    //void OnDrawGizmos()
+    //{
+    //    if (!Application.isPlaying || edgeCollider == null) return;
 
-        Gizmos.color = Color.cyan;
-        Vector2[] points = edgeCollider.points;
+    //    Gizmos.color = Color.cyan;
+    //    Vector2[] points = edgeCollider.points;
 
-        for (int i = 0; i < points.Length - 1; i++)
-        {
-            Vector3 p1 = shellObject.transform.TransformPoint(points[i]);
-            Vector3 p2 = shellObject.transform.TransformPoint(points[i + 1]);
-            Gizmos.DrawLine(p1, p2);
-        }
-    }
+    //    for (int i = 0; i < points.Length - 1; i++)
+    //    {
+    //        Vector3 p1 = shellObject.transform.TransformPoint(points[i]);
+    //        Vector3 p2 = shellObject.transform.TransformPoint(points[i + 1]);
+    //        Gizmos.DrawLine(p1, p2);
+    //    }
+    //}
 }

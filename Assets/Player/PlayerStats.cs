@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class PlayerStats : MonoBehaviour
     public float baseMaxHealth = 100f;
     public float currentHealth;
     [SerializeField] private GameObject damageVFX;
+    [SerializeField] private GameObject deathVFX;
 
     //Checkpoint
     public int currentSegments;
@@ -48,7 +50,12 @@ public class PlayerStats : MonoBehaviour
     {
 
         currentHealth = 0;
-
+        if (healthBarUI != null)
+        {
+            Debug.Log($"[PlayerStats] DeInitializePlayer() forcing HP bar to 0. CurrentHealth={currentHealth}");
+            healthBarUI.SetHealth(0, baseMaxHealth);
+            Debug.Log($"[PlayerStats] HealthBarUI now showing {healthBarUI.GetCurrentFill()} (if you can expose one)");
+        }
         if (movement != null)
         {
             movement.enabled = false;
@@ -70,11 +77,12 @@ public class PlayerStats : MonoBehaviour
             { 
                 playersCols.enabled = false;
             }
+            Transform tentaclepoint = transform.Find("TentaPoint");
+            if (tentaclepoint != null)
+                tentaclepoint.gameObject.SetActive(false);
         }
 
-        // Reset health bar UI
-        if (healthBarUI != null)
-            healthBarUI.SetHealth(0, baseMaxHealth);
+       
 
     }
       public void InitializePlayer()
@@ -173,19 +181,20 @@ public class PlayerStats : MonoBehaviour
     }
     private void Die()
     {
-        Debug.Log("[PlayerStats] Die() called");
         
+        Debug.Log("[PlayerStats] Die() called");
+
         //This section is for when a checkpoint is found and active, the player will respawn.
         CheckPoints lastCheckPoint = null;
 
         for (int i = 0; i < CheckPoints.allCheckPoints.Count; i++)
         {
             if (CheckPoints.allCheckPoints[i].isActivated)
-            { 
+            {
                 lastCheckPoint = CheckPoints.allCheckPoints[i];
                 break;
             }
-            
+
         }
 
         if (lastCheckPoint != null)
@@ -194,34 +203,53 @@ public class PlayerStats : MonoBehaviour
             restorefromCheckpoint(lastCheckPoint);
             return;
         }
-        
-        //This section is if no checkpoint is found, the player will die.
-        
+
         //Remove Player from scene.
         DeInitializePlayer();
-
-        Animator animator = GetComponent<Animator>();
-        if (animator != null)
-        {
-            animator.SetTrigger("Die");
-        }
-
-        AudioSource audiosource = GetComponent<AudioSource>();
-        if (audiosource != null)
-        {
-            // audiosource.PlayOneShot(deathSound);
-        }
-
-        //Trigger death condition
-        if (GameManager.instance != null)
-        {
-            Debug.Log("[PlayerStats] Calling GameManager.endGame(false)");
-
-            GameManager.instance.endGame(false);
-        }
+        StartCoroutine(DeathSequence());
     }
+    private IEnumerator DeathSequence()
+    {
+        //Disable player control
+        if (movement != null)
+        {
+            movement.enabled = false;
+        }
 
-    public void restorefromCheckpoint(CheckPoints checkpoint)
+       
+
+        float vfxDuration = 2f;
+        if (deathVFX != null)
+        {
+            GameObject dVFX = Instantiate(deathVFX, transform.position, Quaternion.identity);
+            ParticleSystem ps = dVFX.GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                ps.Play();
+                vfxDuration = ps.main.duration;
+            }
+
+            Destroy(dVFX, vfxDuration + 0.1f);
+
+            yield return new WaitForSeconds(vfxDuration);
+
+
+            //Trigger death condition
+            if (GameManager.instance != null)
+            {
+                Debug.Log("[PlayerStats] Calling GameManager.endGame(false)");
+
+                GameManager.instance.endGame(false);
+            }
+
+
+
+        }
+
+
+
+    }
+public void restorefromCheckpoint(CheckPoints checkpoint)
     {
         if (checkpoint == null)
         {

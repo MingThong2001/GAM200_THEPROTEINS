@@ -149,14 +149,7 @@ public class Door : MonoBehaviour
 
     //    }
     //}
-    ////Handle victory by calling gameManager.
-    //public void handleVictory()
-    //{
-    //    if (GameManager.instance != null)
-    //    {
-    //        GameManager.instance.endGame(true);
-    //    }
-    //}
+    //
     //Door state variables.
     public bool isOpening = false;
 

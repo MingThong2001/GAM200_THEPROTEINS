@@ -36,5 +36,11 @@ public class HealthBarUI : MonoBehaviour
         c.a = alpha;
         img.color = c;
     }
-
+    public float GetCurrentFill()
+    {
+        // Estimate visible fill based on the current mask padding
+        // 180f is your full range (taken from SetHealth)
+        float ratio = 1f - (mask.padding.w / 180f);
+        return Mathf.Clamp01(ratio);
+    }
 }
