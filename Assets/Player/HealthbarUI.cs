@@ -18,7 +18,7 @@ public class HealthBarUI : MonoBehaviour
     public void SetHealth(float currentHealth, float maxHealth)
     {
         float healthPercent = currentHealth / maxHealth;
-        subtractAmt = (1 - healthPercent) * 180f;
+        subtractAmt = (1 - healthPercent) * 283f;
         // barFull fades between 1 (at 100%) > 0 (at 66%)
         float fullAlpha = Mathf.InverseLerp(0.66f, 1f, healthPercent);
         // barMid fades between 1 (at 66%) > 0 (at 33%)
