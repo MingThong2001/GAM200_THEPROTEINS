@@ -5206,10 +5206,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4226213479866027315, guid: f83c583035253c04c989476b386fefd3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1391684305}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f83c583035253c04c989476b386fefd3, type: 3}
 --- !u!1 &527126677
 GameObject:
@@ -14579,7 +14576,7 @@ MonoBehaviour:
   platforms: {fileID: 742355487}
   requiredMass: 0.2
   grabblebox: {fileID: 0}
-  holdDuration: 1.5
+  holdDuration: 0
   holdTimer: 0
   lockbacktime: 1
   locktimer: 0
@@ -15193,28 +15190,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8791b76d90cc3534c968076eb52b1763, type: 3}
---- !u!1 &1391684299 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4226213479866027315, guid: f83c583035253c04c989476b386fefd3, type: 3}
-  m_PrefabInstance: {fileID: 497543167}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1391684305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1391684299}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7df98ac542ade65449f61fdaf7d957a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Objhealth: 10
-  Objmaxhealth: 10
-  fullhp: {fileID: 0}
-  midhp: {fileID: 0}
-  lowhp: {fileID: 0}
 --- !u!1 &1405766043
 GameObject:
   m_ObjectHideFlags: 0
@@ -15806,9 +15781,9 @@ MonoBehaviour:
   platforms: {fileID: 0}
   requiredMass: 0.2
   grabblebox: {fileID: 0}
-  holdDuration: 2
+  holdDuration: 0
   holdTimer: 0
-  lockbacktime: 1
+  lockbacktime: 0
   locktimer: 0
   hasbeenPressed: 0
   triggerDoor: 1
@@ -16511,7 +16486,7 @@ MonoBehaviour:
   platforms: {fileID: 22074736}
   requiredMass: 0.2
   grabblebox: {fileID: 0}
-  holdDuration: 1.5
+  holdDuration: 0
   holdTimer: 0
   lockbacktime: 100
   locktimer: 0

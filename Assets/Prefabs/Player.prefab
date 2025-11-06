@@ -7025,7 +7025,7 @@ MonoBehaviour:
   maxSegments: 3
   massPerSegment: 0.2
   basemoveSpeed: 3
-  baseJump: 1.5
+  baseJump: 2
   baseHealth: 100
   calculatedSpeed: 0
   calculatedJump: 0
