@@ -56,6 +56,7 @@ public class TentacleAppendage : MonoBehaviour
 
     }
 
+    //Handling Input.
     public void Update()
     {
         HandleInput();
@@ -71,22 +72,24 @@ public class TentacleAppendage : MonoBehaviour
         { 
             return;
         }
-        // Get raw mouse position
+        //Get raw mouse position.
         Vector3 mousePos = Input.mousePosition;
 
-        // Clamp mouse inside the screen
+        //Clamp mouse inside the screen.
         mousePos.x = Mathf.Clamp(mousePos.x, 0f, Screen.width);
         mousePos.y = Mathf.Clamp(mousePos.y, 0f, Screen.height);
 
-        // Validate
+        //To validate the correct value.
         if (float.IsInfinity(mousePos.x) || float.IsInfinity(mousePos.y) ||
             float.IsNaN(mousePos.x) || float.IsNaN(mousePos.y))
             return;
 
-        // Convert to world space (2D plane, ignore z)
-        mousePos.z = 0f - Camera.main.transform.position.z; // distance from camera to 0-plane
-        Vector3 worldPos3D = Camera.main.ScreenToWorldPoint(mousePos);
-        Vector2 mousePosition = new Vector2(worldPos3D.x, worldPos3D.y);
+        //Convert to world space (2D plane, ignore z axis).
+        mousePos.z = 0f - Camera.main.transform.position.z; //Distance from camera to the 2D plane.
+        Vector3 worldPos3D = Camera.main.ScreenToWorldPoint(mousePos); //Convert to worldpsace.
+        Vector2 mousePosition = new Vector2(worldPos3D.x, worldPos3D.y); //Stiore new mousepos.
+
+
         //Left click to extend toward target.
         if (Input.GetMouseButtonDown(1) && grabbedObject == null)
         {
@@ -108,13 +111,15 @@ public class TentacleAppendage : MonoBehaviour
         }
 
 
-        // While Holding left click with object.
+        //While Holding left click with object.
         if (Input.GetMouseButton(1) && grabbedObject != null)
         {
             dragObject();
            
         }
     }
+
+    //Tentacle Restrictions.
     private Vector2 constraintsTarget(Vector2 desiredPos)
     {
         Vector2 constraintDirection = desiredPos - (Vector2)tentacleAnchor.position; //Direction from the anchor.
@@ -130,13 +135,15 @@ public class TentacleAppendage : MonoBehaviour
         }*/
         return constrainedPos;
     }
+
+
     public void StartExtend(Vector2 target)
     {
         Vector2 direction = (target - (Vector2)tentacleAnchor.position).normalized; //Direction to target.
         float distance = Mathf.Min(Vector2.Distance(tentacleAnchor.position, target), maxtentacleLength); //Clamp the distance.
         targetPosition = (Vector2)tentacleAnchor.position + direction * distance; //Calculate final taret position.
 
-        // Raycast to grab object
+        //Raycast to grab object.
         Collider2D[] hit = Physics2D.OverlapCircleAll(targetPosition, 0.1f, LayerMask.GetMask("Jumpable"));
 
         //   RaycastHit2D hit = Physics2D.Raycast(tentacleAnchor.position, direction, distance, LayerMask.GetMask("groundLayer"));
@@ -153,6 +160,8 @@ public class TentacleAppendage : MonoBehaviour
                     originalGrabPos = grabbedObject.position;
 
                     transform.position = grabbedObject.position;
+
+                    //Springjoint settings so it wont wobble and flal through.
                     springJoint.connectedBody = grabbedObject;
                     springJoint.frequency = 20f;
                     springJoint.distance = 0.1f;
@@ -186,6 +195,8 @@ public class TentacleAppendage : MonoBehaviour
         isExtending = false;
         isRetracting = true;
     }
+
+    //Tentacle Movement.
     public void moveTentacle()
     {
         if (isExtending)

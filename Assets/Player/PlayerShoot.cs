@@ -18,7 +18,7 @@ public class PlayerShoot : MonoBehaviour
 
     private void Start()
     {
-        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>(); //For SFX.
     }
     private void Update()
     {
@@ -27,6 +27,8 @@ public class PlayerShoot : MonoBehaviour
         {
             return;
         }
+
+        //If left click is clicked, coold down and check against if the players have enoguh segments.
         if (Input.GetMouseButtonDown(0) && Time.time >= lastFiretime + cooldown && massSegment.GetCurrentSegments() > massSegment.GetMinSegments())
         {
             lastFiretime = Time.time;
@@ -36,17 +38,18 @@ public class PlayerShoot : MonoBehaviour
     }
     private void Shoot()
     {
-        //Remove segment before shooting
         //massSegment.RemoveSegment(massSegment.GetMaxSegments());
+
+        //Remove segment before shooting.
         massSegment.RemoveSegment(1);
-        //Direction toward mouse
+
+        //Direction toward mouse.
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPos.z = 0; 
         Vector3 direction = (mouseWorldPos - firePoint.position).normalized;
 
 
-        //Spawn a projectile
-
+        //Spawn a projectile.
         Debug.Log($"[PlayerShoot] projectilePrefab = {projectilePrefab}");
         if (projectilePrefab == null)
         {
@@ -69,6 +72,7 @@ public class PlayerShoot : MonoBehaviour
      
         Debug.Log("Fired projectile at time: " + Time.time);
 
+        //SFX.
         if (audioManager != null)
         {
             audioManager.PlaySFX(audioManager.shootOut);

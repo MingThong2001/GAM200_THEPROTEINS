@@ -33,6 +33,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip restorePuddle;
     public AudioClip applyPuddle;
 
+    //Audio State Flags
     private bool sfxSliderInteracting = false;
     private bool sfxSliderFirstLoaded = false;
 
@@ -51,20 +52,11 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    //To load scene.
+    //To subscribe/unscribe to scene load events (Experimental).
     private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
     private void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        //Autobind.
-        if (musicSlider == null) musicSlider = GameObject.FindWithTag("MusicSlider")?.GetComponent<Slider>();
-        if (sfxSlider == null) sfxSlider = GameObject.FindWithTag("SFXSlider")?.GetComponent<Slider>();
-
-     
-        ApplySavedVolume();
-    }
-
+   
     //
     private void Start()
     {
@@ -76,7 +68,7 @@ public class AudioManager : MonoBehaviour
             BGM.Play();
         }
 
-        // Apply saved volume at start if sliders exist
+        //Apply saved volume at start if sliders exist.
         ApplySavedVolume();
     }
 
@@ -118,7 +110,7 @@ public class AudioManager : MonoBehaviour
         SetSFXVolume();
     }
 
-    //Update.
+    //Update (This is for SFX because when drag the UI it might have tons of sounds spamming).
     private void Update()
     {
         if (sfxSlider != null && !Input.GetMouseButton(0) && sfxSliderInteracting)
@@ -175,6 +167,8 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetFloat("SFXVolume", volume);
     }
 
+
+    //Force applied mixervolume incase setting does not work instantly.
     private void ApplyMixerVolume()
     {
         if (myMixer == null) return;
@@ -189,7 +183,7 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    //Apply Saved Volume (Music Volume doenst reflect the value when the game loaded - Gameplay.scene).
+    //Apply Saved Volume.
     private void ApplySavedVolume()
     {
         float musicVol = PlayerPrefs.GetFloat("musicVolume", 1f);
@@ -210,5 +204,34 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-   
+    //Scene Load Handler. - to bind the buttons and the sliders.
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    { 
+         Slider newMusicSlider = GameObject.FindWithTag("MusicSlider")?.GetComponent<Slider>();
+        Slider newSFXslider = GameObject.FindWithTag("SFXSlider")?.GetComponent<Slider>();
+
+        if (newMusicSlider != null || newSFXslider != null)
+        { 
+            BindSliders(newMusicSlider, newSFXslider);
+           
+        }
+        BindButtons();
+        ApplySavedVolume();  
+    
+    }
+
+    //Find all the buttons in the scene including the inactive ones.
+    private void BindButtons()
+    {
+        Button[] buttons = FindObjectsOfType<Button>(true);
+
+        foreach (Button btn in buttons)
+        {
+            //Remove previous listener just in case.
+            btn.onClick.RemoveListener(PlayUI);
+
+            //Add your PlayUI method to this button.
+            btn.onClick.AddListener(PlayUI);
+        }
+    }
 }

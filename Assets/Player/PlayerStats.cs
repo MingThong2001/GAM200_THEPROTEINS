@@ -15,7 +15,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private GameObject damageVFX;
     [SerializeField] private GameObject deathVFX;
 
-    //Checkpoint
+    //Checkpoint Storage.
     public int currentSegments;
 
     //References
@@ -44,11 +44,11 @@ public class PlayerStats : MonoBehaviour
 
     private void Start()
     {
-        InitializePlayer();
+        InitializePlayer(); //Create player.
     }
-    public void DeInitializePlayer()
+    public void DeInitializePlayer() //Destroy Player.
     {
-
+        //Update health value.
         currentHealth = 0;
         if (healthBarUI != null)
         {
@@ -56,16 +56,20 @@ public class PlayerStats : MonoBehaviour
             healthBarUI.SetHealth(0, baseMaxHealth);
             Debug.Log($"[PlayerStats] HealthBarUI now showing {healthBarUI.GetCurrentFill()} (if you can expose one)");
         }
+
+        //Disable Movement.
         if (movement != null)
         {
             movement.enabled = false;
         }
 
+        //Freeze any rb.
         if (rb != null)
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
         }
 
+        //Disable all the child, colliders components.
         foreach (Transform child in transform)
         { 
             Renderer playerRenderer = child.GetComponentInChildren<Renderer>();   
@@ -85,16 +89,18 @@ public class PlayerStats : MonoBehaviour
        
 
     }
+
+    //Create player.
       public void InitializePlayer()
     {
         Debug.Log($"[PlayerStats] === INITIALIZE PLAYER === Health BEFORE: {currentHealth}");
         
-        // CRITICAL: Reset health to max
+        //Reset health to max.
         currentHealth = baseMaxHealth;
         
         Debug.Log($"[PlayerStats] === INITIALIZE PLAYER === Health AFTER: {currentHealth}/{baseMaxHealth}");
         
-        // Update health bar UI - FIXED: pass baseMaxHealth, not 1f!
+        //Update HealthbarUI.
         if (healthBarUI != null)
         {
             healthBarUI.SetHealth(currentHealth, baseMaxHealth);
@@ -105,16 +111,19 @@ public class PlayerStats : MonoBehaviour
             Debug.LogWarning("[PlayerStats] healthBarUI is null!");
         }
 
+        //Enable movement.
         if (movement != null)
         {
             movement.enabled = true;
         }
 
+        //Enable RBs.
         if (rb != null)
         {
             rb.constraints = RigidbodyConstraints2D.None;
         }
 
+        //Enable all the childs
         foreach (Transform child in transform)
         {
             Renderer playerRenderer = child.GetComponentInChildren<Renderer>();
@@ -133,7 +142,9 @@ public class PlayerStats : MonoBehaviour
         }
 
     }
-    public void SetHealth(float maxHealth, float currentHealthPercent = -1f)
+
+    //Set health value.
+    public void SetHealth(float maxHealth, float currentHealthPercent = -1f) //-1f is use as a flag to get player current health percentage relative to the new max health. 
     {
         if (currentHealthPercent < 0)
         {
@@ -144,7 +155,7 @@ public class PlayerStats : MonoBehaviour
         currentHealth = baseMaxHealth * Mathf.Clamp01(currentHealthPercent);
     }
 
-   
+   //Take damage value.
     public void TakeDamage(float Damage)
     { 
         currentHealth -= Damage;
@@ -165,6 +176,8 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+
+    //Play VFX.
     private void playdamagevfx()
     {
         if (damageVFX != null)
@@ -179,48 +192,54 @@ public class PlayerStats : MonoBehaviour
 
         }
     }
+
+    //Die Logic.
     private void Die()
     {
         
         Debug.Log("[PlayerStats] Die() called");
+        //For now no checkpoint is created or implemented
 
-        //This section is for when a checkpoint is found and active, the player will respawn.
-        CheckPoints lastCheckPoint = null;
+        ////This section is for when a checkpoint is found and active, the player will respawn.
+        //CheckPoints lastCheckPoint = null;
 
-        for (int i = 0; i < CheckPoints.allCheckPoints.Count; i++)
-        {
-            if (CheckPoints.allCheckPoints[i].isActivated)
-            {
-                lastCheckPoint = CheckPoints.allCheckPoints[i];
-                break;
-            }
+        //for (int i = 0; i < CheckPoints.allCheckPoints.Count; i++)
+        //{
+        //    if (CheckPoints.allCheckPoints[i].isActivated)
+        //    {
+        //        lastCheckPoint = CheckPoints.allCheckPoints[i];
+        //        break;
+        //    }
 
-        }
+        //}
 
-        if (lastCheckPoint != null)
-        {
-            //Respawn from checkpoint
-            restorefromCheckpoint(lastCheckPoint);
-            return;
-        }
+        //if (lastCheckPoint != null)
+        //{
+        //    //Respawn from checkpoint
+        //    restorefromCheckpoint(lastCheckPoint);
+        //    return;
+        //}
 
         //Remove Player from scene.
         DeInitializePlayer();
         StartCoroutine(DeathSequence());
     }
+
+    //Unlock death sequence.
     private IEnumerator DeathSequence()
     {
-        //Disable player control
+        //Disable player control.
         if (movement != null)
         {
             movement.enabled = false;
         }
 
        
-
-        float vfxDuration = 2f;
+        //How long the vfx duration.
+        float vfxDuration = 1f;
         if (deathVFX != null)
         {
+            //Create VFX.
             GameObject dVFX = Instantiate(deathVFX, transform.position, Quaternion.identity);
             ParticleSystem ps = dVFX.GetComponent<ParticleSystem>();
             if (ps != null)
@@ -234,7 +253,7 @@ public class PlayerStats : MonoBehaviour
             yield return new WaitForSeconds(vfxDuration);
 
 
-            //Trigger death condition
+            //Trigger death condition.
             if (GameManager.instance != null)
             {
                 Debug.Log("[PlayerStats] Calling GameManager.endGame(false)");
@@ -249,6 +268,8 @@ public class PlayerStats : MonoBehaviour
 
 
     }
+
+//Checkpoint Logic.
 public void restorefromCheckpoint(CheckPoints checkpoint)
     {
         if (checkpoint == null)
@@ -295,7 +316,8 @@ public void restorefromCheckpoint(CheckPoints checkpoint)
 
     }
 
-    
+
+    //Health Settings.
     public float GetCurrentHealth()
     { return currentHealth; }
 
