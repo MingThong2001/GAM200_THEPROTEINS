@@ -852,15 +852,15 @@ MonoBehaviour:
   - {fileID: 1872036491030810607}
   - {fileID: 2186952906674694409}
   - {fileID: 1822152290116541720}
-  shellThickness: 1
-  paddingFromSegments: 0.1
+  shellThickness: 0.5
+  paddingFromSegments: 0.5
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 0
   updateEveryFrame: 1
   showShell: 0
   shellColor: {r: 0, g: 0.5, b: 1, a: 0.5}
-  edgeCollider: {fileID: 0}
+  edgeCollider: {fileID: 4096549368702936387, guid: 812627cece75c2345a570245f47173c3, type: 3}
 --- !u!114 &3673204040910465066
 MonoBehaviour:
   m_ObjectHideFlags: 0
