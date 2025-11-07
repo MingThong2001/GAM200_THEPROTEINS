@@ -8183,6 +8183,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 1284870946116372229, guid: bcb30f490c2635441a35be08de8406af, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1284870946116372229, guid: bcb30f490c2635441a35be08de8406af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1502555936096999728, guid: bcb30f490c2635441a35be08de8406af, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1502555936096999728, guid: bcb30f490c2635441a35be08de8406af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2322318354933297003, guid: bcb30f490c2635441a35be08de8406af, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -8339,6 +8355,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OpenSettingsFromPauseMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 4928646050779874465, guid: bcb30f490c2635441a35be08de8406af, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4928646050779874465, guid: bcb30f490c2635441a35be08de8406af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5507354687715605817, guid: bcb30f490c2635441a35be08de8406af, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -8390,6 +8414,14 @@ PrefabInstance:
     - target: {fileID: 6468505047065584616, guid: bcb30f490c2635441a35be08de8406af, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6757519905082758707, guid: bcb30f490c2635441a35be08de8406af, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6757519905082758707, guid: bcb30f490c2635441a35be08de8406af, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7196276390805983097, guid: bcb30f490c2635441a35be08de8406af, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
