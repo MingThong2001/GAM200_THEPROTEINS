@@ -5,8 +5,13 @@ public class UpgradeCollectible : MonoBehaviour
 {
     //References.
     private AudioManager audioManager;
+    public AudioClip pickup;
 
+    private void Start()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
 
+    }
     //Triggered when another collider enter this collider tirgger.
     private void OnTriggerEnter2D(Collider2D collision)
     {

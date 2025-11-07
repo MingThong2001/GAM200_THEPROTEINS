@@ -16682,7 +16682,7 @@ MonoBehaviour:
   grabblebox: {fileID: 0}
   holdDuration: 0
   holdTimer: 0
-  lockbacktime: 100
+  lockbacktime: 0
   locktimer: 0
   hasbeenPressed: 0
   triggerDoor: 0
