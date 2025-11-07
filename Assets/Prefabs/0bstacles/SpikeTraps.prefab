@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c213e7797a689249a7b82f1cd11c82d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spikedamage: 1
+  spikedamage: 10
   bounceForce: 20
   isRectractable: 0
   isActive: 1
