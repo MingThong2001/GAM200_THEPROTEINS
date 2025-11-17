@@ -5701,8 +5701,13 @@ MonoBehaviour:
   detectionSize: {x: 0.6, y: 0.8}
   detectionMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   animator: {fileID: 8221904348805502991}
+  groundcheckoffSet: {x: 1, y: 0}
+  groundcheckDistance: 1
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &8780312316125779837
 GameObject:
   m_ObjectHideFlags: 0
