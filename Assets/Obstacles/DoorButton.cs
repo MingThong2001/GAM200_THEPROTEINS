@@ -15,12 +15,12 @@ public class DoorButton : MonoBehaviour
     //Object to open the door:
     public GameObject grabblebox;
 
-    public float holdDuration = 5f;
-    public float holdTimer = 0f;
+    public float holdDuration = 5f; //How long the required mass must stay on the button.
+    public float holdTimer = 0f; //Track how long mass has been on the button.
 
     //To reactivate the door
-    public float lockbacktime = 2f;
-    public float locktimer = 0f;
+    public float lockbacktime = 2f; //Dekay before the button reset after the mass has been removed.
+    public float locktimer = 0f; //Timer used for the reset delay.
 
     //Track whether the button has been pressed.
     public bool hasbeenPressed = false;
@@ -28,8 +28,8 @@ public class DoorButton : MonoBehaviour
     public bool triggerPlatform = false;
 
     //Color Setting for visual feedback.
-    private Color pressedColor = Color.green * 2f;
-    private Color unpressedColor;
+    private Color pressedColor = Color.green * 2f; //Color when button is pressed - required to multiply 2 to get back the bright green pigment.
+    private Color unpressedColor; //Original color of the button.
     private SpriteRenderer spriteRenderer;
 
 
@@ -38,6 +38,7 @@ public class DoorButton : MonoBehaviour
     private List<Projectile> projectilesOnButton = new List<Projectile>();
     private List<Rigidbody2D> objbutton = new List<Rigidbody2D>(); 
 
+    //Player references.
     private PlayerMovement playermovement;
 
     //For visualization.
@@ -51,24 +52,25 @@ public class DoorButton : MonoBehaviour
     //Reset the button to its unpressed state.
     public void ResetButton()
     {
-        hasbeenPressed = false;
+        hasbeenPressed = false; //Button is no longer triggered.
+
         if (buttonRender != null)
         {
-            buttonRender.color = unpressedColor;
+            buttonRender.color = unpressedColor; //Restore button color.
         }
         if (messageText != null)
         {
-            messageText.text = "";
+            messageText.text = ""; //Remove any displayed mssage.
         }
         if (buttonText != null)
         {
-            buttonText.text = "";
+            buttonText.text = ""; //Clear button insturction text.
         }
 
     }
     private void Awake()
     {
-        buttonRender = GetComponent<SpriteRenderer>();
+        buttonRender = GetComponent<SpriteRenderer>(); //Get the button's sprite renderer.
 
         if (buttonRender != null)
         {
@@ -90,15 +92,15 @@ public class DoorButton : MonoBehaviour
 
         if (buttonRender != null)
         {
-            buttonRender.color = unpressedColor;
+            buttonRender.color = unpressedColor; //Set the button to unpressed color at start.
         }
         if (messageText != null)
         {
-            messageText.text = "";
+            messageText.text = ""; //Clear any start up messages.
         }
         if (buttonText != null)
         {
-            buttonText.text = "";
+            buttonText.text = ""; //Clear any button instructions.
         }
     }
 
@@ -111,7 +113,7 @@ public class DoorButton : MonoBehaviour
         {
             if (segmentsonButton[i] != null)
             {
-                totalMass += segmentsonButton[i].GetTotalMass();
+                totalMass += segmentsonButton[i].GetTotalMass(); //Add the mass of a segmented object.
             }
         }
 
@@ -122,14 +124,15 @@ public class DoorButton : MonoBehaviour
             if (proj != null)
             {
                 Rigidbody2D[] childSegments = proj.GetComponentsInChildren<Rigidbody2D>();
-                for (int j = 0; j < childSegments.Length; j++)
+                for (int j = 0; j < childSegments.Length; j++) //Run through the array list.
                 {
-                    Rigidbody2D rb = childSegments[j];
-                    totalMass += rb.mass;
+                    Rigidbody2D rb = childSegments[j]; //Get the index.
+                    totalMass += rb.mass; //Add mass of each index.
                 }
             }
         }
 
+        //Same concept for the button.
         for (int i = 0; i < objbutton.Count; i++)
         {
 
@@ -141,9 +144,12 @@ public class DoorButton : MonoBehaviour
         //Unlocking sequence. If sum mass is more than what is required, unlocked.
         if (totalMass >= requiredMass)
         {
-            holdTimer += Time.deltaTime;
-            locktimer = 0f;
-            if (buttonRender != null) buttonRender.color = pressedColor;
+            holdTimer += Time.deltaTime; //Increase hold timer.
+            locktimer = 0f; //Reset lock timer since force is present.
+
+            if (buttonRender != null) buttonRender.color = pressedColor; //Change color to pressesd.
+
+            //If held long enogh, trigger the activation event. 
             if (holdTimer >= holdDuration)
             {
                 ActivateButton();
@@ -152,24 +158,24 @@ public class DoorButton : MonoBehaviour
         }
         else
         {
-            holdTimer = 0f;
+            holdTimer = 0f; //If no mass, reset hold timer.
 
-            if (hasbeenPressed)
+            if (hasbeenPressed) //If the button is active but mass is removed.
             {
-                locktimer += Time.deltaTime;
-                if (locktimer >= lockbacktime)
+                locktimer += Time.deltaTime; //Start countdown.
+                if (locktimer >= lockbacktime) //If enough time passed.
                 {
-                    DeactivateButton();
+                    DeactivateButton(); //Reset the button.
                 }
 
             }
             if (buttonRender != null)
             {
-                buttonRender.color = unpressedColor;
+                buttonRender.color = unpressedColor; //Set button back to original color.
             }
             if (messageText != null)
             {
-                buttonText.text = buttonmessageToShow;
+                buttonText.text = buttonmessageToShow; //Show the message.
             }
 
         }
@@ -178,28 +184,28 @@ public class DoorButton : MonoBehaviour
     //Activation Logic.
     public void ActivateButton()
     {
-        hasbeenPressed = true;
+        hasbeenPressed = true; //Button is now activated.
 
         if (buttonRender != null)
         {
-            buttonRender.color = Color.white;
-            buttonRender.color = pressedColor;
+            buttonRender.color = Color.white; //Reset the hue color. (To get better colourisation).
+            buttonRender.color = pressedColor; //Set the finalc olor.
         }
 
-        // Door button
+        //If this button controls a door, unlock it.
         if (triggerDoor && connectedDoor != null)
         {
             connectedDoor.UnlockedDoor();
         }
        
 
-        // Platform button
+        //If this button controls a platform, unlock it.
         if (triggerPlatform && platforms != null)
         {
             platforms.Startmoving();
         }
 
-        if (messageText != null) messageText.text = messageToShow;
+        if (messageText != null) messageText.text = messageToShow; //Show activation mesage.
 
 
 
@@ -248,22 +254,31 @@ public class DoorButton : MonoBehaviour
         //}
 
 
-        //Check if the relevant compoenent and add it into the list if is not present.
+        //Add mass segment object to the list if it is not added.
         MassSegment mass = other.GetComponentInParent<MassSegment>();
+
         if (mass != null && !segmentsonButton.Contains(mass))
         {
+            //If the object is a mass segment and it's not already on the button, add it.
             segmentsonButton.Add(mass);
         }
+
+        //Add projectile object to the list if it is not added.
         Projectile proj = other.GetComponentInParent<Projectile>();
         if (proj != null && !projectilesOnButton.Contains(proj))
         {
+            //If the object is a mass segment and it's not already on the button, add it.
             projectilesOnButton.Add(proj);
         }
+
+        //Adding a rigidbody2d object.
         Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
         if (rb != null && !objbutton.Contains(rb))
         {
+            //To prevent double-counting if the object is already counted as mass segment or projectile.
             if (other.GetComponentInParent<MassSegment>() == null && other.GetComponentInParent<Projectile>() == null)
             { 
+                //Add the RB to the list.
                 objbutton.Add(rb);  
             }
         }
@@ -274,16 +289,20 @@ public class DoorButton : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        //Remove massSegment when exit the trigger area.
         MassSegment mass = other.GetComponentInParent<MassSegment>();
         if (mass != null && segmentsonButton.Contains(mass))
         {
-            segmentsonButton.Remove(mass); //Remove object after the object is not on the button.
+            segmentsonButton.Remove(mass); //Remove mass segment from the list when it leaves the button.
+
+            //If no more objects (mass segments or projectiles) are on the button, reset the timer.
             if (segmentsonButton.Count == 0 && projectilesOnButton.Count == 0)
             {
                 holdTimer = 0; //Reset timer.
             }
         }
 
+        //Do the same for porojecitle and rb..
         Projectile proj = other.GetComponentInParent<Projectile>();
         if (proj != null && projectilesOnButton.Contains(proj))
         {

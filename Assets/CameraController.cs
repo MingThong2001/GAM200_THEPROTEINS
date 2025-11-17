@@ -4,25 +4,27 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     //References.
-    public Transform player;
-    public PlayerMovement playermovement;
+    public Transform player; //To get player's position.
+    public PlayerMovement playermovement; //To get player's movement and input.
 
     //Camera Settings.
     public float lookAheadDistance = 5f;
-    public float lookAheadSpeed = 5f;
-    public float cameraSmoothTime = 0.5f;
-    public float verticalSmoothTime = 0.3f;
-    public float fallingSmoothTime = 0.15f;
+    public float lookAheadSpeed = 5f; //Transistion speed to lookahead.
+    public float cameraSmoothTime = 0.5f; //The smoothing time for camera x-axis movement.
+    public float verticalSmoothTime = 0.3f; //Transistion speed for vertical movement.
+    public float fallingSmoothTime = 0.15f; //The smoothing time for camera y-axis movement.
 
    
     //Y-Axis Deadzone. This is a need so to prevent disorienting or any jitteriness.
     public float verticalDeadZone = 2f;
 
     //Boundaries Settings.
-    public string boundaryTag = "CameraBoundary";
+    public string boundaryTag = "CameraBoundary"; //Tag used to identify camera boundary objects in the scene.
 
-    private GameObject[] boundaries;
-    private float lookOffset;
+    private GameObject[] boundaries; //A collection of boundaries object.
+    private float lookOffset; //To store the current horizontal offset of the camera baesd on the player movement.
+
+    //To smooth horizontal/vertical camera movement.
     private float horizontalVelocity;
     private float verticalVelocity;
     private float camHalfWidth;
@@ -36,8 +38,8 @@ public class CameraController : MonoBehaviour
 
         //Set Camera.
         Camera cam = Camera.main;
-        camHalfHeight = cam.orthographicSize;
-        camHalfWidth = camHalfHeight * cam.aspect;
+        camHalfHeight = cam.orthographicSize; //Camera's height in world space.
+        camHalfWidth = camHalfHeight * cam.aspect; //Camera's width in world space, calculated using the aspect ratio.
     }
 
     private void LateUpdate()
@@ -56,12 +58,12 @@ public class CameraController : MonoBehaviour
             currentVerticalSmooth = fallingSmoothTime;
 
         //Get horizontal movement input.
-        float movementDirection = pm != null ? pm.horizontalInput : 0f;
+        float movementDirection = pm != null ? pm.horizontalInput : 0f; //If the player movement exist, use its horizontal input.
 
         //If the player is moving horizontally.
         if (Mathf.Abs(movementDirection) > 0.01f)
         {
-            //Determine the target offset for look-ahead.
+            // Calculate the target offset for camera lookahead based on the movement direction.
             float targetOffset = Mathf.Sign(movementDirection) * lookAheadDistance;
             
             //Smoothly move the camera lookoffset toward the target offset.
@@ -86,11 +88,11 @@ public class CameraController : MonoBehaviour
         if (Mathf.Abs(verticalDifference) > verticalDeadZone)
             targetY = player.position.y - Mathf.Sign(verticalDifference) * verticalDeadZone;
 
-        //For smooth movement  (X and Y axis Y)
+        //For smooth movement  (X and Y axis Y) toward the target position.
         float smoothX = Mathf.SmoothDamp(transform.position.x, targetX, ref horizontalVelocity, cameraSmoothTime);
         float smoothY = Mathf.SmoothDamp(transform.position.y, targetY, ref verticalVelocity, currentVerticalSmooth);
 
-        //Caclulate the smooth X,Y.
+        // Calculate the final smoothed target position for the camera.
         Vector3 targetPos = new Vector3(smoothX, smoothY, transform.position.z);
 
         //Clamp the camera position within the clamped boudnaries.
@@ -112,10 +114,10 @@ public class CameraController : MonoBehaviour
         //Loop through all boundary objects with the designated tag.
         foreach (GameObject b in boundaries)
         {
-            Collider2D col = b.GetComponent<Collider2D>();
-            if (col == null) continue;
+            Collider2D col = b.GetComponent<Collider2D>(); //Get the collider2d component of the boundary tag.
+            if (col == null) continue; //If no Collider2d, skip the boundary object.
 
-            Bounds bounds = col.bounds;
+            Bounds bounds = col.bounds; //Get the bounding box of the boundary.
 
             //Determine which side this boundary represent the name.
             if (b.name.ToLower().Contains("left")) minX = Mathf.Max(minX, bounds.max.x + camHalfWidth);
@@ -141,6 +143,6 @@ public class CameraController : MonoBehaviour
     //Place the camera on the new player.
     public void SetPlayer(Transform newPlayer)
     {
-        player = newPlayer;
+        player = newPlayer; //Set the camera's target player to the new player transform.
     }
 }
