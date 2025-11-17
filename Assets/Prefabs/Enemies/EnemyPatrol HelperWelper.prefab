@@ -115,8 +115,8 @@ MonoBehaviour:
   enemySpawnPos: {fileID: 1545727210129762487}
   speed: 2
   idleDuration: 1
-  Player: {fileID: 0}
-  chaseRange: 3
+  Player: {fileID: 7648647954491245079, guid: 812627cece75c2345a570245f47173c3, type: 3}
+  chaseRange: 10
   maxchaseRange: 6
   obstacleTag: Object
   returnSpeed: 3
@@ -125,6 +125,11 @@ MonoBehaviour:
   detectionMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  groundcheckoffSet: {x: 1, y: 0}
+  groundcheckDistance: 1
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &1712361795619684586
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,6 +852,11 @@ MonoBehaviour:
   grabDamage: 15
   enemyPatrol: {fileID: 469004139418901817}
   maxHealth: 20
+  groundcheckoffSet: {x: 1, y: 0}
+  groundcheckDistance: 1
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!61 &4283324017600880874
 BoxCollider2D:
   m_ObjectHideFlags: 0
