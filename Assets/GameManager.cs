@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.U2D;
 using UnityEngine.UI;
-using UnityEngine.WSA;
 
 //Define game states.
 public enum GameState
@@ -89,6 +88,7 @@ public class GameManager : MonoBehaviour
     public SpriteShapeController spriteShapeController;
     public Playerline playerline;
     [SerializeField] private GameObject playerPrefab;
+    public AudioManager audioManager;
 
     [Header("Audio Sliders")]
     [SerializeField] private Slider musicSlider;
@@ -152,6 +152,7 @@ public class GameManager : MonoBehaviour
             AudioManager.instance.BindSliders(musicSlider, sfxSlider);
             Debug.Log("[GameManager] Audio sliders bound to AudioManager");
         }
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
 
         //Player initialization logic.
         if (player == null)
@@ -354,7 +355,7 @@ public class GameManager : MonoBehaviour
     {
         if (helperWelper != null && helperWelper.enemyPatrol != null)
         {
-            helperWelper.enemyPatrol.SpawnAtPointDrone();
+            helperWelper.enemyPatrol.SpawnAtPointHelperWelper();
         }
     }
 
@@ -403,6 +404,8 @@ public class GameManager : MonoBehaviour
                 {
                     Debug.Log($"[GameManager] Victory menu is NOT null, calling SetActive(true)");
                     victoryMenu.SetActive(true);
+                    audioManager.PlaySFX(audioManager.Victory);
+
                     Debug.Log($"[GameManager] Victory menu active state: {victoryMenu.activeSelf}");
                 }
                 else
@@ -432,6 +435,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0f);
 
         if (gameOverMenu !=null) gameOverMenu.SetActive(true);
+        audioManager.PlaySFX(audioManager.Endgame);
+
     }
     private bool isFinalLevel()
     {
