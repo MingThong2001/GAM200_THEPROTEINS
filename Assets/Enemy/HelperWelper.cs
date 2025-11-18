@@ -1,165 +1,229 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HelperWelper : MonoBehaviour
 {
-    //Grab Settings.
-    public Transform grabPoint;
+    [Header("Grab Settings")]
+    public Transform grabPoint; 
     public float grabRange = 2f;
     public float grabDuration = 2f;
     public float throwForce = 20f;
-    public Transform playerRoot;
     private bool isHolding = false;
     public float grabDamage = 15f;
-    
-    //References
-    private Rigidbody2D grabbedSegments;
-    public EnemyPatrol  enemyPatrol;
+
+    [Header("References Settings")]
+    private Rigidbody2D grabbedPointA;
+    private Rigidbody2D grabbedPointB;
+    public EnemyPatrol enemyPatrol;
     private Collider2D enemyCollider;
-    private PlayerStats healthstats;
     private Rigidbody2D rb;
 
-    //Health
+    [Header("Health Settings")]
     public float maxHealth = 20f;
     private float currentHealth;
     private EnemyHPUI enemyHP;
 
-    //spawn
+    [Header("Spawn Settings")]
     private Vector3 startPos;
     private Quaternion startRot;
     private bool isDead = false;
+
     public void Awake()
     {
+        //Initialization of relevant component.
         currentHealth = maxHealth;
-        Debug.Log($"[Start] {name} currentHealth: {currentHealth}, maxHealth: {maxHealth}");
         rb = GetComponent<Rigidbody2D>();
 
+        //Get the enemy HP and set it.
         enemyHP = GetComponentInChildren<EnemyHPUI>();
         if (enemyHP != null)
         {
             enemyHP.SetHealth(currentHealth, maxHealth);
         }
     }
+
     private void Start()
     {
+
+        //Get patrol script and collider.
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
         enemyCollider = GetComponent<Collider2D>();
-        // Spawn at designated point first
+
         if (enemyPatrol != null)
         {
             enemyPatrol.SpawnAtPointHelperWelper();
         }
 
-        //Store Helper's start position.
-        startPos = transform.position;
-        startRot = transform.rotation;  
-
-       
+        startPos = transform.position; //Store the starting position of the enemy.
+        startRot = transform.rotation; //Store the starting rotation of the enemy.
     }
- 
+
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (isHolding) return;
 
-        // Skip projectiles
-        if (other.GetComponentInParent<Projectile>() != null) return;
-        if (!other.transform.root.name.Contains("Player")) return;
-
-
-        Rigidbody2D rb = other.attachedRigidbody;
-        if (rb == null) return; 
-
-        float distance = Vector2.Distance(transform.position, rb.position);
-        if (distance <= grabRange)
-        { 
-            StartCoroutine(GrabHoldThrow(rb));
+        if (isHolding) //If the enmy already holding the player skip this mehtod.
+        {
+            return;
         }
 
+        //Skip if the object is projectile. Projectile has the same tag as player.
+        if (other.GetComponentInParent<Projectile>() != null)
+        {
+            return;
+        }
 
+        //Skip if the root object does not contain the string "Player".
+        if (!other.transform.root.name.Contains("Player"))
+        {
+            return;
+        }
+
+        Rigidbody2D rb = other.attachedRigidbody; //Get the rigidbody attached to the player.
+        if (rb == null) //If no rigidbody found, skip.
+        {
+            return;
+        }
+
+        float distance = Vector2.Distance(transform.position, rb.position); //Calcykate teh distance form enemy to th eplayer.
+        Debug.Log($"Distance: {distance}, grabRange: {grabRange}");
+
+        if (distance <= grabRange) // If the player is whint the grab range.
+        {
+            Debug.Log(" STARTING GRAB!");
+            StartCoroutine(GrabHoldThrow(rb)); //Start the grab coroutine.
+        }
     }
 
-    private IEnumerator GrabHoldThrow(Rigidbody2D targetRb)
+    private IEnumerator GrabHoldThrow(Rigidbody2D detectedRb)
     {
-        if (isHolding)
+        Debug.Log("=== GrabHoldThrow STARTED ===");
+
+        if (isHolding) //If is already holding, exit teh coroutine.
         {
-           yield break; 
+            yield break;
         }
 
-        isHolding = true;
-        grabbedSegments = targetRb;
+        if (grabPoint == null) //If no grab point, exit.
+        {
+            yield break;
+        }
 
-        // Get player health
+        isHolding = true; //Set the grab state flag to true.
+
+        //Find ALL player rigidbodies because player has multiple rb.
+        Transform playerRoot = detectedRb.transform.root;
+        Rigidbody2D[] allPlayerSegments = playerRoot.GetComponentsInChildren<Rigidbody2D>();
+
+
+        //Take all the player segments, calculate how far each one is from the grab point, sort them from closest to farthest, and put the result into a list.
+        var sortedByDistance = allPlayerSegments
+            .OrderBy(segment => Vector2.Distance(grabPoint.position, segment.position))
+            .ToList();
+
+        if (sortedByDistance.Count < 2) //If there are fewer than 2 points, retturn.
+        {
+            isHolding = false;
+            yield break;
+        }
+
+        grabbedPointA = sortedByDistance[0]; //Closest
+        grabbedPointB = sortedByDistance[1]; //Second closest
+
+       
+
+        //Deal damage to th eplayer.
         if (PlayerStats.instance != null)
         {
             PlayerStats.instance.TakeDamage(grabDamage);
-            Debug.Log($"HelperWelper dealt {grabDamage} damage to player at time {Time.time}");
+            //Debug.Log($"HelperWelper dealt {grabDamage} damage to player at time {Time.time}");
         }
-        //Stop enemy Patrol
+
+        //Stop enemy patrol.
         if (enemyPatrol != null) enemyPatrol.enabled = false;
 
-        //Freeze enemy so it wont move during grab.
-        Rigidbody2D body = GetComponent<Rigidbody2D>();
-        RigidbodyType2D originalbodyType = body.bodyType;
-        bool wasSimulated = body.simulated;
+        //Freeze enemy so it does not move while holding the player.
+        RigidbodyType2D originalbodyType = rb.bodyType;
+        bool wasSimulated = rb.simulated;
+        rb.bodyType = RigidbodyType2D.Kinematic; //Stop all physics.
+        rb.linearVelocity = Vector2.zero; //REmove moving..
+        rb.angularVelocity = 0f; //Remove rotation.
+        rb.simulated = false; //Disbale simulation
 
-        body.bodyType = RigidbodyType2D.Kinematic;
-        body.linearVelocity = Vector2.zero;
-        body.angularVelocity = 0f;
-        body.simulated = false;
+        //Store original states of the two grab points.
+        RigidbodyType2D originalTypeA = grabbedPointA.bodyType;
+        RigidbodyType2D originalTypeB = grabbedPointB.bodyType;
 
-        //Hold Player as kinematic
-        grabbedSegments.bodyType = RigidbodyType2D.Kinematic;
+        //Calculate distance between the two grabbed points to maintain spacing.
+        float originalDistance = Vector2.Distance(grabbedPointA.position, grabbedPointB.position);
+        Vector2 originalDirection = (grabbedPointB.position - grabbedPointA.position).normalized;
 
-        //Keep player at holdpoint for holdduration.
+        //Freeze ONLY the two grabbed points.
+        grabbedPointA.bodyType = RigidbodyType2D.Kinematic;
+        grabbedPointA.linearVelocity = Vector2.zero;
+        grabbedPointA.angularVelocity = 0f;
+
+        grabbedPointB.bodyType = RigidbodyType2D.Kinematic;
+        grabbedPointB.linearVelocity = Vector2.zero;
+        grabbedPointB.angularVelocity = 0f;
+
+        //Debug.Log($"Holding for {grabDuration} seconds...");
+
+        // Hold the player for the grab duration, maintaining the distance and direction.
         float timer = 0f;
+        
+        //While loop yippie.
         while (timer < grabDuration)
         {
-            grabbedSegments.position = grabPoint.position;
-            timer += Time.deltaTime;    
+            // Keep point A at the grab point position.
+            grabbedPointA.position = grabPoint.position;
+
+            // Keep point B relative to A
+            grabbedPointB.position = (Vector2)grabbedPointA.position + originalDirection * originalDistance;
+
+            timer += Time.deltaTime; //Increment the timer.
             yield return null;
-
         }
-       //Release player.
-       grabbedSegments.bodyType = RigidbodyType2D.Dynamic;
 
-        //Apply throw face.
-        float throwdirectionX = Mathf.Sign(transform.localScale.x) * 2f ;
-        Vector2 throwDirection = new Vector2(throwdirectionX, 3f);
-        grabbedSegments.AddForce(throwDirection * (throwForce + 10f), ForceMode2D.Impulse);
+        //Debug.Log("Hold complete, releasing and throwing...");
 
-        // Debug log to show throw info
-        Debug.Log($"[HelperWelper] Throwing player {grabbedSegments.name} from {grabPoint.position} " +
-                  $"with direction {throwDirection.normalized}, magnitude {throwForce + 10f}, " +
-                  $"final velocity will be approx: {(throwDirection.normalized * (throwForce + 10f))}");
+        //Restore the points bodytybe to dynamic.
+        grabbedPointA.bodyType = originalTypeA;
+        grabbedPointB.bodyType = originalTypeB;
 
-        //Clear refernece to prevent double grab.
-        grabbedSegments = null;
-        healthstats = null; 
+        //Apply throw force to detected rigidbody (usually player root)
+        float throwdirectionX = Mathf.Sign(transform.localScale.x) * 2f; //Determine whether the enemy is facing left and right then multiply by 2. JUST IN CASE, CUZ IT CANT FLIP SOMETIMES. IDK WHY.
+        Vector2 throwDirection = new Vector2(throwdirectionX, 3f); //Create a direction vector for the throw. 3f is a vertical lift.
+        detectedRb.AddForce(throwDirection * (throwForce + 10f), ForceMode2D.Impulse); //Applies instant force to the player rb.
 
-        //Wait for awhile before restoring enemy physics so player is fully thrown.
+        //Debug.Log($"[HelperWelper] Threw player with force {throwDirection * (throwForce + 10f)}");
+
+        //Clear references to prepare the next grab.
+        grabbedPointA = null;
+        grabbedPointB = null;
+
+        //Wait before restoring enemy physics.
         yield return new WaitForSeconds(0.5f);
 
-        //Restore enemy physics
-        body.simulated = wasSimulated;
-        body.bodyType = originalbodyType;
+        //Restore enemy physics.
+        rb.simulated = wasSimulated;
+        rb.bodyType = originalbodyType;
 
         //Resume patrol
         if (enemyPatrol != null)
-        {
             enemyPatrol.enabled = true;
-        }
 
-        isHolding = false;  
+        isHolding = false;
+        //Debug.Log("=== GrabHoldThrow COMPLETE ===");
     }
 
-
-    //This is to ignroe projectile if the projectile is collectible.
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Projectile proj = collision.gameObject.GetComponentInParent<Projectile>();
-        if (proj != null && proj.canBeCollected)
+        Projectile proj = collision.gameObject.GetComponentInParent<Projectile>(); //Check if the collided object belongs to a projectile.
+        if (proj != null && proj.canBeCollected) //Ignore the collision it is projectile and the flag can be collected is true. This mean the projectile is on the ground.
         {
-            // Ignore physics interactions with this projectile
             Collider2D enemyCollider = GetComponent<Collider2D>();
             Collider2D[] projectileColliders = collision.gameObject.GetComponents<Collider2D>();
 
@@ -167,28 +231,22 @@ public class HelperWelper : MonoBehaviour
             {
                 Physics2D.IgnoreCollision(col, enemyCollider, true);
             }
-
-            return; // Stop further interaction
+            return;
         }
-
-    
     }
 
-    //Health Settings
     public void TakeDamage(float damage)
     {
-
-        Debug.Log($"[DEBUG] {name} currentHealth BEFORE damage: {currentHealth}");
+        //Debug.Log($"[DEBUG] {name} currentHealth BEFORE damage: {currentHealth}");
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
-        Debug.Log($"[DEBUG] {name} took {damage} damage. Remaining health: {currentHealth}");
+        //Debug.Log($"[DEBUG] {name} took {damage} damage. Remaining health: {currentHealth}");
+
         if (enemyHP != null)
             enemyHP.SetHealth(currentHealth, maxHealth);
 
         if (currentHealth <= 0)
-        {
             Die();
-        }
     }
 
     private void Die()
@@ -217,61 +275,4 @@ public class HelperWelper : MonoBehaviour
 
         gameObject.SetActive(false);
     }
-
-    //public void HelperWelperReset()
-    //{
-    //    Debug.Log($"[HelperWelper] Starting reset for {gameObject.name}");
-    //    gameObject.SetActive(true);
-
-    //    isDead = false;
-
-    //    // Stop coroutines and clear references
-    //    StopAllCoroutines();
-    //    isHolding = false;
-
-    //    // Clear player references to prevent stacked damage
-    //    if (grabbedSegments != null)
-    //    {
-    //        grabbedSegments.bodyType = RigidbodyType2D.Dynamic;
-    //        grabbedSegments = null;
-    //    }
-    //    healthstats = null;
-
-    //    // Reset health
-    //    currentHealth = maxHealth;
-    //    if (enemyHP != null)
-    //    {
-    //        enemyHP.gameObject.SetActive(true);
-    //        enemyHP.SetHealth(currentHealth, maxHealth);
-    //    }
-
-    //    // Reset physics
-    //    if (rb != null)
-    //    {
-    //        rb.constraints = RigidbodyConstraints2D.None;
-    //        rb.bodyType = RigidbodyType2D.Dynamic;
-    //        rb.simulated = true;
-    //        rb.linearVelocity = Vector2.zero;
-    //        rb.angularVelocity = 0f;
-    //    }
-
-    //    // Reset position (use stored start position)
-    //    transform.position = startPos;
-    //    transform.rotation = startRot;
-
-    //    // Re-enable collider
-    //    if (enemyCollider != null)
-    //        enemyCollider.enabled = true;
-
-    //    // Re-enable renderers
-    //    foreach (Renderer r in GetComponentsInChildren<Renderer>())
-    //        r.enabled = true;
-
-    //    // Re-enable patrol last
-    //    if (enemyPatrol != null)
-    //        enemyPatrol.enabled = true;
-
-
-    //    Debug.Log($"[HelperWelper] Reset complete. healthstats is now: {(healthstats == null ? "NULL (GOOD)" : "NOT NULL (BAD!)")}");
-    //}
 }
