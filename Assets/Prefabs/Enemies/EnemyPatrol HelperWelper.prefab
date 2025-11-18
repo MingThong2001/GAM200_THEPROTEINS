@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 477893955826714254}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.09, y: 1.25, z: 0}
+  m_LocalPosition: {x: -0.373, y: 1.273, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -125,6 +125,7 @@ MonoBehaviour:
   detectionMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  animator: {fileID: 0}
   groundcheckoffSet: {x: 1, y: 0}
   groundcheckDistance: 1
   groundMask:
@@ -848,15 +849,9 @@ MonoBehaviour:
   grabRange: 1
   grabDuration: 3
   throwForce: 20
-  playerRoot: {fileID: 0}
   grabDamage: 15
   enemyPatrol: {fileID: 469004139418901817}
   maxHealth: 20
-  groundcheckoffSet: {x: 1, y: 0}
-  groundcheckDistance: 1
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!61 &4283324017600880874
 BoxCollider2D:
   m_ObjectHideFlags: 0

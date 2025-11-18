@@ -2176,7 +2176,6 @@ MonoBehaviour:
   maxDistance: 5
   speed: 10
   damage: 2
-  projectilvfx: {fileID: 3617403901832935685}
 --- !u!114 &2157501424920403759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2322,8 +2321,8 @@ MonoBehaviour:
   - {fileID: 6148637060247194666}
   - {fileID: 826308855733159546}
   - {fileID: 5477785609567748654}
-  shellThickness: 0.05
-  paddingFromSegments: 0.15
+  shellThickness: 0.02
+  paddingFromSegments: 0.1
   groundLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
