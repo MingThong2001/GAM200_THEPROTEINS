@@ -17395,11 +17395,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2870987034658274034, guid: 85db85e004c7e3542b471ade72ee8a44, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 2870987034658274034, guid: 85db85e004c7e3542b471ade72ee8a44, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 3.55
       objectReference: {fileID: 0}
     - target: {fileID: 2870987034658274034, guid: 85db85e004c7e3542b471ade72ee8a44, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17440,6 +17440,14 @@ PrefabInstance:
     - target: {fileID: 9135458189337764944, guid: 85db85e004c7e3542b471ade72ee8a44, type: 3}
       propertyPath: boundaryTag
       value: CameraStop
+      objectReference: {fileID: 0}
+    - target: {fileID: 9135458189337764944, guid: 85db85e004c7e3542b471ade72ee8a44, type: 3}
+      propertyPath: verticalDeadZone
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9135458189337764944, guid: 85db85e004c7e3542b471ade72ee8a44, type: 3}
+      propertyPath: verticalLookAheadDistance
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

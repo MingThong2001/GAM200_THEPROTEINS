@@ -16,7 +16,7 @@ public class CameraController : MonoBehaviour
 
    
     //Y-Axis Deadzone. This is a need so to prevent disorienting or any jitteriness.
-    public float verticalDeadZone = 2f;
+    public float verticalDeadZone =3f;
 
     //Boundaries Settings.
     public string boundaryTag = "CameraBoundary"; //Tag used to identify camera boundary objects in the scene.
