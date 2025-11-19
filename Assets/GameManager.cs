@@ -57,6 +57,11 @@ public class GameManager : MonoBehaviour
     private static bool isRestarting = false;
     public float delay = 2f;
 
+    // Cutscene
+
+    public float cutsceneDuration = 5f;  // Adjust as necessary
+    private float cutsceneTimer = 0f;
+
     //CheckPoint
     [Header("CheckPoints SETTINGS")]
     [SerializeField] private CheckPoints checkPoints;
@@ -177,7 +182,16 @@ public class GameManager : MonoBehaviour
     }
 
     public void Update()
-    {
+    {// If a cutscene is active, check if it has finished.
+        if (currentState == GameState.Cutscene)
+        {
+            cutsceneTimer += Time.unscaledDeltaTime;
+
+            if (cutsceneTimer >= cutsceneDuration)
+            {
+                OnCutsceneComplete();  // Trigger the transition to the objective panel
+            }
+        }
         //Pause logic (Toggle E for pause panel).
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -199,11 +213,14 @@ public class GameManager : MonoBehaviour
         if (playermovement != null) playermovement.enabled = !uiActive;
         if (playershoot != null) playershoot.enabled = !uiActive;
         if (puddleController != null) puddleController.enabled = !uiActive;
+
+        
     }
 
     #region Start
     public void StartGame()
     {
+
         Debug.Log("[GameManager] StartGame() called");
 
         if (playMenu != null) playMenu.SetActive(false);
@@ -211,6 +228,8 @@ public class GameManager : MonoBehaviour
         if (cutscenePanel != null && !GameFlags.hasPlayedCutscene)
         {
             cutscenePanel.SetActive(true);
+            cutsceneTimer = 0f;
+
             if (objectivePanel != null) objectivePanel.SetActive(false);
             currentState = GameState.Cutscene;
             gamePaused = true;
@@ -239,10 +258,11 @@ public class GameManager : MonoBehaviour
 
     public void OnCutsceneComplete()
     {
-        if (cutscenePanel != null) cutscenePanel.SetActive(false);
-        if (objectivePanel != null) objectivePanel.SetActive(true);
-        currentState = GameState.showobjective;
-        gamePaused = true;
+        if (cutscenePanel != null) cutscenePanel.SetActive(false);  // Hide cutscene panel
+        if (objectivePanel != null) objectivePanel.SetActive(true); // Show objective panel
+        currentState = GameState.showobjective;  // Update game state
+        gamePaused = true;  // Pause the game since objectives are showing
+        Time.timeScale = 0f; // Pause game time
     }
     #endregion
 
