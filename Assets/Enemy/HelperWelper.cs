@@ -31,6 +31,13 @@ public class HelperWelper : MonoBehaviour
     private Quaternion startRot;
     private bool isDead = false;
 
+
+   // [SerializeField] private GameObject deathVFX;
+ //   [SerializeField] private GameObject damageVFX;
+  //  [SerializeField] private Animator animator;
+    public ParticleSystem impactVFX;
+    private ParticleSystem activeImpactVFX;
+
     public void Awake()
     {
         //Initialization of relevant component.
@@ -221,12 +228,33 @@ public class HelperWelper : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Projectile proj = collision.gameObject.GetComponentInParent<Projectile>(); //Check if the collided object belongs to a projectile.
-        if (proj != null && proj.canBeCollected) //Ignore the collision it is projectile and the flag can be collected is true. This mean the projectile is on the ground.
+        // Ignore ground collisions entirely
+        if (collision.gameObject.CompareTag("groundLayer"))
+        {
+            return;
+        }
+
+        Projectile proj = collision.gameObject.GetComponentInParent<Projectile>();
+        if (proj == null) return;
+
+        // Check if projectile is moving fast enough (actively flying) for VFX
+        Rigidbody2D projRb = proj.GetComponent<Rigidbody2D>();
+        bool isFastMoving = (projRb != null && projRb.linearVelocity.magnitude >= 2f);
+
+        // Spawn VFX only for fast-moving projectiles
+        if (isFastMoving && impactVFX != null)
+        {
+            Vector3 hitPoint = collision.GetContact(0).point;
+            ParticleSystem vfx = Instantiate(impactVFX, hitPoint, Quaternion.identity);
+            vfx.Play();
+            Destroy(vfx.gameObject, vfx.main.duration + vfx.main.startLifetime.constantMax);
+        }
+
+        // ALWAYS ignore collision physics for collectible projectiles (regardless of velocity)
+        if (proj.canBeCollected)
         {
             Collider2D enemyCollider = GetComponent<Collider2D>();
             Collider2D[] projectileColliders = collision.gameObject.GetComponents<Collider2D>();
-
             foreach (Collider2D col in projectileColliders)
             {
                 Physics2D.IgnoreCollision(col, enemyCollider, true);
@@ -234,7 +262,6 @@ public class HelperWelper : MonoBehaviour
             return;
         }
     }
-
     public void TakeDamage(float damage)
     {
         //Debug.Log($"[DEBUG] {name} currentHealth BEFORE damage: {currentHealth}");

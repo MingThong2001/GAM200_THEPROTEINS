@@ -6,7 +6,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 
-    //Projectile Settings
+    [Header("Projectile Settings")]
     public float speed = 0.2f;
     public float maxDistance;
     public int damage = 2;
@@ -14,43 +14,42 @@ public class Projectile : MonoBehaviour
     public float fireTime;
     public bool ignorePlayer = false;
     public float recoilForce = 5f;
+    private Vector3 startPosition; //To track max distance.
+    private Vector3 moveDirection; //Normalized direction of travel.
+    public int segmentAmount = 1;
 
-    //Just in case.
+    [Header("BackUP Settings")]
     public Transform FirePoint;
     public GameObject segmentPrefab;
 
-    private Vector3 startPosition; //To track max distance.
-    private Vector3 moveDirection; //Normalized direction of travel.
+   
 
-    //References
+    [Header("References Settings")]
     public Rigidbody2D[] bodyParts;
     private SpringJoint2D[] joints;
     private Collider2D[] colliders; 
     private Transform projectileTransform;
     public ParticleSystem projectilvfx;
-
-    //Pickup Settings.
-    public bool canBeCollected = false;
-
-    public AudioClip pickupSound;
-    public int segmentAmount = 1;
-
-    //References.
+    public ParticleSystem impactVFX;
     private Collider2D pickupCollider;
     public Projectile projectilePrefab;
+    private ProjectillePickup pickup;
+    public MassSegment projectilemass;
 
-    //VFX
+    [Header("Pickup Settings")]
+    public bool canBeCollected = false;
 
-    //Projectile States.
+    [Header("Audio Settings")]
+    public AudioClip pickupSound;
+
+    [Header("Projectile State Settings")]
     private bool isActive = false;
     private bool isStuck = false;
     private float stickTime = 0f;
     private float stickDuration = 5f;
     private bool Hashit = false;
 
-    //References
-    private ProjectillePickup pickup;
-    public MassSegment projectilemass;
+    
 
 
     public float GetProjectileMass()
@@ -330,18 +329,25 @@ public class Projectile : MonoBehaviour
         if (failedsubjects != null)
         {
             failedsubjects.TakeDamage(damage);
+
+            
         }
 
         Drone drone = targetPoint.GetComponentInChildren<Drone>();
         if (drone != null)
         {
             drone.TakeDamage(damage);
+
+
+            
         }
 
         HelperWelper helperwelper = targetPoint.GetComponent<HelperWelper>();
         if (helperwelper != null)
         {
             helperwelper.TakeDamage(damage);
+
+          
         }
 
         ApplyRecoil();
@@ -370,6 +376,13 @@ public class Projectile : MonoBehaviour
         if (breakable != null)
         {
             breakable.TakeDamage(damage);
+            Vector3 impactPoint = collision.contacts[0].point; //Retieves the first contact point of the collision.
+            if (activeImpactVFX == null) //If theres no vfx, create it.
+            {
+                activeImpactVFX = Instantiate(impactVFX, impactPoint, Quaternion.identity, transform);
+            }
+            activeImpactVFX.transform.position = impactPoint; //Move vfx to the new collision point.
+            activeImpactVFX.Play(); //Play it.
 
         }
         ApplyRecoil();
@@ -411,8 +424,50 @@ public class Projectile : MonoBehaviour
 
     }
 
+    #region Particle System
+    public ParticleSystem activeImpactVFX;
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Don't trigger when colliding with player or self
+        if (collision.collider.CompareTag("Player")) return;
 
+        // Get hit point
+        Vector3 hitPoint = collision.GetContact(0).point;
+
+        // Spawn VFX if not created yet
+        if (activeImpactVFX == null)
+        {
+            activeImpactVFX = Instantiate(impactVFX, hitPoint, Quaternion.identity, transform);
+        }
+
+        // Update position & play
+        activeImpactVFX.transform.position = hitPoint;
+        activeImpactVFX.Play();
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (activeImpactVFX == null) return;
+
+        // Update VFX position while sliding
+        Vector3 hitPoint = collision.GetContact(0).point;
+        activeImpactVFX.transform.position = hitPoint;
+
+        if (!activeImpactVFX.isPlaying)
+            activeImpactVFX.Play();
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        // Stop when projectile stops touching
+        if (activeImpactVFX != null)
+        {
+            activeImpactVFX.Stop();
+        }
+    }
+
+    #endregion  
     #region Pickup System
 
     private void Land()
@@ -432,6 +487,8 @@ public class Projectile : MonoBehaviour
             float randomJitter = Random.Range(0.25f, 0.30f);
             rb.AddForce(Vector2.up * randomJitter);
         }
+
+        projectilvfx.Stop();
         MakeCollectible();
     }
 
@@ -471,7 +528,18 @@ public class Projectile : MonoBehaviour
         if (canBeCollected) return;
         canBeCollected = true;
         Debug.Log($"Projectile: MakeCollectible called on {gameObject.name} at time {Time.time}");
+        // Ignore collision with all enemies
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            Collider2D enemyCol = enemy.GetComponent<Collider2D>();
+            Collider2D[] projCols = GetComponents<Collider2D>();
 
+            foreach (Collider2D projCol in projCols)
+            {
+                Physics2D.IgnoreCollision(projCol, enemyCol, true);
+            }
+        }
         SwitchTag(gameObject, "Player");
 
         if (pickup != null)
@@ -480,6 +548,9 @@ public class Projectile : MonoBehaviour
 
             pickup.EnableCollection();
         }
+
+   
+
     }
 
     private void SwitchTag(GameObject obj, string newTag)

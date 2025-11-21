@@ -19,6 +19,9 @@ public class Drone : MonoBehaviour
     [SerializeField] private GameObject deathVFX;
     [SerializeField] private GameObject damageVFX;
     [SerializeField] private Animator animator;
+    public ParticleSystem impactVFX;
+    private ParticleSystem activeImpactVFX;
+
 
     [SerializeField] private LayerMask defaultlayer;
 
@@ -167,9 +170,23 @@ public class Drone : MonoBehaviour
 
             return; // Stop further interaction.
         }
+        if (proj == null) return;
 
+        // Get hit point
+        Vector3 hitPoint = collision.GetContact(0).point;
 
+        // Spawn VFX if missing
+        if (activeImpactVFX == null)
+        {
+            activeImpactVFX = Instantiate(impactVFX, hitPoint, Quaternion.identity, transform);
+        }
+
+        // Move & play VFX
+        activeImpactVFX.transform.position = hitPoint;
+        activeImpactVFX.Play();
     }
+
+
 
     //Take damage from player or any possible interactions.
     public void TakeDamage(float damage)
@@ -207,7 +224,9 @@ public class Drone : MonoBehaviour
 
         }
     }
-   private IEnumerator Die()
+
+   
+    private IEnumerator Die()
     {
         if (isDead) yield return null; //Prevent duplicate death
 
